@@ -8,26 +8,19 @@ class FormControl extends Component {
     super(props);
     this.historicFormHandler=this.historicFormHandler.bind(this);
     this.projectedFormHadnler=this.projectedFormHandler.bind(this);
-    
   }
   historicFormHandler(changeEvent){
-    console.log("hello from historic form"+changeEvent)
     this.props.formHandler(changeEvent)
   }
   projectedFormHandler(changeEvent){
-    console.log("hello from projected form"+changeEvent)
     this.props.formHandler(changeEvent)
   }
   render()
   {
-
-      
-  return(
-  <div>
-    {this.props.data==="Historic"?<HistoricForm historicFormHandler={(e)=>this.historicFormHandler(e)} historicInputState={this.props.historicInputState}/>:<ProjectedForm projectedFormHandler={(e)=>this.projectedFormHandler(e)}/>}
-  </div>
-    )
+    return(
+      <div>
+        {this.props.data==="Historic"?<HistoricForm historicFormHandler={(e)=>this.historicFormHandler(e)} historicInputState={this.props.historicInputState}/>:<ProjectedForm projectedFormHandler={(e)=>this.projectedFormHandler(e)}/>}
+      </div>)
   }
 }
 export default FormControl;
-

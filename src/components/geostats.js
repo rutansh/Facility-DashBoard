@@ -1,0 +1,1 @@
+export const geostats = require('geostats');

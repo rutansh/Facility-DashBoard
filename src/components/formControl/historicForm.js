@@ -99,7 +99,7 @@ class HistoricForm extends Component {
             placeholder={this.props.historicInputState}/>
             </div>
           </div>
-            <div style={{marginLeft:'70px'}}>
+            <div style={{marginLeft:'70px',zIndex:2}}>
             Select month and year from    <br></br>
                     <DatePicker
                     selected={this.state.startDate}
@@ -110,7 +110,7 @@ class HistoricForm extends Component {
                     showMonthYearPicker
                     /> 
             </div>
-            <div style={{marginLeft:'40px'}}>
+            <div style={{marginLeft:'40px',zIndex:2}}>
             Select month and year to    <br></br>
                     <DatePicker
                     selected={this.state.endDate}
@@ -130,6 +130,7 @@ class HistoricForm extends Component {
                     {
                       overlay: {
                         position: 'fixed',
+                        zIndex:4,
                         top: 0,
                         left: 0,
                         right: 0,

@@ -1,9 +1,12 @@
 import React, { Component, useState } from 'react';
 import { withGoogleMap, GoogleMap, Marker, InfoWindow, Polygon, Circle } from 'react-google-maps';
 import mapStyles from "./mystyle"
-import { stateLatLngs } from './vars';
+import { stateLatLngs } from '../data/stateLatLong';
 import { Button } from 'react-bootstrap';
-
+import FacilityChart from './facilityChart';
+import Modal from 'react-modal';
+import {stateAbr} from '../data/stateAbr';
+import Regions from './regions';
 
 class MapContent extends Component {
   constructor(props) {
@@ -23,28 +26,91 @@ class MapContent extends Component {
       displayChoice: "Water Consumption",
       viewByChoice: "States",
       isFacilitySelected:false,
+      index:0,
+      jsonDataforChart:undefined,
+      ismodalOpen:false,
+      prevState:"",
+      dataForColor:null,
+      items:this.props.tabledata,
     }
-    this.renderRegions = this.renderRegions.bind(this);
+    this.backButton=this.backButton.bind(this);
+    // this.renderRegions = this.renderRegions.bind(this);
     this.arrayForParent = [];
     this.displayItem = this.displayItem.bind(this);
     this.viewByItem = this.viewByItem.bind(this);
-    let lng=0.0;
-    let lat=0.0;
+    this.onClickFacility=this.onClickFacility.bind(this);
+    this.facilityChart=this.facilityChart.bind(this);
+    this.formHandler=this.formHandler.bind(this);
+    this.modalOpen=this.modalOpen.bind(this);
+  }
+  formHandler(changeEvent){
+    //console.log("");("")("")("hello from map form"+changeEvent)
+    console.log("mapcontrol...!")
+    this.setState({
+      loading:false,
+    })
+    this.props.formHandler(changeEvent)
+  }
+  onClickFacility(facilityObject){
+    //console.log("");("")("")("clicked in paarticular facility");
+    if(!this.state.isFacilitySelected)
+    {
+      this.setState({
+        isFacilitySelected:true,
+        lat:facilityObject.facility.LATITUDE83,
+        lng:facilityObject.facility.LONGITUDE83,
+        index:facilityObject.index,
+        jsonDataforChart:facilityObject.jsonDataforChart,
+      })
+    }
+    else
+    {
+      //console.log("");("")("")("second facility selected");
+      this.setState({
+        lat:facilityObject.facility.LATITUDE83,
+        lng:facilityObject.facility.LONGITUDE83,
+        index:facilityObject.index,
+        jsonDataforChart:facilityObject.jsonDataforChart,
+      })
+      
+    }
+    
+  }
+  facilityChart(facilityData){
+    //console.log("");("")("")("facilitychart data");
+    //console.log("");("")("")(facilityData);
+    this.setState({
+      ismodalOpen:true
+    })
+  }
+  backButton()
+  {
+    //console.log("");("")("")("backbutton");
+  }
+  modalOpen()
+  {
+   
+    this.setState({
+      ismodalOpen:true,
+    })
   }
   displayItem(event) {
-    console.log("inside display radio function")
+    //console.log("");("")("")("inside display radio function")
     this.setState({
       displayChoice: event.target.value
     })
   }
   viewByItem(event) {
-    console.log("inside viewBy radio function")
+    
     this.setState({
-      viewByChoice: event.target.value
+      loading:false,
+      viewByChoice: event.target.value,
+      
     })
     if (event.target.value == "States") {
+      
       this.arrayForParent[0] = "all us";
-      this.props.formHandler(this.arrayForParent);
+      this.formHandler(this.arrayForParent);
     }
     else if (event.target.value == "Counties") {
       this.setState({
@@ -52,7 +118,7 @@ class MapContent extends Component {
       })
     }
     else if (event.target.value == "Facilities") {
-      console.log("Facility Radio Button")
+      
       this.setState({
         isClicked: true,
       })
@@ -63,173 +129,74 @@ class MapContent extends Component {
       })
     }
   }
-  renderRegions(props) {
-    console.log("This is props from renderRegions()");
-    console.log(props);
-
-    if (this.state.viewByChoice == "Facilities") {
-      console.log("3rd Layer of Map");
-      console.log(this.state.regions);
-      return this.state.regions["All Facilities"].map((facility, index) => {
-      
-       return  (
-        <div>
-       <Circle
-          center={
-            {
-              lat: parseFloat(facility.LATITUDE83),
-              lng: parseFloat(facility.LONGITUDE83),
-            }
-          }
-          radius={10000}
-          options={{
-            fillColor: "purple",
-            strokeWeight: 0.5,
-            
-          }}
-          onClick={(async ()=>{
-            console.log("clicked..!");
-            console.log(facility.PGM_SYS_ID);
-            let fetchFacility="https://ewed.org:31567/ewedService/getFacility/pgmSysId/"+facility.PGM_SYS_ID+"/2015/1/2015/12";
-            var res = await fetch(fetchFacility)
-            var jsondata = await res.json()
-            console.log(jsondata);
-            if(!this.state.isFacilitySelected)
-            {
-              this.setState({
-                isFacilitySelected:true,
-              })
-              this.lat=facility.LATITUDE83;
-              this.lng=facility.LONGITUDE83;
-            }
-            })}>
-        </Circle>
-        
-          
-        </div>
-        
-        )
-            
-        
-
-      }
-      );
-      
-      // if(this.state.isFacilitySelected)
-      //   {
-          
-      //   
-      //   }
-    }
-    else {
-      if(this.state.regions.length>0)
-      {
-        return this.state.regions.map(regionJ => {
-          let region = regionJ["geometry"];
-          let type = region["type"];
-          var coordinates;
-          if (type === "MultiPolygon") {
-            var tempArr = []
-            var coord = region["coordinates"]
-            coord.map(coordinate => {
-              coordinate.map(temp => {
-                temp.map(t => {
-                  tempArr.push(t)
-                })
-              })
-            })
-            coordinates = tempArr
+  //Component->onClick(e,key){
+    //activeIndex:key
   
-          }
-          else {
-            coordinates = region["coordinates"][0]
-          }
-          let coordArr = []
-          coordinates.map(coordinate => coordArr.push({ lat: coordinate[1], lng: coordinate[0] }))
-          return (
-            <Polygon
-              ref={this.polygonRef}
-              path={coordArr}
-              options={{
-                strokeColor: 'rgba(0,0,0,0.5)',
-                strokeOpacity: 0.2,
-                strokeWeight: 0.5,
-                fillColor: "green"
-              }}
-              onClick={async () => {
-                if (props.toLowerCase().includes("all us")) {
-                  this.arrayForParent[0] = regionJ["properties"]["NAME"].toLowerCase() + " (state)";
-                  // console.log(this.arrayForParent[0]);
-                  this.props.formHandler(this.arrayForParent);
-                }
-                else if (props.toLowerCase().includes("state")) {
-  
-                  if (this.state.viewByChoice == "Watersheds" && regionJ.properties.SUBBASIN.toLowerCase().includes("watershed")) {
-                    console.log("this is inside watershed")
-                    console.log(regionJ.properties)
-                    this.arrayForParent[0] = regionJ.properties.SUBBASIN;
-                    this.props.formHandler(this.arrayForParent);
-                  }
-                  else if (this.state.viewByChoice == "Counties") {
-                    console.log("sadasdasd:", regionJ);
-                    this.arrayForParent[0] = regionJ.properties.CountyState1;
-                    this.props.formHandler(this.arrayForParent);
-                  }
-                  console.log("see this subbasin:")
-                  console.log(regionJ.properties.SUBBASIN);
-                  console.log("see this HU_8_STATE:")
-                  console.log(regionJ.properties.HU_8_STATE);
-                }
-              }
-              }
-            />
-          )
-        })  
-      }
-    }
-  }
+
   async componentDidMount() {
-    console.log("Component DidMount..!")
-    await fetch('https://ewed.org:3004/all-states')
-      .then(res => res.json())
-      .then((resJson) => {
-        this.setState({
-          regions: resJson["features"],
+    let startDate = this.props.historicStartDate;
+    let endDate = this.props.historicEndDate;
+    let mapping = { "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sep": "9", "Oct": "10", "Nov": "11", "Dec": "12" };
+    let startYear = parseInt(startDate.split(" ")[3])
+    let endYear = parseInt(endDate.split(" ")[3])
+    let startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
+    let endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
+    try{
+      var response= await fetch('https://ewed.org:3004/all-states');
+      var json = await response.json()
+      this.setState({
+          regions: json["features"],
           loading: true,
+          items:this.props.tabledata,
         })
-      }).catch(e => { console.log(e) });
-    console.log("This is regions..!")
-    console.log(this.state.regions)
+    }
+    
+    catch(e) { console.log(e) };
+    
+  }
+  shouldComponentUpdate(pP,pS)
+  {
+    
+
+    if(this.props.notReload)
+    {
+      console.log("false");
+      return false;
+    }
+    else
+    {
+      console.log("true");
+      return true;  
+    }
+    
   }
   async componentDidUpdate(pP, pS, snap) {
-    console.log("componentDidupdate..!")
-    var startDate = this.props.historicStartDate;
-    var endDate = this.props.historicEndDate;
-    var mapping = { "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sep": "9", "Oct": "10", "Nov": "11", "Dec": "12" };
-    var startYear = parseInt(startDate.split(" ")[3])
-    var endYear = parseInt(endDate.split(" ")[3])
-    var startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
-    var endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
+    let startDate = this.props.historicStartDate;
+    let endDate = this.props.historicEndDate;
+    let mapping = { "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sep": "9", "Oct": "10", "Nov": "11", "Dec": "12" };
+    let startYear = parseInt(startDate.split(" ")[3])
+    let endYear = parseInt(endDate.split(" ")[3])
+    let startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
+    let endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
     if (pP.historicInputState === this.props.historicInputState && pP.historicStartDate === this.props.historicStartDate && pP.historicEndDate === this.props.historicEndDate) 
     {
-      console.log("props are same");
-      // console.log(this.state.viewByChoice);
+
+      console.log("didupdate of mapcontent");
       if (this.state.viewByChoice == "Counties" && this.state.isClicked) {
-        console.log("Counties selected..!")
+
         var stateName = this.props.historicInputState.split(" (")
         stateName = stateName[0].split(" ");
         var state = "";
-        console.log("This is state: " + stateName);
-        console.log("This is from radio button form", this.state.viewByChoice);
-        for (let i = 0; i < stateName.length; i++) {
-          console.log("i:" + i);
+        for (let i = 0; i < stateName.length; i++) 
+        {
           state = state + ((stateName[i].substr(0, 1).toUpperCase() + stateName[i].substr(1)) + " ");
         }
         stateName = state.trim();
-        console.log("This is state name:" + stateName);
+        var obj={viewByChoice:"Counties",state:this.props.historicInputState} 
+        this.props.viewByButtonClicked(obj);
+        console.log("return back.....")
         let long = stateLatLngs[stateName]["longitude"];
         let lat = stateLatLngs[stateName]["latitude"];
-        console.log(stateLatLngs[stateName]);
         var url = "https://ewed.org:3004/counties-in-state/" + stateName
         try {
           var response = await fetch(url)
@@ -240,29 +207,148 @@ class MapContent extends Component {
             longitude: long,
             latitude: lat,
             zoom: 6,
-            isClicked: false
+            isClicked: false,
+            prevState:pP.historicInputState,
+            
           })
+          
         }
         catch (e) {
           console.log(e);
         }
       }
       else if (this.state.viewByChoice == "Watersheds" && this.state.isClicked) {
-        console.log("Watershed selected..!");
         var stateName = this.props.historicInputState.split(" (")
         stateName = stateName[0].split(" ");
         var state = "";
-        console.log("This is state: " + stateName);
-        console.log("This is from radio button form", this.state.viewByChoice);
         for (let i = 0; i < stateName.length; i++) {
-          console.log("i:" + i);
           state = state + ((stateName[i].substr(0, 1).toUpperCase() + stateName[i].substr(1)) + " ");
         }
         stateName = state.trim();
-        console.log("This is state name:" + stateName);
+        var obj={viewByChoice:"Watersheds",state:this.props.historicInputState} 
+        this.props.viewByButtonClicked(obj);
         let long = stateLatLngs[stateName]["longitude"];
         let lat = stateLatLngs[stateName]["latitude"];
-        console.log(stateLatLngs[stateName]);
+        var url = "https://ewed.org:3004/hucs-in-state/" + stateName
+        try {
+          var response = await fetch(url)
+          var json = await response.json()
+          
+          await this.setState({
+            regions: json["features"],
+            loading: true,
+            longitude: long,
+            latitude: lat,
+            zoom: 6,
+            viewByChoice: "Watersheds",
+            isClicked: false,
+            prevState:pP.historicInputState
+          })
+         
+        }
+        catch (e) {
+          console.log(e);
+        }
+      }
+      else if (this.state.viewByChoice == "Facilities" && this.state.isClicked)
+      {
+        
+        var name=this.props.historicInputState;
+        name=name.split(" (")[0];
+        let startDate = this.props.historicStartDate;
+        let endDate = this.props.historicEndDate;
+        let mapping = { "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sep": "9", "Oct": "10", "Nov": "11", "Dec": "12" };
+        let startYear = parseInt(startDate.split(" ")[3])
+        let endYear = parseInt(endDate.split(" ")[3])
+        let startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
+        let endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
+        var obj={viewByChoice:"Facilities",state:this.props.historicInputState} 
+        this.props.viewByButtonClicked(obj);
+        var url = "https://ewed.org:28469/ewedService/getFacilityData/stateName/"+name+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all";
+        try {
+          var response = await fetch(url)
+          var json = await response.json()
+          await this.setState({
+            regions:json,
+            zoom: 5.5,
+            isClicked: false,
+            loading: true,
+            prevState:pP.historicInputState,
+            viewByChoice:"Facilities"
+          })
+       }
+        catch (e) {
+          console.log("");
+        }
+        
+      }
+      else if (this.state.viewByChoice == "States" && this.state.isClicked)
+      {
+        
+        var url = "https://ewed.org:3004/all-states";
+      
+        try {
+          var response = await fetch(url)
+          var json = await response.json()
+          //this.updateState(json,pP);
+          await this.setState({
+            regions: json["features"],
+            loading: false,
+            lattitude: 39.833333,
+            longitude: -98.583333,
+            zoom: 4.46,
+            isClicked: false,
+            prevState:"",
+      
+          })
+        }
+        catch (e) {
+          console.log(e);
+        }
+      }
+      
+    }
+    else {
+     
+        this.setState({
+          startDateProps: this.props.historicStartDate,
+          endDateProps: this.props.historicEndDate,
+          nameOfState: this.props.historicInputState,
+        });
+      
+      if (this.props.historicInputState.toLowerCase().includes("all us")) {
+        var url = "https://ewed.org:3004/all-states"
+        var url2="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+        try {
+          var response = await fetch(url)
+          var json = await response.json()
+          //this.updateState(json,pP);
+          this.setState({
+            regions: json["features"],
+            loading: true,
+            lattitude: 39.833333,
+            longitude: -98.583333,
+            zoom: 4.46,
+            prevState:"",
+            items:this.props.tabledata,
+          })
+        }
+        catch (e) {
+          console.log(e);
+        }
+      }
+      else if (this.props.historicInputState.toLowerCase().includes("state") ) {
+        console.log("this is compnentdid update of mapcontent");
+        console.log(this.props.tabledata);
+        var stateName = this.props.historicInputState.split(" (")
+        stateName = stateName[0].split(" ");
+        var state = "";
+        for (let i = 0; i < stateName.length; i++) {
+          state = state + ((stateName[i].substr(0, 1).toUpperCase() + stateName[i].substr(1)) + " ");
+        }
+        stateName = state.trim();
+        let long = stateLatLngs[stateName]["longitude"];
+        let lat = stateLatLngs[stateName]["latitude"];
         var url = "https://ewed.org:3004/hucs-in-state/" + stateName
         try {
           var response = await fetch(url)
@@ -274,129 +360,45 @@ class MapContent extends Component {
             latitude: lat,
             zoom: 6,
             viewByChoice: "Watersheds",
-            isClicked: false
+            prevState:"all us",
+            items:this.props.tabledata,
           })
         }
-        catch (e) {
-          console.log(e);
-        }
-      }
-      else if (this.state.viewByChoice == "States" && this.state.isClicked)
-      {
-        var url = "https://ewed.org:3004/all-states"
-        try {
-          var response = await fetch(url)
-          var json = await response.json()
-          //this.updateState(json,pP);
-          await this.setState({
-            regions: json["features"],
-            loading: true,
-            lattitude: 39.833333,
-            longitude: -98.583333,
-            zoom: 4.46,
-            isClicked: false
-          })
-        }
-        catch (e) {
-          console.log(e);
-        }
-      }
-      else if (this.state.viewByChoice == "Facilities" && this.state.isClicked)
-      {
-        var url = "https://ewed.org:3004/all-states"
-        try {
-          var response = await fetch(url)
-          var json = await response.json()
-          //this.updateState(json,pP);
-          await this.setState({
-            regions: json["features"],
-            loading: true,
-            lattitude: 39.833333,
-            longitude: -98.583333,
-            zoom: 4.46,
-            isClicked: false
-          })
-        }
-        catch (e) {
-          console.log(e);
-        }
-      }
-      
-    }
-    else {
-      console.log("searching from form...!1")
-      setTimeout(() => {
-        this.setState({
-          startDateProps: this.props.historicStartDate,
-          endDateProps: this.props.historicEndDate,
-          nameOfState: this.props.historicInputState,
-        }, () => { });
-      }, 0);
-
-      if (this.props.historicInputState.toLowerCase().includes("all us")) {
-        var url = "https://ewed.org:3004/all-states"
-        try {
-          var response = await fetch(url)
-          var json = await response.json()
-          //this.updateState(json,pP);
-          await this.setState({
-            regions: json["features"],
-            loading: true,
-            lattitude: 39.833333,
-            longitude: -98.583333,
-            zoom: 4.46,
-          })
-        }
-        catch (e) {
-          console.log(e);
-        }
-      }
-      else if (this.props.historicInputState.toLowerCase().includes("state")) {
-        var stateName = this.props.historicInputState.split(" (")
-        stateName = stateName[0].split(" ");
-        var state = "";
-        console.log("This is state: " + stateName);
-        console.log("This is from radio button form", this.state.viewByChoice);
-        for (let i = 0; i < stateName.length; i++) {
-          console.log("i:" + i);
-          state = state + ((stateName[i].substr(0, 1).toUpperCase() + stateName[i].substr(1)) + " ");
-        }
-        stateName = state.trim();
-        console.log("This is state name:" + stateName);
-        let long = stateLatLngs[stateName]["longitude"];
-        let lat = stateLatLngs[stateName]["latitude"];
-        console.log(stateLatLngs[stateName]);
-        var url = "https://ewed.org:3004/hucs-in-state/" + stateName
-        try {
-          var response = await fetch(url)
-          var json = await response.json()
-          await this.setState({
-            regions: json["features"],
-            loading: true,
-            longitude: long,
-            latitude: lat,
-            zoom: 6,
-            viewByChoice: "Watersheds"
-          })
-        }
-
         catch (e) {
           console.log(e);
         }
       }
       else if (this.props.historicInputState.toLowerCase().includes("county")) {
         var countyName = this.props.historicInputState;
-        console.log("County data fetch");
-        console.log(countyName);
-        var url = "https://ewed.org:3004/county/" + countyName;
+        
+        var url = "https://ewed.org:41513/ewedService/getFacilityData/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+        var stateNamefromCounty=countyName.split(" (");
+        stateNamefromCounty=stateNamefromCounty[1].substr(0,stateNamefromCounty[1].length-1);
+        
+        let arr=stateNamefromCounty.split(" ");
+        stateNamefromCounty=""
+        for(let k=0;k<arr.length;k++)
+        {
+          stateNamefromCounty+=arr[k].substr(0,1).toUpperCase()+arr[k].substr(1,arr[k].length)+" ";
+        }
+        stateNamefromCounty= stateNamefromCounty.trim();
+        
+        let lat=stateLatLngs[stateNamefromCounty].latitude;
+        let long=stateLatLngs[stateNamefromCounty].longitude;
         try {
           var response = await fetch(url)
           var json = await response.json()
+
           //this.updateState(json,pP);
           await this.setState({
-            regions: json["features"],
+            regions: json,
             loading: true,
-            viewByChoice: "Facilities"
+            viewByChoice: "Facilities",
+            zoom:8.0,
+            latitude:lat,
+            longitude:long,
+            prevState:stateNamefromCounty+" (state)",
+            items:this.props.tabledata,
           })
         }
         catch (e) {
@@ -406,7 +408,22 @@ class MapContent extends Component {
       }
       else if (this.props.historicInputState.toLowerCase().includes("watershed")) 
       {
-        var hucName = this.props.historicInputState.toLowerCase()
+        var hucName = this.props.historicInputState.toLowerCase();
+        var stateNamefromWatershed=hucName.split(" (");
+        stateNamefromWatershed=stateNamefromWatershed[1].substr(0,stateNamefromWatershed[1].length-1);
+        
+        if(stateNamefromWatershed.includes(","))
+        {
+          stateNamefromWatershed=stateNamefromWatershed.split(",")[0].toUpperCase();
+        }
+        else
+        {
+          stateNamefromWatershed=stateNamefromWatershed.toUpperCase();
+        }
+        
+        var lat=stateLatLngs[stateAbr[stateNamefromWatershed]].latitude;
+        var long=stateLatLngs[stateAbr[stateNamefromWatershed]].longitude;
+        
         var url = "https://ewed.org:41513/ewedService/getFacilityData/HUC8Name/" + hucName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/all"
         try {
           var response = await fetch(url)
@@ -415,14 +432,51 @@ class MapContent extends Component {
             regions: json,
             loading: true,
             viewByChoice: "Facilities",
-            zoom: 8.0,
-            
+            zoom: 7.0,
+            latitude:lat,
+            longitude:long,
+            prevState:stateAbr[stateNamefromWatershed]+" (state)",
+            items:this.props.tabledata,
+
           })
         }
         catch (e) {
           console.log(e);
         }
       }
+      else if(this.state.viewByChoice=="Facilities" && this.props.notReload)
+      {
+        console.log("facility without click in didupdate!")
+        var name=this.props.historicInputState;
+        name=name.split(" (")[0];
+      
+        let startDate = this.props.historicStartDate;
+        let endDate = this.props.historicEndDate;
+        let mapping = { "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sep": "9", "Oct": "10", "Nov": "11", "Dec": "12" };
+        let startYear = parseInt(startDate.split(" ")[3])
+        let endYear = parseInt(endDate.split(" ")[3])
+        let startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
+        let endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
+        var url = "https://ewed.org:28469/ewedService/getFacilityData/stateName/"+name+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all";
+        try {
+          var response = await fetch(url)
+          var json = await response.json()
+          await this.setState({
+            regions:json,
+            zoom: 5.5,
+            isClicked: false,
+            loading: true,
+            prevState:pP.historicInputState,
+            viewByChoice:"Facilities"
+          })
+          
+       }
+        catch (e) {
+          console.log("");
+        }
+
+      }
+
     }
   }
   render() {
@@ -432,19 +486,63 @@ class MapContent extends Component {
         defaultZoom = { this.state.zoom }
         defaultOptions={{ styles: mapStyles }} 
       >
-        {this.state.regions !== null ? this.renderRegions(this.state.nameOfState) : console.log("do nothing")}   
-
+        {this.state.regions!== null ?
+        <Regions regions={this.state.regions} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate} 
+        historicInputState={this.props.historicInputState} displayChoice={this.state.displayChoice} viewByChoice={this.state.viewByChoice}
+        formHandler={(e)=>this.formHandler(e)} tabledata={this.props.tabledata} modalOpen={(e)=>this.modalOpen(e)}
+        />:console.log("do nothing")}
         
+        {/* {this.state.regions !== null ? this.renderRegions(this.state.nameOfState) : console.log("do nothing")}     */}
       </GoogleMap>));
-    if (!this.state.loading) {
+    
+    if (!this.state.loading || !this.props.status) {
+      
       return (
         <div>Loading...!</div>
       )
     }
     else {
+      console.log("county data in render:");
+      console.log(this.props.tabledata);
       return (
         <div>
-          <div style={{position:"absolute",zIndex:1}} >
+          <div>
+        {/* {this.state.ismodalOpen&&<Modal isOpen={this.state.ismodalOpen} style={
+                    {
+                       overlay: {
+                        position: 'fixed',
+                        zIndex:4,
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: 'rgba(255, 255, 255, 0.75)',
+                        height:"1200px",
+                        width:"2300px"
+
+                      },
+                      content: {
+                        position: 'absolute',
+                        top: '300px',
+                        left: '690px',
+                        right: '690px',
+                        bottom: '300px',
+                        border: '1px solid #ccc',
+                        background: '#fff',
+                        overflow: 'auto',
+                        WebkitOverflowScrolling: 'touch',
+                        borderRadius: '4px',
+                        outline: 'none',
+                        padding: '20px'
+                      }
+                    }
+                  }>
+                  <FacilityChart facilityData={this.state.jsonDataforChart} startDate={this.state.startDateProps} endDate={this.state.endDateProps}/>
+                    <button onClick={()=>{this.setState({ismodalOpen:false})}}>Close</button>
+        </Modal>} */}
+        </div>
+        <div>
+            <div style={{position:"absolute",zIndex:1}} >  
             <form style={{ display: 'flex', flexDirection: 'row', marginBottom: '10px' }}>
               
               <div className="filterForm">
@@ -479,8 +577,13 @@ class MapContent extends Component {
               
               </div>
               <div style={{ marginLeft: "50px" }}>
-                <Button style={{ width: "200px", height: "40px" }}>Up to ALL US View</Button>
-              </div>             
+              <Button style={{ width: "200px", height: "40px" }} onClick={()=>
+                {            
+                }}>
+                Up to {this.state.prevState} View
+              </Button>
+              </div>
+                           
             </form>
           </div>
           <div style={{position:"absolute", top:"0"}}>
@@ -489,11 +592,11 @@ class MapContent extends Component {
             {
               <div style={{ height: `950px`, width: '880px' }}></div>
             }
-            mapElement={<div style={{ height: `95%` }} > </div>}/>
-                
-  }
+            mapElement={<div style={{ height: `95%` }} > </div>}
+            />
           </div>
-          
+        </div>
+        
         </div>
         );
     }}}

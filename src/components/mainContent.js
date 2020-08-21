@@ -15,6 +15,9 @@ class MainContent extends Component {
       historicInputState:"ALL US",
       historicStartDate:"Thu Jan 01 2015 00:00:00 GMT-0800 (Pacific Standard Time)",
       historicEndDate:"Tue Dec 01 2015 00:00:00 GMT-0800 (Pacific Standard Time)",
+      mapChange:true,
+      status:true,
+
     }
     this.optionHandler=this.optionHandler.bind(this)   
     this.formHandler=this.formHandler.bind(this)   
@@ -22,12 +25,12 @@ class MainContent extends Component {
    }
   optionHandler(changeEvent)
   {
-    console.log("inside main function")  
+    
     this.setState({selectedOption:changeEvent})    
   }
   formHandler(changeEvent)
   {
-    console.log("hello this from mainContent: "+changeEvent)
+    
     this.setState({
       historicInputState:changeEvent[0],
       historicStartDate:String(changeEvent[1]),
@@ -36,33 +39,54 @@ class MainContent extends Component {
   }
   mapHandler(changeEvent)
   {
-    console.log("hello this from from map to main: "+changeEvent);
+    console.log("maincontent",changeEvent.trim());
     let newState=changeEvent;
-    if(changeEvent[0].includes("watershed"))
+    if(changeEvent.includes("watershed"))
     {
-      console.log("search for watershed");
+      
       this.setState({
-        historicInputState:changeEvent[0],
+        historicInputState:changeEvent,
+        mapChange:false,
+        status:false,
       })
     }
     else
     {
+      
       this.setState({
-        historicInputState:changeEvent[0],
+        historicInputState:changeEvent,
+        mapChange:false,
+        status:false,
       })
     }
         
   }
+  componentDidUpdate(pP,pS)
+  {
+    console.log("didupdate");
+    if(!this.state.mapChange)
+    {
+      this.setState({
+        mapChange:true,
+        status:true,
+      })
+    }
+  }
   render()
   {
-    console.log(this.state.selectedOption)
+   
+   
+     console.log("this is state name:",this.state.historicInputState);
     return (
       <div>
       <QueryForm data={this.state.selectedOption} optionHandler={(e)=>this.optionHandler(e)}/>
       <FormControl historicInputState={this.state.historicInputState} data={this.state.selectedOption} formHandler={(e)=>this.formHandler(e)}/>
-      <MapControl historicInputState={this.state.historicInputState} historicStartDate={this.state.historicStartDate} historicEndDate={this.state.historicEndDate} mapHandler={(e)=>this.mapHandler(e)}/>
+      <MapControl historicInputState={this.state.historicInputState} historicStartDate={this.state.historicStartDate} historicEndDate={this.state.historicEndDate} mapHandler={(e)=>this.mapHandler(e)} status={this.state.status}/>
       </div>
     );
+   
+  
+    
   }
 }
 export default MainContent;

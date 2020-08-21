@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import * as ReactBootstrap from "react-bootstrap";
+import ReactToExcel from 'react-html-table-to-excel';
 
 class TableContent extends Component 
 {
@@ -7,7 +8,7 @@ class TableContent extends Component
   {
       super(props);
       this.state={
-          items:[],
+          items:this.props.tabledata,
           isLoaded:false,
           startDateProps:this.props.historicStartDate,
           endDateProps:this.props.historicEndDate,
@@ -24,119 +25,136 @@ class TableContent extends Component
    }
   componentDidMount()
   {
-    var startDate=this.state.startDateProps;
-    var endDate=this.state.endDateProps;
-    var startYear=parseInt(startDate.split(" ")[3])
-    var endYear=parseInt(endDate.split(" ")[3])
-    var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};    
-    var startmonthinInt=parseInt(mapping[startDate.split(" ")[1]]);
-    var endmonthinInt=parseInt(mapping[endDate.split(" ")[1]]);
-    var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
-        fetch(url)
-        .then(res=>res.json())
-        .then(json=>{
-        this.setState({
+   
+    this.setState({
             isLoaded:true,
-            items:json,    
-        })
-        }).catch(e=>{
-          console.log(e);
-        })  
+            items:this.props.tabledata,    
+        });
+        
   }
+  // shouldComponentUpdate()
+  // {
+  //   if(this.props.notReload)
+  //   {
+  //     return false;
+  //   }
+  //   return true;
+  // }
   async componentDidUpdate(pP,state,snap)
   {
     if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate)
     {
-
+      
+      if(pP.tabledata===this.props.tabledata)
+      {
+        console.log("TableContent ComponentDidUpdate:")
+      }
+      else
+      {
+        this.setState({
+          startDateProps:this.props.historicStartDate,
+          endDateProps:this.props.historicEndDate,
+          nameOfState:this.props.historicInputState,
+          items:this.props.tabledata,
+        });
+      }
+      
     }
-    else
-    {
-      setTimeout(() => {this.setState({
+    else{
+      
+      console.log(this.props.tabledata);
+      this.setState({
             startDateProps:this.props.historicStartDate,
             endDateProps:this.props.historicEndDate,
-            nameOfState:this.props.historicInputState, },() => {});}, 0);
+            nameOfState:this.props.historicInputState,
+            items:this.props.tabledata,
+          });
+    }
+    
+      
 
-      var startDate=this.props.historicStartDate;
-      var endDate=this.props.historicEndDate;
-      var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};
-      var startYear=parseInt(startDate.split(" ")[3])
-      var endYear=parseInt(endDate.split(" ")[3])
-      var startmonthinInt=parseInt(mapping[startDate.split(" ")[1]]);
-      var endmonthinInt=parseInt(mapping[endDate.split(" ")[1]]);
-      if(this.props.historicInputState.toLowerCase().includes("all us"))
-      {
-        var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
-        try{
-          var response=await fetch(url)
-          var json=await response.json()
-          //this.updateState(json,pP);
-          setTimeout(() => {this.setState({
-            items:json,
-             },() => {});}, 0);
-        }
-        catch(e)
-        {
-          console.log(e);
-        }
-      }
-      else if(this.props.historicInputState.toLowerCase().includes("state"))
-      {
-        var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
-        var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
-        try{
-          var response=await fetch(url)
-          var json=await response.json()
-          //this.updateState(json,pP);
-          setTimeout(() => {this.setState({
-            items:json,
-             },() => {});}, 0);
-        }
+    //   var startDate=this.props.historicStartDate;
+    //   var endDate=this.props.historicEndDate;
+    //   var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};
+    //   var startYear=parseInt(startDate.split(" ")[3])
+    //   var endYear=parseInt(endDate.split(" ")[3])
+    //   var startmonthinInt=parseInt(mapping[startDate.split(" ")[1]]);
+    //   var endmonthinInt=parseInt(mapping[endDate.split(" ")[1]]);
+    //   if(this.props.historicInputState.toLowerCase().includes("all us"))
+    //   {
+    //     var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+    //     try{
+    //       var response=await fetch(url)
+    //       var json=await response.json()
+    //       //this.updateState(json,pP);
+    //       setTimeout(() => {this.setState({
+    //         items:json,
+    //          },() => {});}, 0);
+    //     }
+    //     catch(e)
+    //     {
+    //       console.log(e);
+    //     }
+    //   }
+    //   else if(this.props.historicInputState.toLowerCase().includes("state"))
+    //   {
+    //     var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
+    //     var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+    //     try{
+    //       var response=await fetch(url)
+    //       var json=await response.json()
+    //       //this.updateState(json,pP);
+    //       setTimeout(() => {this.setState({
+    //         items:json,
+    //          },() => {});}, 0);
+    //     }
         
-        catch(e)
-        {
-          console.log(e);
-        }
-      }
-      else if(this.props.historicInputState.toLowerCase().includes("county"))
-      {
+    //     catch(e)
+    //     {
+    //       console.log(e);
+    //     }
+    //   }
+    //   else if(this.props.historicInputState.toLowerCase().includes("county"))
+    //   {
 
         
-        var countyName=this.props.historicInputState.toLowerCase()
-        var url="https://ewed.org:31567/ewedService/getFacilityData/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
-        try{
-          var response=await fetch(url)
-          var json=await response.json()
+    //     var countyName=this.props.historicInputState.toLowerCase()
+    //     var url="https://ewed.org:31567/ewedService/getFacilityData/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+    //     try{
+    //       var response=await fetch(url)
+    //       var json=await response.json()
 
-          this.setState({
-            items:json,
-          })
-        }
+    //       this.setState({
+    //         items:json,
+    //       })
+    //     }
         
-        catch(e)
-        {
-          console.log(e);
-        }
+    //     catch(e)
+    //     {
+    //       console.log(e);
+    //     }
           
-    }
-    else if(this.props.historicInputState.toLowerCase().includes("watershed"))
-    {
-        var hucName=this.props.historicInputState.toLowerCase()
-        var url="https://ewed.org:31567/ewedService/getFacilityData/HUC8Name/"+hucName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
-        try{
-          var response=await fetch(url)
-          var json=await response.json()
-          //this.updateState(json,pP);
-          setTimeout(() => {this.setState({
-            items:json,
-             },() => {});}, 0);
-        }
-        catch(e)
-        {
-          console.log(e);
-        }
-    }
-    }
-   }
+    // }
+    // else if(this.props.historicInputState.toLowerCase().includes("watershed"))
+    // {
+    //     var hucName=this.props.historicInputState.toLowerCase()
+    //     var url="https://ewed.org:31567/ewedService/getFacilityData/HUC8Name/"+hucName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+    //     try{
+    //       var response=await fetch(url)
+    //       var json=await response.json()
+    //       //this.updateState(json,pP);
+    //       setTimeout(() => {this.setState({
+    //         items:json,
+    //          },() => {});}, 0);
+    //     }
+    //     catch(e)
+    //     {
+    //       console.log(e);
+    //     }
+    // }
+    // }
+
+  }
 
 
   render()
@@ -160,12 +178,26 @@ class TableContent extends Component
           return(
           
             <div style={{ height: "885px",overflowY: "scroll"}} >
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '5px' }}>
             <div style={{marginTop:"20px"}}>
               <b>Activity for {nameOfState}</b>
+              <p><b>({formatstartDate} to {formatendDate}) </b></p>
             </div>
-            <p><b>({formatstartDate} to {formatendDate}) </b>
-            </p>
-                <ReactBootstrap.Table striped bordered hover wrapperClasses="table-responsive">
+            <div style={{marginLeft:"450px",marginTop:"20px"}}>
+            <ReactToExcel 
+                table="tableid"
+                filename=""
+                sheet="sheet 1"
+                buttonText="Download .CSV"
+                className="btn"
+                />
+            </div>
+            
+            </div>
+            
+            
+            
+            <ReactBootstrap.Table id="tableid" striped bordered hover>
             <thead>
               <tr>
                 <th>StateName</th>
@@ -196,28 +228,90 @@ class TableContent extends Component
                   
             </tbody>
           </ReactBootstrap.Table>
-  
+                
   
             </div>
             );
 
 
         }
-        else if((typeof this.state.items["Total Summary"]) !== "undefined" && this.state.nameOfState.toLowerCase().includes("state"))
+        else if((typeof this.state.items["Summary"]) !== "undefined" && this.state.nameOfState.toLowerCase().includes("state")&&this.props.viewByChoice==="Facilities")
         {
-          
-          nameOfState="This is state: "+this.props.historicInputState;
-  
-          
           return(
           
             <div style={{ height: "885px",overflowY: "scroll"}}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '5px' }}>
             <div style={{marginTop:"20px"}}>
               <b>Activity for {nameOfState}</b>
+              <p><b>({formatstartDate} to {formatendDate}) </b></p>
             </div>
-            <p><b>({formatstartDate} to {formatendDate}) </b>
-            </p>
-                <ReactBootstrap.Table striped bordered hover>
+            <div style={{marginLeft:"450px",marginTop:"20px"}}>
+            <ReactToExcel 
+                table="tableid"
+                filename=""
+                sheet="sheet 1"
+                buttonText="Download .CSV"
+                className="btn"
+                />
+            </div>
+            
+            </div>
+          {/* <p>{JSON.stringify(this.state.items["All Facilities"])}</p> */}
+                <ReactBootstrap.Table id="tableid" striped bordered hover>
+            <thead>
+              <tr>
+                <th>Facility Name</th>
+                <th>Generation</th>
+                <th>Emissions</th>
+                <th>WaterConsumption</th>
+                <th>WaterWithdrwal</th>
+              </tr>
+            </thead>
+            <tbody>   
+              <tr>
+                  <td><b>Total</b></td>
+                  <td><b>{this.state.items["Summary"][0].totalGeneration}</b></td>
+                  <td><b>{this.state.items["Summary"][0].totalEmission}</b></td>
+                  <td><b>{this.state.items["Summary"][0].totalWaterConsumption}</b></td>
+                  <td><b>{this.state.items["Summary"][0].totalWaterWithdrawal}</b></td>
+              </tr>
+              {this.state.items["All Facilities"].map((item,index)=>(
+                  <tr key={index}>
+                  <td>{item.PRIMARY_NAME}</td>
+                  <td>{item.GenerationSummary}</td>
+                  <td>{item.EmissionSummary}</td>
+                  <td>{item.WaterConsumptionSummary}</td>
+                  <td>{item.WaterWithdrawalSummary}</td>
+              </tr>  
+              ))}               
+            </tbody>
+          </ReactBootstrap.Table>
+      </div>
+            );
+
+        }
+        else if((typeof this.state.items["Total Summary"]) !== "undefined" && this.state.nameOfState.toLowerCase().includes("state")&&this.props.viewByChoice!=="Facilities")
+        {
+          nameOfState=this.props.historicInputState;
+          return(
+               <div style={{ height: "885px",overflowY: "scroll"}}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '5px' }}>
+            <div style={{marginTop:"20px"}}>
+              <b>Activity for {nameOfState}</b>
+              <p><b>({formatstartDate} to {formatendDate}) </b></p>
+            </div>
+            <div style={{marginLeft:"450px",marginTop:"20px"}}>
+            <ReactToExcel 
+                table="tableid"
+                filename=""
+                sheet="sheet 1"
+                buttonText="Download .CSV"
+                className="btn"
+                />
+            </div>
+            
+            </div>
+            <ReactBootstrap.Table id="tableid" striped bordered hover>
             <thead>
               <tr>
                 <th>StateName</th>
@@ -257,16 +351,24 @@ class TableContent extends Component
           return(
           
             <div style={{ height: "885px",overflowY: "scroll"}}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '5px' }}>
             <div style={{marginTop:"20px"}}>
               <b>Activity for {nameOfState}</b>
+              <p><b>({formatstartDate} to {formatendDate}) </b></p>
+            </div>
+            <div style={{marginLeft:"450px",marginTop:"20px"}}>
+            <ReactToExcel 
+                table="tableid"
+                filename=""
+                sheet="sheet 1"
+                buttonText="Download .CSV"
+                className="btn"
+                />
             </div>
             
-  
-            <p><b>({formatstartDate} to {formatendDate}) </b>
-            </p>
-            
+            </div>
           {/* <p>{JSON.stringify(this.state.items["All Facilities"])}</p> */}
-                <ReactBootstrap.Table striped bordered hover>
+                <ReactBootstrap.Table id="tableid" striped bordered hover>
             <thead>
               <tr>
                 <th>Facility Name</th>
@@ -300,19 +402,29 @@ class TableContent extends Component
         }
         else if((typeof this.state.items["All Facilities"]) !== "undefined" && this.state.nameOfState.toLowerCase().includes("watershed"))
         {
-          nameOfState="This is watershed: "+this.props.historicInputState;
+          nameOfState=this.props.historicInputState;
           return(
           
             <div style={{height: "885px",overflowY: "scroll"}}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '5px' }}>
             <div style={{marginTop:"20px"}}>
               <b>Activity for {nameOfState}</b>
+              <p><b>({formatstartDate} to {formatendDate}) </b></p>
             </div>
-  
-            <p><b>({formatstartDate} to {formatendDate}) </b>
-            </p>
+            <div style={{marginLeft:"250px",marginTop:"20px"}}>
+            <ReactToExcel 
+                table="tableid"
+                filename=""
+                sheet="sheet 1"
+                buttonText="Download .CSV"
+                className="btn"
+                />
+            </div>
+            
+            </div>
             
           {/* <p>{JSON.stringify(this.state.items["All Facilities"])}</p> */}
-                <ReactBootstrap.Table striped bordered hover>
+          <ReactBootstrap.Table id="tableid" striped bordered hover>
             <thead>
               <tr>
                 <th>Facility Name</th>

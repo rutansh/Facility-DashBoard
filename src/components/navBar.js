@@ -10,11 +10,15 @@ class NavBar extends Component {
       super(props);
       this.state = {
         activeItem: "1",
+        items:this.props.tabledata,
 
       };
     }
     
-
+    tableDataHandler(e)
+    {
+      this.props.tableDataHandler(e);
+    }
     toggle = tab => e => {
       if (this.state.activeItem !== tab) {
         this.setState({
@@ -22,7 +26,20 @@ class NavBar extends Component {
         });
       }
     };
+    componentDidUpdate(pP,state,snap)
+    {
+      if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate)
+      {
 
+      }
+      else
+      {
+        this.setState({
+          items:this.props.tabledata,
+        })
+
+      }
+    }
     render() {
       return (
         
@@ -58,7 +75,8 @@ class NavBar extends Component {
         <MDBTabContent activeItem={this.state.activeItem} >
           <MDBTabPane tabId="1" role="tabpanel">
             <div>
-            <TableContent historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate} />
+            
+            <TableContent notReload={this.props.notReload} tabledata={this.props.tabledata} historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate} />
             </div>
           </MDBTabPane>
           <MDBTabPane tabId="2" role="tabpanel">

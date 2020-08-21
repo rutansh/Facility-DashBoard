@@ -238,14 +238,19 @@ class LineChart extends Component {
       lineChartData.wc = []
       lineChartData.wa = []
       lineChartData.em = []
+      lineChartData.labels = []
 
       var years = [];
       var data=this.state.items;
+
+      var mapping={1:"Jan",2:"Feb",3:"Mar",4:"Apr",5:"May",6:"Jun",7:"Jul",8:"Aug","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};    
+
       years = Object.keys(data.MonthWiseSummary);
+      
+
       var i,j,months;
       for (i in years) {
         months = [];
-
         months = data.MonthWiseSummary[Object.keys(data.MonthWiseSummary)[i]];
         for (j in months) {
           lineChartData.gen.push(data.MonthWiseSummary[years[i]][j].generation);
@@ -253,8 +258,10 @@ class LineChart extends Component {
           lineChartData.wc.push(data.MonthWiseSummary[years[i]][j].waterConsumption);
           lineChartData.em.push(data.MonthWiseSummary[years[i]][j].emission);
           lineChartData.wa.push(data.MonthWiseSummary[years[i]][j].waterAvailability);
+          lineChartData.labels.push(years[i]+"-"+j);
         }
-
+       
+        
       }
 
       //data: [{em:[]},{gen:[]},{ww:[]},{wc:[]},{wa:[]}]
@@ -263,6 +270,7 @@ class LineChart extends Component {
       chartdata["datasets"][2]["data"]=lineChartData.ww;
       chartdata["datasets"][3]["data"]=lineChartData.wc;
       chartdata["datasets"][4]["data"]=lineChartData.wa;
+      chartdata.labels=lineChartData.labels;
       return (
         <div style={{height:"800px",overflowY:"scroll"}}>
           <p>Line chart</p>
