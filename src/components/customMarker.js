@@ -1,12 +1,6 @@
 import React, { Component, useState } from 'react';
 import { Marker, InfoWindow } from 'react-google-maps';
-import mapStyles from "./mystyle"
-import { stateLatLngs } from '../data/stateLatLong';
-import { Button } from 'react-bootstrap';
-import FacilityChart from './facilityChart';
-import Modal from 'react-modal';
-import {stateAbr} from '../data/stateAbr';
-import Regions from './regions';
+
 
 class CustomMarker extends Component {
   constructor(props) {
@@ -27,16 +21,12 @@ class CustomMarker extends Component {
 
     // this.renderRegions = this.renderRegions.bind(this);
     this.objectForParent = {};
-    this.onClickFacility=this.onClickFacility.bind(this);
+    
     this.facilityChart=this.facilityChart.bind(this);
 
   }
 
-onClickFacility(facilityIndex){
-    //console.log("");("")("")("clicked in paarticular facility");
-    //   this.props.onClickFacility(facilityIndex);  
-    console.log("facility clicked..!")
-}
+
   facilityChart(facilityData){
    console.log("display chart");
   }

@@ -4,7 +4,7 @@ import CustomMarker from './customMarker';
 import FacilityChart from './facilityChart';
 import Modal from 'react-modal';
 import {geostats} from './geostats';
-class Regions extends Component {
+class Regions extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
@@ -24,6 +24,7 @@ class Regions extends Component {
       dataForColor:this.props.dataForColor,
       data:null,
       ismodalOpen:false,
+      
     }
     
     this.regionColor=this.regionColor.bind(this);
@@ -42,6 +43,7 @@ class Regions extends Component {
           data:e.data,
         })  
   }
+
   modalClick(e)
   {
     // this.props.modalOpen(true)
@@ -51,8 +53,7 @@ class Regions extends Component {
   }
   componentDidMount()
   {
-    console.log("compnent didmount");
-    console.log(this.props.tabledata);
+   
     this.setState({
       regions: this.props.regions,
       viewByChoice: this.props.viewByChoice,
@@ -61,7 +62,7 @@ class Regions extends Component {
   }
   componentDidUpdate(pP,pS,snap)
   { 
-    
+    console.log("regions",this.props.historicInputState);
     let i=this.state.index;
     if(pS.index!==this.state.index)
     {
@@ -73,20 +74,16 @@ class Regions extends Component {
   render() {
     {
         const scale=1;
-        
-        if (this.state.viewByChoice == "Facilities") {
+        console.log("render regions");
+        if (this.props.viewByChoice == "Facilities" ) {
         console.log("component rerender")
-        console.log(this.state.regions);
-        if(this.state.regions)
-        {
-          if(this.state.regions["All Facilities"])
+        console.log(this.props.regions);
+        if(this.props.regions["All Facilities"])
           {
-            return this.state.regions["All Facilities"].map((facility, index) => {
+            return this.props.regions["All Facilities"].map((facility, index) => {
               return  (
               <div>
-                  
                 {<CustomMarker facility={facility} arrIndex={index} index={this.state.index} data={this.state.data} modalOpen={(e)=>{this.modalClick(e)}} markerClick={(e)=>this.markerClick(e)} historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/> }
-            
                 {this.state.ismodalOpen&&index===this.state.index&&<Modal isOpen={this.state.ismodalOpen} style={
                     {
                        overlay: {
@@ -135,20 +132,18 @@ class Regions extends Component {
             </div>
           );
         }
+      
+       
       }
-        else 
-        {
-          return (
-            <div>
-              Loading...
-            </div>
-          );
-        }
-      }
-        else {
-          if(this.state.regions.length>0)
+        else if(this.props.regions.length>0){
+          
           {
-            return this.state.regions.map(regionJ => {
+            console.log("state data",this.props.viewByChoice);
+            console.log("this.props.regions");
+            console.log(this.props.regions);
+            console.log("this.props.tabledata");
+            console.log(this.props.tabledata);
+            return this.props.regions.map(regionJ => {
               let region = regionJ["geometry"];
               let type = region["type"];
               var coordinates;
@@ -183,19 +178,23 @@ class Regions extends Component {
                   onClick={async () => {
                     if (this.props.historicInputState.toLowerCase().includes("all us")) {
                       console.log("all us clicked...!!")
+
                       this.arrayForParent[0] = regionJ["properties"]["NAME"].toLowerCase() + " (state)";
                       // console.log("")(this.arrayForParent[0]);
                       this.props.formHandler(this.arrayForParent);
+                     
                     }
                     else if (this.props.historicInputState.toLowerCase().includes("state")) {
                       if (this.state.viewByChoice == "Watersheds" && regionJ.properties.SUBBASIN.toLowerCase().includes("watershed")) {
                         this.arrayForParent[0] = regionJ.properties.SUBBASIN;
-                        this.props.formHandler(this.arrayForParent);
+                        this.props.formHandlerforFacility(this.arrayForParent);
+                        
                       }
                       else if (this.state.viewByChoice == "Counties") {
                         
                         this.arrayForParent[0] = regionJ.properties.CountyState1;
-                        this.props.formHandler(this.arrayForParent);
+                        this.props.formHandlerforFacility(this.arrayForParent);
+                        
                       }
                       
                     }
@@ -205,6 +204,13 @@ class Regions extends Component {
               )
             })  
           }
+        }
+        else{
+          return(
+            <div>
+              loading...!
+            </div>
+          );
         }       
     }}
 }
