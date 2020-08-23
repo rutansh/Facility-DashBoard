@@ -47,7 +47,7 @@ class TableContent extends Component
       
       if(pP.tabledata===this.props.tabledata)
       {
-        console.log("TableContent ComponentDidUpdate:")
+        
       }
       else
       {
@@ -62,7 +62,7 @@ class TableContent extends Component
     }
     else{
       
-      console.log(this.props.tabledata);
+      
       this.setState({
             startDateProps:this.props.historicStartDate,
             endDateProps:this.props.historicEndDate,
@@ -71,88 +71,7 @@ class TableContent extends Component
           });
     }
     
-      
 
-    //   var startDate=this.props.historicStartDate;
-    //   var endDate=this.props.historicEndDate;
-    //   var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};
-    //   var startYear=parseInt(startDate.split(" ")[3])
-    //   var endYear=parseInt(endDate.split(" ")[3])
-    //   var startmonthinInt=parseInt(mapping[startDate.split(" ")[1]]);
-    //   var endmonthinInt=parseInt(mapping[endDate.split(" ")[1]]);
-    //   if(this.props.historicInputState.toLowerCase().includes("all us"))
-    //   {
-    //     var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
-    //     try{
-    //       var response=await fetch(url)
-    //       var json=await response.json()
-    //       //this.updateState(json,pP);
-    //       setTimeout(() => {this.setState({
-    //         items:json,
-    //          },() => {});}, 0);
-    //     }
-    //     catch(e)
-    //     {
-    //       console.log(e);
-    //     }
-    //   }
-    //   else if(this.props.historicInputState.toLowerCase().includes("state"))
-    //   {
-    //     var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
-    //     var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
-    //     try{
-    //       var response=await fetch(url)
-    //       var json=await response.json()
-    //       //this.updateState(json,pP);
-    //       setTimeout(() => {this.setState({
-    //         items:json,
-    //          },() => {});}, 0);
-    //     }
-        
-    //     catch(e)
-    //     {
-    //       console.log(e);
-    //     }
-    //   }
-    //   else if(this.props.historicInputState.toLowerCase().includes("county"))
-    //   {
-
-        
-    //     var countyName=this.props.historicInputState.toLowerCase()
-    //     var url="https://ewed.org:31567/ewedService/getFacilityData/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
-    //     try{
-    //       var response=await fetch(url)
-    //       var json=await response.json()
-
-    //       this.setState({
-    //         items:json,
-    //       })
-    //     }
-        
-    //     catch(e)
-    //     {
-    //       console.log(e);
-    //     }
-          
-    // }
-    // else if(this.props.historicInputState.toLowerCase().includes("watershed"))
-    // {
-    //     var hucName=this.props.historicInputState.toLowerCase()
-    //     var url="https://ewed.org:31567/ewedService/getFacilityData/HUC8Name/"+hucName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
-    //     try{
-    //       var response=await fetch(url)
-    //       var json=await response.json()
-    //       //this.updateState(json,pP);
-    //       setTimeout(() => {this.setState({
-    //         items:json,
-    //          },() => {});}, 0);
-    //     }
-    //     catch(e)
-    //     {
-    //       console.log(e);
-    //     }
-    // }
-    // }
 
   }
 

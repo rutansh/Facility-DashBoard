@@ -8,7 +8,7 @@ import Modal from 'react-modal';
 import {stateAbr} from '../data/stateAbr';
 import Regions from './regions';
 
-class MapContent extends Component {
+class MapContent extends React.PureComponent {
   constructor(props) {
     super(props);
     this.props = props;
@@ -30,8 +30,9 @@ class MapContent extends Component {
       jsonDataforChart:undefined,
       ismodalOpen:false,
       prevState:"",
-      dataForColor:null,
+      regionClick:false,
       items:this.props.tabledata,
+      regionLoaded:false,
     }
     this.backButton=this.backButton.bind(this);
     // this.renderRegions = this.renderRegions.bind(this);
@@ -42,15 +43,33 @@ class MapContent extends Component {
     this.facilityChart=this.facilityChart.bind(this);
     this.formHandler=this.formHandler.bind(this);
     this.modalOpen=this.modalOpen.bind(this);
+    this.formHandlerforFacility=this.formHandlerforFacility.bind(this);
   }
   formHandler(changeEvent){
-    //console.log("");("")("")("hello from map form"+changeEvent)
-    console.log("mapcontrol...!")
-    this.setState({
-      loading:false,
-    })
-    this.props.formHandler(changeEvent)
+    console.log("formhandler from mapcontent",changeEvent);
+    if(changeEvent[0]=="all us")
+    {
+      this.props.formHandler(changeEvent);  
+    }
+    else
+    {
+      // this.setState({
+      //   regionClick:true,
+      // })
+      //california(state)
+      this.props.formHandler(changeEvent)
+    }
+    
+    
   }
+  formHandlerforFacility(changeEvent){
+    console.log("formhandlerforfacility from mapcontent",changeEvent);
+    // this.setState({
+    //   regionClick:true,
+    // })
+    this.props.formHandlerforFacility(changeEvent)  
+  }
+
   onClickFacility(facilityObject){
     //console.log("");("")("")("clicked in paarticular facility");
     if(!this.state.isFacilitySelected)
@@ -108,9 +127,10 @@ class MapContent extends Component {
       
     })
     if (event.target.value == "States") {
+      this.setState({
+        isClicked: true,
+      })
       
-      this.arrayForParent[0] = "all us";
-      this.formHandler(this.arrayForParent);
     }
     else if (event.target.value == "Counties") {
       this.setState({
@@ -154,23 +174,34 @@ class MapContent extends Component {
     catch(e) { console.log(e) };
     
   }
-  shouldComponentUpdate(pP,pS)
-  {
+  // shouldComponentUpdate(nextProps,nextState)
+  // {
+  //   console.log("should componentupdate of mapcontent");
+  //   console.log("nextProps of tabledata");
+  //   console.log(nextProps.tabledata);
+  //   console.log("this.props.tabledata")
+  //   console.log(this.props.tabledata);
+  //   console.log((nextProps.tabledata!==this.props.tabledata)||!this.state.loading);
+  //   console.log("nextState.regions")
+  //   console.log(nextState.regions);
+  //   console.log("this.state.regions");
+  //   console.log(this.state.regions);
+  //   console.log("loading..");
+  //   console.log(nextState.loading)
+  //   // if(nextState.regions!==this.state.regions)
+  //   // {
+  //   //   return true;
+  //   // }
+  //   console.log("check");
+  //   console.log(nextState.regions===this.state.regions)
     
-
-    if(this.props.notReload)
-    {
-      console.log("false");
-      return false;
-    }
-    else
-    {
-      console.log("true");
-      return true;  
-    }
     
-  }
+  //     return true;
+    
+    
+  // }
   async componentDidUpdate(pP, pS, snap) {
+    
     let startDate = this.props.historicStartDate;
     let endDate = this.props.historicEndDate;
     let mapping = { "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sep": "9", "Oct": "10", "Nov": "11", "Dec": "12" };
@@ -178,12 +209,13 @@ class MapContent extends Component {
     let endYear = parseInt(endDate.split(" ")[3])
     let startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
     let endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
+    console.log("component did update of mapcontent"+this.props.historicInputState); 
     if (pP.historicInputState === this.props.historicInputState && pP.historicStartDate === this.props.historicStartDate && pP.historicEndDate === this.props.historicEndDate) 
     {
 
-      console.log("didupdate of mapcontent");
+      console.log("component did update of mapcontent and everything is same:"+this.props.historicInputState+":"+this.state.regionClick);
+      console.log(this.props.tabledata);
       if (this.state.viewByChoice == "Counties" && this.state.isClicked) {
-
         var stateName = this.props.historicInputState.split(" (")
         stateName = stateName[0].split(" ");
         var state = "";
@@ -192,9 +224,8 @@ class MapContent extends Component {
           state = state + ((stateName[i].substr(0, 1).toUpperCase() + stateName[i].substr(1)) + " ");
         }
         stateName = state.trim();
-        var obj={viewByChoice:"Counties",state:this.props.historicInputState} 
-        this.props.viewByButtonClicked(obj);
-        console.log("return back.....")
+        
+        
         let long = stateLatLngs[stateName]["longitude"];
         let lat = stateLatLngs[stateName]["latitude"];
         var url = "https://ewed.org:3004/counties-in-state/" + stateName
@@ -211,6 +242,8 @@ class MapContent extends Component {
             prevState:pP.historicInputState,
             
           })
+          var obj={viewByChoice:"Counties",state:this.props.historicInputState} 
+        this.props.viewByButtonClicked(obj);
           
         }
         catch (e) {
@@ -225,8 +258,7 @@ class MapContent extends Component {
           state = state + ((stateName[i].substr(0, 1).toUpperCase() + stateName[i].substr(1)) + " ");
         }
         stateName = state.trim();
-        var obj={viewByChoice:"Watersheds",state:this.props.historicInputState} 
-        this.props.viewByButtonClicked(obj);
+        
         let long = stateLatLngs[stateName]["longitude"];
         let lat = stateLatLngs[stateName]["latitude"];
         var url = "https://ewed.org:3004/hucs-in-state/" + stateName
@@ -249,6 +281,8 @@ class MapContent extends Component {
         catch (e) {
           console.log(e);
         }
+        var obj={viewByChoice:"Watersheds",state:this.props.historicInputState} 
+        this.props.viewByButtonClicked(obj);
       }
       else if (this.state.viewByChoice == "Facilities" && this.state.isClicked)
       {
@@ -262,8 +296,7 @@ class MapContent extends Component {
         let endYear = parseInt(endDate.split(" ")[3])
         let startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
         let endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
-        var obj={viewByChoice:"Facilities",state:this.props.historicInputState} 
-        this.props.viewByButtonClicked(obj);
+        
         var url = "https://ewed.org:28469/ewedService/getFacilityData/stateName/"+name+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all";
         try {
           var response = await fetch(url)
@@ -280,20 +313,24 @@ class MapContent extends Component {
         catch (e) {
           console.log("");
         }
+        var obj={viewByChoice:"Facilities",state:this.props.historicInputState} 
+        this.props.viewByButtonClicked(obj);
+
         
       }
       else if (this.state.viewByChoice == "States" && this.state.isClicked)
       {
         
         var url = "https://ewed.org:3004/all-states";
-      
+        this.arrayForParent[0] = "all us";
+        
         try {
           var response = await fetch(url)
           var json = await response.json()
           //this.updateState(json,pP);
           await this.setState({
             regions: json["features"],
-            loading: false,
+            loading: true,
             lattitude: 39.833333,
             longitude: -98.583333,
             zoom: 4.46,
@@ -301,25 +338,104 @@ class MapContent extends Component {
             prevState:"",
       
           })
+          this.formHandler(this.arrayForParent);
         }
         catch (e) {
           console.log(e);
         }
       }
+      // else if(this.props.historicInputState.toLowerCase().includes("state") && pS.regions!==this.state.regions)
+      // {
+      //   console.log("state with false regionclick");
+      //   console.log(this.props.tabledata);
+      //   var stateName = this.props.historicInputState.split(" (")
+      //   stateName = stateName[0].split(" ");
+      //   var state = "";
+      //   for (let i = 0; i < stateName.length; i++) {
+      //     state = state + ((stateName[i].substr(0, 1).toUpperCase() + stateName[i].substr(1)) + " ");
+      //   }
+      //   stateName = state.trim();
+      //   let long = stateLatLngs[stateName]["longitude"];
+      //   let lat = stateLatLngs[stateName]["latitude"];
+      //   var url = "https://ewed.org:3004/hucs-in-state/" + stateName
+      //   try {
+      //     var response = await fetch(url)
+      //     var json = await response.json()
+      //     await this.setState({
+      //       regions: json["features"],
+      //       loading: true,
+      //       longitude: long,
+      //       latitude: lat,
+      //       zoom: 6,
+      //       viewByChoice: "Watersheds",
+      //       prevState:"all us",
+      //       items:this.props.tabledata,
+      //       startDateProps: this.props.historicStartDate,
+      //       endDateProps: this.props.historicEndDate,
+      //       nameOfState: this.props.historicInputState,
+            
+      //     })
+      //     console.log("regions for geojson");
+      //     console.log(json);
+
+      //   }
+      //   catch (e) {
+      //     console.log(e);
+      //   }
+      // }
+      // else if(!this.state.regionClick && this.props.historicInputState.toLowerCase().includes("watershed") && !this.state.regionLoaded)
+      // {
+      //   var hucName = this.props.historicInputState.toLowerCase();
+      //   var stateNamefromWatershed=hucName.split(" (");
+      //   stateNamefromWatershed=stateNamefromWatershed[1].substr(0,stateNamefromWatershed[1].length-1);
+        
+      //   if(stateNamefromWatershed.includes(","))
+      //   {
+      //     stateNamefromWatershed=stateNamefromWatershed.split(",")[0].toUpperCase();
+      //   }
+      //   else
+      //   {
+      //     stateNamefromWatershed=stateNamefromWatershed.toUpperCase();
+      //   }
+        
+      //   var lat=stateLatLngs[stateAbr[stateNamefromWatershed]].latitude;
+      //   var long=stateLatLngs[stateAbr[stateNamefromWatershed]].longitude;
+        
+      //   var url = "https://ewed.org:41513/ewedService/getFacilityData/HUC8Name/" + hucName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/all"
+      //   try {
+      //     var response = await fetch(url)
+      //     var json = await response.json()
+      //     await this.setState({
+      //       regions: json,
+      //       loading: true,
+      //       viewByChoice: "Facilities",
+      //       zoom: 7.0,
+      //       latitude:lat,
+      //       longitude:long,
+      //       prevState:stateAbr[stateNamefromWatershed]+" (state)",
+      //       items:this.props.tabledata,
+      //       startDateProps: this.props.historicStartDate,
+      //       endDateProps: this.props.historicEndDate,
+      //       nameOfState: this.props.historicInputState,
+      //       regionLoaded:true,
+      //     })
+      //   }
+      //   catch (e) {
+      //     console.log(e);
+      //   }
+      // }
+      
       
     }
     else {
-     
-        this.setState({
-          startDateProps: this.props.historicStartDate,
-          endDateProps: this.props.historicEndDate,
-          nameOfState: this.props.historicInputState,
-        });
       
+        
+      console.log("component didupdate of mapcontent and everything is not same");
       if (this.props.historicInputState.toLowerCase().includes("all us")) {
         var url = "https://ewed.org:3004/all-states"
         var url2="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
         try {
+             
           var response = await fetch(url)
           var json = await response.json()
           //this.updateState(json,pP);
@@ -331,15 +447,17 @@ class MapContent extends Component {
             zoom: 4.46,
             prevState:"",
             items:this.props.tabledata,
+            startDateProps: this.props.historicStartDate,
+            endDateProps: this.props.historicEndDate,
+            nameOfState: this.props.historicInputState,
           })
         }
         catch (e) {
           console.log(e);
         }
       }
-      else if (this.props.historicInputState.toLowerCase().includes("state") ) {
-        console.log("this is compnentdid update of mapcontent");
-        console.log(this.props.tabledata);
+      else if (this.props.historicInputState.toLowerCase().includes("state")) {
+        
         var stateName = this.props.historicInputState.split(" (")
         stateName = stateName[0].split(" ");
         var state = "";
@@ -362,6 +480,9 @@ class MapContent extends Component {
             viewByChoice: "Watersheds",
             prevState:"all us",
             items:this.props.tabledata,
+            startDateProps: this.props.historicStartDate,
+            endDateProps: this.props.historicEndDate,
+            nameOfState: this.props.historicInputState,
           })
         }
         catch (e) {
@@ -399,6 +520,9 @@ class MapContent extends Component {
             longitude:long,
             prevState:stateNamefromCounty+" (state)",
             items:this.props.tabledata,
+            startDateProps: this.props.historicStartDate,
+            endDateProps: this.props.historicEndDate,
+            nameOfState: this.props.historicInputState,
           })
         }
         catch (e) {
@@ -437,7 +561,9 @@ class MapContent extends Component {
             longitude:long,
             prevState:stateAbr[stateNamefromWatershed]+" (state)",
             items:this.props.tabledata,
-
+            startDateProps: this.props.historicStartDate,
+            endDateProps: this.props.historicEndDate,
+            nameOfState: this.props.historicInputState,
           })
         }
         catch (e) {
@@ -446,7 +572,7 @@ class MapContent extends Component {
       }
       else if(this.state.viewByChoice=="Facilities" && this.props.notReload)
       {
-        console.log("facility without click in didupdate!")
+        
         var name=this.props.historicInputState;
         name=name.split(" (")[0];
       
@@ -467,7 +593,10 @@ class MapContent extends Component {
             isClicked: false,
             loading: true,
             prevState:pP.historicInputState,
-            viewByChoice:"Facilities"
+            viewByChoice:"Facilities",
+            startDateProps: this.props.historicStartDate,
+            endDateProps: this.props.historicEndDate,
+            nameOfState: this.props.historicInputState,
           })
           
        }
@@ -489,57 +618,22 @@ class MapContent extends Component {
         {this.state.regions!== null ?
         <Regions regions={this.state.regions} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate} 
         historicInputState={this.props.historicInputState} displayChoice={this.state.displayChoice} viewByChoice={this.state.viewByChoice}
-        formHandler={(e)=>this.formHandler(e)} tabledata={this.props.tabledata} modalOpen={(e)=>this.modalOpen(e)}
+        formHandler={(e)=>this.formHandler(e)} formHandlerforFacility={(e)=>this.formHandlerforFacility(e)}tabledata={this.props.tabledata} modalOpen={(e)=>this.modalOpen(e)}
         />:console.log("do nothing")}
-        
-        {/* {this.state.regions !== null ? this.renderRegions(this.state.nameOfState) : console.log("do nothing")}     */}
       </GoogleMap>));
     
-    if (!this.state.loading || !this.props.status) {
+    if (!this.state.loading) {
       
       return (
         <div>Loading...!</div>
       )
     }
     else {
-      console.log("county data in render:");
-      console.log(this.props.tabledata);
+      
       return (
         <div>
           <div>
-        {/* {this.state.ismodalOpen&&<Modal isOpen={this.state.ismodalOpen} style={
-                    {
-                       overlay: {
-                        position: 'fixed',
-                        zIndex:4,
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundColor: 'rgba(255, 255, 255, 0.75)',
-                        height:"1200px",
-                        width:"2300px"
-
-                      },
-                      content: {
-                        position: 'absolute',
-                        top: '300px',
-                        left: '690px',
-                        right: '690px',
-                        bottom: '300px',
-                        border: '1px solid #ccc',
-                        background: '#fff',
-                        overflow: 'auto',
-                        WebkitOverflowScrolling: 'touch',
-                        borderRadius: '4px',
-                        outline: 'none',
-                        padding: '20px'
-                      }
-                    }
-                  }>
-                  <FacilityChart facilityData={this.state.jsonDataforChart} startDate={this.state.startDateProps} endDate={this.state.endDateProps}/>
-                    <button onClick={()=>{this.setState({ismodalOpen:false})}}>Close</button>
-        </Modal>} */}
+        
         </div>
         <div>
             <div style={{position:"absolute",zIndex:1}} >  
