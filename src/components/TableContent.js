@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import * as ReactBootstrap from "react-bootstrap";
 import ReactToExcel from 'react-html-table-to-excel';
-
+import UserContext from './Context/updateContext';
 class TableContent extends Component 
 {
   constructor(props)
@@ -16,21 +16,22 @@ class TableContent extends Component
           counter:1,
         }     
         this.updateState=this.updateState.bind(this);
+        this.strokeColor=this.strokeColor.bind(this);
   }
   updateState = (json,pP) => {
-    
      this.setState({
        items: json,
      },() => {})
    }
+  strokeColor=(item)=>{
+    this.props.setRegion(item.filterName);
+  }
   componentDidMount()
   {
-   
     this.setState({
             isLoaded:true,
             items:this.props.tabledata,    
-        });
-        
+        });  
   }
   // shouldComponentUpdate()
   // {
@@ -44,7 +45,6 @@ class TableContent extends Component
   {
     if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate)
     {
-      
       if(pP.tabledata===this.props.tabledata)
       {
         
@@ -58,27 +58,18 @@ class TableContent extends Component
           items:this.props.tabledata,
         });
       }
-      
     }
     else{
-      
-      
       this.setState({
             startDateProps:this.props.historicStartDate,
             endDateProps:this.props.historicEndDate,
             nameOfState:this.props.historicInputState,
             items:this.props.tabledata,
           });
-    }
-    
-
-
+        }
   }
-
-
   render()
   {
-      
       var startDate=this.state.startDateProps;
       var endDate=this.state.endDateProps;
       var formatstartDate=startDate.split(" ")[1]+"-"+startDate.split(" ")[3]+"  ";
@@ -91,11 +82,10 @@ class TableContent extends Component
       }
       else
       {
-        if((typeof this.state.items["Total Summary"]) !== "undefined" && this.state.nameOfState.toLowerCase().includes("all us"))
+        if((typeof this.props.tabledata["Total Summary"]) !== "undefined" && this.props.historicInputState.toLowerCase().includes("all us"))
         {
           
           return(
-          
             <div style={{ height: "885px",overflowY: "scroll"}} >
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '5px' }}>
             <div style={{marginTop:"20px"}}>
@@ -105,17 +95,12 @@ class TableContent extends Component
             <div style={{marginLeft:"450px",marginTop:"20px"}}>
             <ReactToExcel 
                 table="tableid"
-                filename=""
+                filename={this.props.historicInputState}
                 sheet="sheet 1"
                 buttonText="Download .CSV"
-                className="btn"
-                />
+                className="btn"/>
             </div>
-            
             </div>
-            
-            
-            
             <ReactBootstrap.Table id="tableid" striped bordered hover>
             <thead>
               <tr>
@@ -128,15 +113,22 @@ class TableContent extends Component
             </thead>
             <tbody className="scrollit">   
               <tr>
-                
                   <td><b>Total</b></td>
-                  <td><b>{this.state.items["Total Summary"][0].totalGeneration}</b></td>
-                  <td><b>{this.state.items["Total Summary"][0].totalEmission}</b></td>
-                  <td><b>{this.state.items["Total Summary"][0].totalWaterConsumption}</b></td>
-                  <td><b>{this.state.items["Total Summary"][0].totalWaterWithdrawal}</b></td>
+                  <td><b>{this.props.tabledata["Total Summary"][0].totalGeneration}</b></td>
+                  <td><b>{this.props.tabledata["Total Summary"][0].totalEmission}</b></td>
+                  <td><b>{this.props.tabledata["Total Summary"][0].totalWaterConsumption}</b></td>
+                  <td><b>{this.props.tabledata["Total Summary"][0].totalWaterWithdrawal}</b></td>
               </tr>
-              {this.state.items["Summary"].map((item,index)=>(
-                  <tr key={index}>
+              {this.props.tabledata["Summary"].map((item,index)=>(
+                  <tr 
+                  key={index} 
+                  onMouseOver={()=>{
+                    this.props.setRegion(item.filterName)
+                  }} 
+                  onMouseOut={()=>{
+                    this.props.setRegion("")
+                    }}
+                  onClick={()=>{if(!item.filterName){}else{this.props.formHandler(item.filterName.toLowerCase()+" (state)")}}}>
                   <td>{item.filterName}</td>
                   <td>{item.generation}</td>
                   <td>{item.emission}</td>
@@ -144,20 +136,14 @@ class TableContent extends Component
                   <td>{item.waterWithdrawal}</td>
               </tr>  
               ))}            
-                  
             </tbody>
           </ReactBootstrap.Table>
-                
-  
             </div>
             );
-
-
         }
-        else if((typeof this.state.items["Summary"]) !== "undefined" && this.state.nameOfState.toLowerCase().includes("state")&&this.props.viewByChoice==="Facilities")
+        else if((typeof this.props.tabledata["Summary"]) !== "undefined" && this.state.nameOfState.toLowerCase().includes("state")&&this.props.viewByChoice==="Facilities")
         {
           return(
-          
             <div style={{ height: "885px",overflowY: "scroll"}}>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '5px' }}>
             <div style={{marginTop:"20px"}}>
@@ -173,7 +159,6 @@ class TableContent extends Component
                 className="btn"
                 />
             </div>
-            
             </div>
           {/* <p>{JSON.stringify(this.state.items["All Facilities"])}</p> */}
                 <ReactBootstrap.Table id="tableid" striped bordered hover>
@@ -205,15 +190,15 @@ class TableContent extends Component
               ))}               
             </tbody>
           </ReactBootstrap.Table>
-      </div>
-            );
-
+        </div>
+        );
         }
-        else if((typeof this.state.items["Total Summary"]) !== "undefined" && this.state.nameOfState.toLowerCase().includes("state")&&this.props.viewByChoice!=="Facilities")
+        else if((typeof this.props.tabledata["Total Summary"]) !== "undefined" && this.state.nameOfState.toLowerCase().includes("state")&&this.props.viewByChoice!=="Facilities")
         {
           nameOfState=this.props.historicInputState;
+          
           return(
-               <div style={{ height: "885px",overflowY: "scroll"}}>
+            <div style={{ height: "885px",overflowY: "scroll"}}>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '5px' }}>
             <div style={{marginTop:"20px"}}>
               <b>Activity for {nameOfState}</b>
@@ -228,7 +213,6 @@ class TableContent extends Component
                 className="btn"
                 />
             </div>
-            
             </div>
             <ReactBootstrap.Table id="tableid" striped bordered hover>
             <thead>
@@ -243,13 +227,21 @@ class TableContent extends Component
             <tbody>   
               <tr>
                   <td><b>Total</b></td>
-                  <td><b>{this.state.items["Total Summary"][0].totalGeneration}</b></td>
-                  <td><b>{this.state.items["Total Summary"][0].totalEmission}</b></td>
-                  <td><b>{this.state.items["Total Summary"][0].totalWaterConsumption}</b></td>
-                  <td><b>{this.state.items["Total Summary"][0].totalWaterWithdrawal}</b></td>
+                  <td><b>{this.props.tabledata["Total Summary"][0].totalGeneration}</b></td>
+                  <td><b>{this.props.tabledata["Total Summary"][0].totalEmission}</b></td>
+                  <td><b>{this.props.tabledata["Total Summary"][0].totalWaterConsumption}</b></td>
+                  <td><b>{this.props.tabledata["Total Summary"][0].totalWaterWithdrawal}</b></td>
               </tr>
-              {this.state.items["Summary"].map((item,index)=>(
-                  <tr key={index}>
+              {this.props.tabledata["Summary"].map((item,index)=>(
+                  <tr key={index} 
+                  onMouseOver={()=>{
+                    
+                    this.props.setRegion(item.filterName)
+                  }} 
+                  onMouseOut={()=>{
+                    this.props.setRegion("")
+                    }}
+                  onClick={()=>{if(!item.filterName){}else{this.props.formHandler(item.filterName)}}}>
                   <td>{item.filterName}</td>
                   <td>{item.generation}</td>
                   <td>{item.emission}</td>
@@ -260,34 +252,30 @@ class TableContent extends Component
                   
             </tbody>
           </ReactBootstrap.Table>
-  
-  
-            </div>
-            );
-        }
-        else if((typeof this.state.items["All Facilities"]) !== "undefined" && this.state.nameOfState.toLowerCase().includes("county"))
+        </div>
+            );}
+        else if((typeof this.props.tabledata["All Facilities"]) !== "undefined" && this.state.nameOfState.toLowerCase().includes("county"))
         {
-          return(
           
+          return(
             <div style={{ height: "885px",overflowY: "scroll"}}>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '5px' }}>
             <div style={{marginTop:"20px"}}>
-              <b>Activity for {nameOfState}</b>
-              <p><b>({formatstartDate} to {formatendDate}) </b></p>
+            <b>Activity for {nameOfState}</b>
+            <p><b>({formatstartDate} to {formatendDate}) </b></p>
             </div>
             <div style={{marginLeft:"450px",marginTop:"20px"}}>
-            <ReactToExcel 
-                table="tableid"
-                filename=""
-                sheet="sheet 1"
-                buttonText="Download .CSV"
-                className="btn"
-                />
+              <ReactToExcel 
+                  table="tableid"
+                  filename=""
+                  sheet="sheet 1"
+                  buttonText="Download .CSV"
+                  className="btn"
+                  />
             </div>
-            
             </div>
-          {/* <p>{JSON.stringify(this.state.items["All Facilities"])}</p> */}
-                <ReactBootstrap.Table id="tableid" striped bordered hover>
+            {/* <p>{JSON.stringify(this.state.items["All Facilities"])}</p> */}
+            <ReactBootstrap.Table id="tableid" striped bordered hover>
             <thead>
               <tr>
                 <th>Facility Name</th>
@@ -300,13 +288,21 @@ class TableContent extends Component
             <tbody>   
               <tr>
                   <td><b>Total</b></td>
-                  <td><b>{this.state.items["Summary"][0].totalGeneration}</b></td>
-                  <td><b>{this.state.items["Summary"][0].totalEmission}</b></td>
-                  <td><b>{this.state.items["Summary"][0].totalWaterConsumption}</b></td>
-                  <td><b>{this.state.items["Summary"][0].totalWaterWithdrawal}</b></td>
+                  <td><b>{this.props.tabledata["Summary"][0].totalGeneration}</b></td>
+                  <td><b>{this.props.tabledata["Summary"][0].totalEmission}</b></td>
+                  <td><b>{this.props.tabledata["Summary"][0].totalWaterConsumption}</b></td>
+                  <td><b>{this.props.tabledata["Summary"][0].totalWaterWithdrawal}</b></td>
               </tr>
-              {this.state.items["All Facilities"].map((item,index)=>(
-                  <tr key={index}>
+              {this.props.tabledata["All Facilities"].map((item,index)=>(
+                  <tr key={index}
+                  onMouseOver={()=>{
+                    
+                    this.props.setRegion(item.PRIMARY_NAME)
+                  }} 
+                  onMouseOut={()=>{
+                    this.props.setRegion("")
+                    }}
+                  onClick={()=>{this.props.formHandler(item.PRIMARY_NAME)}}>
                   <td>{item.PRIMARY_NAME}</td>
                   <td>{item.GenerationSummary}</td>
                   <td>{item.EmissionSummary}</td>
@@ -317,13 +313,13 @@ class TableContent extends Component
             </tbody>
           </ReactBootstrap.Table>
       </div>
-            );
+      );
         }
-        else if((typeof this.state.items["All Facilities"]) !== "undefined" && this.state.nameOfState.toLowerCase().includes("watershed"))
+        else if((typeof this.props.tabledata["All Facilities"]) !== "undefined" && (this.state.nameOfState.toLowerCase().includes("watershed")|| true))
         {
+          
           nameOfState=this.props.historicInputState;
           return(
-          
             <div style={{height: "885px",overflowY: "scroll"}}>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '5px' }}>
             <div style={{marginTop:"20px"}}>
@@ -339,9 +335,7 @@ class TableContent extends Component
                 className="btn"
                 />
             </div>
-            
             </div>
-            
           {/* <p>{JSON.stringify(this.state.items["All Facilities"])}</p> */}
           <ReactBootstrap.Table id="tableid" striped bordered hover>
             <thead>
@@ -361,7 +355,7 @@ class TableContent extends Component
                   <td><b>{this.state.items["Summary"][0].totalWaterConsumption}</b></td>
                   <td><b>{this.state.items["Summary"][0].totalWaterWithdrawal}</b></td>
               </tr>
-              {this.state.items["All Facilities"].map((item,index)=>(
+              {this.state.items["All Facilities"]?this.state.items["All Facilities"].map((item,index)=>(
                   <tr key={index}>
                   <td>{item.PRIMARY_NAME}</td>
                   <td>{item.GenerationSummary}</td>
@@ -369,16 +363,25 @@ class TableContent extends Component
                   <td>{item.WaterConsumptionSummary}</td>
                   <td>{item.WaterWithdrawalSummary}</td>
               </tr>  
-              ))}        
+              )):<div>Loading...!</div>}        
             </tbody>
           </ReactBootstrap.Table>
         </div>
             );
         }
+        
         else{
           return <div>Loading...</div>
         }
       }   
   }
 }
-export default TableContent;
+export default (props)=>{
+  return(
+    <UserContext.Consumer>
+    {(context)=>{
+      return <TableContent {...props}{...context}/>
+    }} 
+  </UserContext.Consumer>
+  )
+}

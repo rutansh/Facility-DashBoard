@@ -15,6 +15,10 @@ class FormControl extends Component {
   projectedFormHandler(changeEvent){
     this.props.formHandler(changeEvent)
   }
+  componentDidUpdate(pP,pS)
+  {
+    console.log("didupdate");
+  }
   render()
   {
     return(
