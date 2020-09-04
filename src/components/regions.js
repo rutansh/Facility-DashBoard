@@ -1,9 +1,11 @@
-import React, { Component, useState } from 'react';
-import { Marker, InfoWindow, Polygon } from 'react-google-maps';
+import React from 'react';
 import CustomMarker from './customMarker';
 import FacilityChart from './facilityChart';
 import Modal from 'react-modal';
 import {geostats} from './geostats';
+import StateLayer from './stateLayer';
+import UserContext from './Context/updateContext';
+
 class Regions extends React.Component {
   constructor(props) {
     super(props);
@@ -26,16 +28,23 @@ class Regions extends React.Component {
       ismodalOpen:false,
       
     }
+    var g=new geostats();
     
-    this.regionColor=this.regionColor.bind(this);
     this.markerClick=this.markerClick.bind(this);
     this.modalClick=this.modalClick.bind(this);
+    this.formHandler=this.formHandler.bind(this);
+    this.formHandlerforFacility=this.formHandlerforFacility.bind(this);
     this.arrayForParent = []; 
   }
-  regionColor()
+  formHandler(e)
   {
-      return "green"
+    this.props.formHandler(e);
   }
+  formHandlerforFacility(e)
+  {
+    this.props.formHandlerforFacility(e);
+  }
+  
   markerClick(e)
   {
         this.setState({
@@ -62,7 +71,7 @@ class Regions extends React.Component {
   }
   componentDidUpdate(pP,pS,snap)
   { 
-    console.log("regions",this.props.historicInputState);
+    
     let i=this.state.index;
     if(pS.index!==this.state.index)
     {
@@ -71,19 +80,68 @@ class Regions extends React.Component {
         })
     }
   }
+  
   render() {
     {
         const scale=1;
-        console.log("render regions");
-        if (this.props.viewByChoice == "Facilities" ) {
-        console.log("component rerender")
-        console.log(this.props.regions);
+        if (this.props.viewByChoice == "Facilities" ) 
+        {
         if(this.props.regions["All Facilities"])
           {
+            let dataforcolor=this.props.tabledata;
+            let data=this.props.tabledata.Summary;
+            let arr=[];
+            let objforstate={};
+            var g=new geostats();
+            if(this.props.regions["All Facilities"].length!==0)
+            {
+              for(let i=0;i<this.props.regions["All Facilities"].length;i++)
+              {
+                if(this.props.displayChoice=="Water Consumption")
+                {
+                  arr.push(Number(this.props.regions["All Facilities"][i].WaterConsumptionSummary));
+                  
+                }
+                else if(this.props.displayChoice=="Water Withdrawal")
+                {
+                  arr.push(Number(this.props.regions["All Facilities"][i].WaterWithdrawalSummary));
+                }
+                else
+                {
+                  arr.push(Number(this.props.regions["All Facilities"][i].EmissionSummary));
+                }
+                objforstate[this.props.regions["All Facilities"][i].PRIMARY_NAME]=this.props.regions["All Facilities"][i];
+              }
+
+              if(arr.length>0)
+              {
+                
+                if(arr.length<=5)
+                {
+                  g.setSerie(arr);
+                  g.setPrecision(2);
+                  g.getClassJenks2(arr.length-1);
+                }
+                else
+                {
+                  console.log(arr);
+                  console.log(g);
+                  g.setSerie(arr);
+                  g.setPrecision(2);
+                  g.getClassJenks2(5);
+                }
+              }
+            }
             return this.props.regions["All Facilities"].map((facility, index) => {
               return  (
               <div>
-                {<CustomMarker facility={facility} arrIndex={index} index={this.state.index} data={this.state.data} modalOpen={(e)=>{this.modalClick(e)}} markerClick={(e)=>this.markerClick(e)} historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/> }
+                {<CustomMarker 
+                facility={facility} arrIndex={index} index={this.state.index} 
+                data={this.state.data} modalOpen={(e)=>{this.modalClick(e)}} 
+                markerClick={(e)=>this.markerClick(e)} historicInputState={this.props.historicInputState} 
+                historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}
+                objforstate={objforstate} g={g} displayChoice={this.props.displayChoice}
+                /> }
                 {this.state.ismodalOpen&&index===this.state.index&&<Modal isOpen={this.state.ismodalOpen} style={
                     {
                        overlay: {
@@ -114,15 +172,12 @@ class Regions extends React.Component {
                       }
                     }
                   }>
-
                 <FacilityChart facilityData={this.state.data} startDate={this.props.historicStartDate} endDate={this.props.historicEndDate}/>
                 <button onClick={()=>{this.setState({ismodalOpen:false})}}>Close</button>
                 </Modal>} 
-
               </div>
           )}
         );  
-        
         }  
         else
         {
@@ -132,21 +187,57 @@ class Regions extends React.Component {
             </div>
           );
         }
-      
-       
       }
-        else if(this.props.regions.length>0){
-          
+      else if(this.props.regions.length>0 && this.props.tabledata.Summary.length!==1){
+      {
+        //pattern find the data in facility , what is in data and in datacolor
+        let dataforcolor=this.props.tabledata;
+        let data=this.props.tabledata.Summary;
+
+        let arr=[];
+        let objforstate={};
+        var g=new geostats();
+        if(this.props.viewByChoice!=="Facilities")
+        {
+          if(data)
           {
-            console.log("state data",this.props.viewByChoice);
-            console.log("this.props.regions");
-            console.log(this.props.regions);
-            console.log("this.props.tabledata");
-            console.log(this.props.tabledata);
+              for(let i=0;i<data.length;i++)
+              {
+                if(this.props.displayChoice=="Water Consumption")
+                {
+                  arr.push(Number(data[i].waterConsumption));
+                  
+                }
+                else if(this.props.displayChoice=="Water Withdrawal")
+                {
+                  arr.push(Number(data[i].waterWithdrawal));
+                }
+                else
+                {
+                  arr.push(Number(data[i].emission));
+                }
+                objforstate[data[i].filterName]=data[i];
+              }
+              if(arr.length>0)
+              {
+                g.setSerie(arr);
+                g.setPrecision(2);
+                if(arr.length<10)
+                {
+                  g.getClassJenks(arr.length);  
+                }
+                else{
+                  g.getClassJenks(10);
+                }
+                
+              }
+              //map->based on key name, function -> 2 (g,map,regionJ.properties.NAME)->g.random(map[regionJ.properties.NAME].waterConsumption)
+          }
+        }
             return this.props.regions.map(regionJ => {
               let region = regionJ["geometry"];
               let type = region["type"];
-              var coordinates;
+              var coordinates=[];
               if (type === "MultiPolygon") {
                 var tempArr = []
                 var coord = region["coordinates"]
@@ -155,6 +246,7 @@ class Regions extends React.Component {
                     temp.map(t => {
                       tempArr.push(t)
                     })
+
                   })
                 })
                 coordinates = tempArr
@@ -164,43 +256,13 @@ class Regions extends React.Component {
                 coordinates = region["coordinates"][0]
               }
               let coordArr = []
-              coordinates.map(coordinate => coordArr.push({ lat: coordinate[1], lng: coordinate[0] }))
-              return (
-                <Polygon
-                  ref={this.polygonRef}
-                  path={coordArr}
-                  options={{
-                    strokeColor: 'rgba(0,0,0,0.5)',
-                    strokeOpacity: 0.2,
-                    strokeWeight: 0.5,
-                    fillColor: this.regionColor(regionJ,this.state.displayChoice),
-                  }}
-                  onClick={async () => {
-                    if (this.props.historicInputState.toLowerCase().includes("all us")) {
-                      console.log("all us clicked...!!")
-
-                      this.arrayForParent[0] = regionJ["properties"]["NAME"].toLowerCase() + " (state)";
-                      // console.log("")(this.arrayForParent[0]);
-                      this.props.formHandler(this.arrayForParent);
-                     
-                    }
-                    else if (this.props.historicInputState.toLowerCase().includes("state")) {
-                      if (this.state.viewByChoice == "Watersheds" && regionJ.properties.SUBBASIN.toLowerCase().includes("watershed")) {
-                        this.arrayForParent[0] = regionJ.properties.SUBBASIN;
-                        this.props.formHandlerforFacility(this.arrayForParent);
-                        
-                      }
-                      else if (this.state.viewByChoice == "Counties") {
-                        
-                        this.arrayForParent[0] = regionJ.properties.CountyState1;
-                        this.props.formHandlerforFacility(this.arrayForParent);
-                        
-                      }
-                      
-                    }
-                  }
-                  }
-                />
+              coordinates.map(coordinate => coordArr.push({ lat: coordinate[1], lng: coordinate[0] }));
+              return(
+                  <StateLayer displayChoice={this.props.displayChoice}viewByChoice={this.props.viewByChoice} coordArr={coordArr} 
+                  regionJ={regionJ} historicInputState={this.props.historicInputState} 
+                  formHandler={(e)=>{this.formHandler(e)}} 
+                  formHandlerforFacility={(e)=>{this.formHandlerforFacility(e)}} 
+                  objforstate={objforstate} g={g}/> 
               )
             })  
           }
@@ -214,4 +276,12 @@ class Regions extends React.Component {
         }       
     }}
 }
-export default Regions;
+export default (props)=>{
+  return(
+    <UserContext.Consumer>
+    {(context)=>{
+      return <Regions {...props}{...context}/>
+    }} 
+  </UserContext.Consumer>
+  )
+}

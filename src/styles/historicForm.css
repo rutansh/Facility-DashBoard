@@ -35,3 +35,11 @@
 ul {
     list-style: none;
   }
+.sc-bwzfXH.zNoeh.react-search-box-dropdown {
+    max-height: 300px;
+    overflow: auto;
+    position: absolute;
+    top: 70px;
+    z-index: 9;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+}

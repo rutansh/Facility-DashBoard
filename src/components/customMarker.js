@@ -1,5 +1,7 @@
 import React, { Component, useState } from 'react';
 import { Marker, InfoWindow } from 'react-google-maps';
+import {geostats} from './geostats';
+import {facilityHax} from './facilityHax';
 
 
 class CustomMarker extends Component {
@@ -18,22 +20,33 @@ class CustomMarker extends Component {
       prevState:"",
       index:this.props.arrIndex,
     }
-
     // this.renderRegions = this.renderRegions.bind(this);
     this.objectForParent = {};
-    
+    this.setRadius=this.setRadius.bind(this);
     this.facilityChart=this.facilityChart.bind(this);
-
   }
-
-
+  
   facilityChart(facilityData){
    console.log("display chart");
   }
-
-  
-  componentDidMount() {
+  setRadius(g,facility,map)
+  {
     
+    if(this.props.displayChoice=="Water Consumption")
+    {
+      return facilityHax[g.getRangeNum(Number(map[facility.PRIMARY_NAME].WaterConsumptionSummary))];
+    }
+    else if(this.props.displayChoice=="Water Withdrawal")
+    {
+      return facilityHax[g.getRangeNum(Number(map[facility.PRIMARY_NAME].WaterWithdrawalSummary))];
+    }
+    else
+    {
+      return facilityHax[g.getRangeNum(Number(map[facility.PRIMARY_NAME].EmissionSummary))];
+    }
+    
+  }
+  componentDidMount() {
     this.setState({
         loading:true,
     })
@@ -46,6 +59,7 @@ class CustomMarker extends Component {
       }
       return true;
   }
+
   render() {
     if (!this.state.loading) {
       
@@ -74,7 +88,7 @@ class CustomMarker extends Component {
                   fillOpacity: 0.4,
                   anchor: {x:0,y:0},
                   strokeWeight: 0,
-                  scale: 1
+                  scale: this.setRadius(this.props.g,this.props.facility,this.props.objforstate)
                 }}
                 onClick={
                     (async ()=>{

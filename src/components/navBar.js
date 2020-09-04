@@ -4,6 +4,7 @@ import TableContent from './TableContent';
 import PieChart from './pie';
 import BarChart from './bar';
 import LineChart from './line';
+
 class NavBar extends Component {
     constructor(props)
     {
@@ -11,10 +12,14 @@ class NavBar extends Component {
       this.state = {
         activeItem: "1",
         items:this.props.tabledata,
-
       };
+      this.formHandler=this.formHandler.bind(this);
     }
-    
+    formHandler(e)
+    {
+      // console.log(e);
+      this.props.formHandler(e);
+    }
     tableDataHandler(e)
     {
       this.props.tableDataHandler(e);
@@ -37,15 +42,12 @@ class NavBar extends Component {
         this.setState({
           items:this.props.tabledata,
         })
-
       }
     }
     render() {
       return (
-        
         <MDBContainer >
         <MDBNav className="nav-tabs mt-6">
-          
           <MDBNavItem>
             <div style={{marginTop:'0px'}}>
             <MDBNavLink link to="#" active={this.state.activeItem === "1"} onClick={this.toggle("1")} role="tab" >
@@ -69,14 +71,13 @@ class NavBar extends Component {
               Line Chart
             </MDBNavLink>
           </MDBNavItem>:<></>}
-          
-          
         </MDBNav>
         <MDBTabContent activeItem={this.state.activeItem} >
           <MDBTabPane tabId="1" role="tabpanel">
             <div>
             
-            <TableContent notReload={this.props.notReload} tabledata={this.props.tabledata} historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate} />
+            <TableContent formHandler={(e)=>this.formHandler(e)} notReload={this.props.notReload} tabledata={this.props.tabledata} historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate} />
+            
             </div>
           </MDBTabPane>
           <MDBTabPane tabId="2" role="tabpanel">
@@ -93,10 +94,7 @@ class NavBar extends Component {
           </MDBTabPane>: 
           <></>}
         </MDBTabContent>
-        
       </MDBContainer>
-        
-        
     );
   }
 }

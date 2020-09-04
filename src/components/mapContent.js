@@ -45,25 +45,20 @@ class MapContent extends React.PureComponent {
     this.modalOpen=this.modalOpen.bind(this);
     this.formHandlerforFacility=this.formHandlerforFacility.bind(this);
   }
-  formHandler(changeEvent){
-    console.log("formhandler from mapcontent",changeEvent);
+  formHandler(changeEvent)
+  {
+    
     if(changeEvent[0]=="all us")
     {
       this.props.formHandler(changeEvent);  
     }
     else
     {
-      // this.setState({
-      //   regionClick:true,
-      // })
-      //california(state)
       this.props.formHandler(changeEvent)
     }
-    
-    
   }
   formHandlerforFacility(changeEvent){
-    console.log("formhandlerforfacility from mapcontent",changeEvent);
+    
     // this.setState({
     //   regionClick:true,
     // })
@@ -93,11 +88,8 @@ class MapContent extends React.PureComponent {
       })
       
     }
-    
   }
   facilityChart(facilityData){
-    //console.log("");("")("")("facilitychart data");
-    //console.log("");("")("")(facilityData);
     this.setState({
       ismodalOpen:true
     })
@@ -194,12 +186,9 @@ class MapContent extends React.PureComponent {
   //   // }
   //   console.log("check");
   //   console.log(nextState.regions===this.state.regions)
-    
-    
   //     return true;
-    
-    
   // }
+  
   async componentDidUpdate(pP, pS, snap) {
     
     let startDate = this.props.historicStartDate;
@@ -209,23 +198,27 @@ class MapContent extends React.PureComponent {
     let endYear = parseInt(endDate.split(" ")[3])
     let startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
     let endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
-    console.log("component did update of mapcontent"+this.props.historicInputState); 
+     
     if (pP.historicInputState === this.props.historicInputState && pP.historicStartDate === this.props.historicStartDate && pP.historicEndDate === this.props.historicEndDate) 
     {
 
-      console.log("component did update of mapcontent and everything is same:"+this.props.historicInputState+":"+this.state.regionClick);
-      console.log(this.props.tabledata);
       if (this.state.viewByChoice == "Counties" && this.state.isClicked) {
         var stateName = this.props.historicInputState.split(" (")
         stateName = stateName[0].split(" ");
         var state = "";
-        for (let i = 0; i < stateName.length; i++) 
+        if(stateName.length>1)
         {
-          state = state + ((stateName[i].substr(0, 1).toUpperCase() + stateName[i].substr(1)) + " ");
+          for (let i = 0; i < stateName.length; i++) 
+          {
+            state = state + ((stateName[i].substr(0, 1).toUpperCase() + stateName[i].substr(1)) + " ");
+          }
         }
+        else if(stateName.length==1)
+        {
+          state=stateName[0].substr(0, 1).toUpperCase()+stateName[0].substr(1);
+        }
+        
         stateName = state.trim();
-        
-        
         let long = stateLatLngs[stateName]["longitude"];
         let lat = stateLatLngs[stateName]["latitude"];
         var url = "https://ewed.org:3004/counties-in-state/" + stateName
@@ -239,8 +232,6 @@ class MapContent extends React.PureComponent {
             latitude: lat,
             zoom: 6,
             isClicked: false,
-            prevState:pP.historicInputState,
-            
           })
           var obj={viewByChoice:"Counties",state:this.props.historicInputState} 
         this.props.viewByButtonClicked(obj);
@@ -274,7 +265,6 @@ class MapContent extends React.PureComponent {
             zoom: 6,
             viewByChoice: "Watersheds",
             isClicked: false,
-            prevState:pP.historicInputState
           })
          
         }
@@ -296,7 +286,6 @@ class MapContent extends React.PureComponent {
         let endYear = parseInt(endDate.split(" ")[3])
         let startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
         let endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
-        
         var url = "https://ewed.org:28469/ewedService/getFacilityData/stateName/"+name+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all";
         try {
           var response = await fetch(url)
@@ -306,7 +295,6 @@ class MapContent extends React.PureComponent {
             zoom: 5.5,
             isClicked: false,
             loading: true,
-            prevState:pP.historicInputState,
             viewByChoice:"Facilities"
           })
        }
@@ -320,7 +308,6 @@ class MapContent extends React.PureComponent {
       }
       else if (this.state.viewByChoice == "States" && this.state.isClicked)
       {
-        
         var url = "https://ewed.org:3004/all-states";
         this.arrayForParent[0] = "all us";
         
@@ -344,96 +331,10 @@ class MapContent extends React.PureComponent {
           console.log(e);
         }
       }
-      // else if(this.props.historicInputState.toLowerCase().includes("state") && pS.regions!==this.state.regions)
-      // {
-      //   console.log("state with false regionclick");
-      //   console.log(this.props.tabledata);
-      //   var stateName = this.props.historicInputState.split(" (")
-      //   stateName = stateName[0].split(" ");
-      //   var state = "";
-      //   for (let i = 0; i < stateName.length; i++) {
-      //     state = state + ((stateName[i].substr(0, 1).toUpperCase() + stateName[i].substr(1)) + " ");
-      //   }
-      //   stateName = state.trim();
-      //   let long = stateLatLngs[stateName]["longitude"];
-      //   let lat = stateLatLngs[stateName]["latitude"];
-      //   var url = "https://ewed.org:3004/hucs-in-state/" + stateName
-      //   try {
-      //     var response = await fetch(url)
-      //     var json = await response.json()
-      //     await this.setState({
-      //       regions: json["features"],
-      //       loading: true,
-      //       longitude: long,
-      //       latitude: lat,
-      //       zoom: 6,
-      //       viewByChoice: "Watersheds",
-      //       prevState:"all us",
-      //       items:this.props.tabledata,
-      //       startDateProps: this.props.historicStartDate,
-      //       endDateProps: this.props.historicEndDate,
-      //       nameOfState: this.props.historicInputState,
-            
-      //     })
-      //     console.log("regions for geojson");
-      //     console.log(json);
-
-      //   }
-      //   catch (e) {
-      //     console.log(e);
-      //   }
-      // }
-      // else if(!this.state.regionClick && this.props.historicInputState.toLowerCase().includes("watershed") && !this.state.regionLoaded)
-      // {
-      //   var hucName = this.props.historicInputState.toLowerCase();
-      //   var stateNamefromWatershed=hucName.split(" (");
-      //   stateNamefromWatershed=stateNamefromWatershed[1].substr(0,stateNamefromWatershed[1].length-1);
-        
-      //   if(stateNamefromWatershed.includes(","))
-      //   {
-      //     stateNamefromWatershed=stateNamefromWatershed.split(",")[0].toUpperCase();
-      //   }
-      //   else
-      //   {
-      //     stateNamefromWatershed=stateNamefromWatershed.toUpperCase();
-      //   }
-        
-      //   var lat=stateLatLngs[stateAbr[stateNamefromWatershed]].latitude;
-      //   var long=stateLatLngs[stateAbr[stateNamefromWatershed]].longitude;
-        
-      //   var url = "https://ewed.org:41513/ewedService/getFacilityData/HUC8Name/" + hucName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/all"
-      //   try {
-      //     var response = await fetch(url)
-      //     var json = await response.json()
-      //     await this.setState({
-      //       regions: json,
-      //       loading: true,
-      //       viewByChoice: "Facilities",
-      //       zoom: 7.0,
-      //       latitude:lat,
-      //       longitude:long,
-      //       prevState:stateAbr[stateNamefromWatershed]+" (state)",
-      //       items:this.props.tabledata,
-      //       startDateProps: this.props.historicStartDate,
-      //       endDateProps: this.props.historicEndDate,
-      //       nameOfState: this.props.historicInputState,
-      //       regionLoaded:true,
-      //     })
-      //   }
-      //   catch (e) {
-      //     console.log(e);
-      //   }
-      // }
-      
-      
     }
     else {
-      
-        
-      console.log("component didupdate of mapcontent and everything is not same");
       if (this.props.historicInputState.toLowerCase().includes("all us")) {
         var url = "https://ewed.org:3004/all-states"
-        var url2="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
         try {
              
           var response = await fetch(url)
@@ -489,9 +390,8 @@ class MapContent extends React.PureComponent {
           console.log(e);
         }
       }
-      else if (this.props.historicInputState.toLowerCase().includes("county")) {
+      else if (this.props.historicInputState.toLowerCase().includes("county") || (this.props.historicInputState.toLowerCase().search(",") < 0 && this.props.historicInputState.split("(")[1].split(")")[0].length > 2)) {
         var countyName = this.props.historicInputState;
-        
         var url = "https://ewed.org:41513/ewedService/getFacilityData/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
         var stateNamefromCounty=countyName.split(" (");
         stateNamefromCounty=stateNamefromCounty[1].substr(0,stateNamefromCounty[1].length-1);
@@ -605,6 +505,8 @@ class MapContent extends React.PureComponent {
         }
 
       }
+      
+
 
     }
   }
@@ -613,7 +515,7 @@ class MapContent extends React.PureComponent {
       <GoogleMap
         defaultCenter = { { lat: this.state.latitude, lng: this.state.longitude } }
         defaultZoom = { this.state.zoom }
-        defaultOptions={{ styles: mapStyles }} 
+        // defaultOptions={{ styles: mapStyles }} 
       >
         {this.state.regions!== null ?
         <Regions regions={this.state.regions} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate} 
@@ -671,18 +573,40 @@ class MapContent extends React.PureComponent {
               
               </div>
               <div style={{ marginLeft: "50px" }}>
-              <Button style={{ width: "200px", height: "40px" }} onClick={()=>
-                {            
+                {this.state.prevState?<Button style={{ width: "200px", height: "40px" }} onClick={()=>
+                {
+                  if(this.state.prevState.length>0)
+                  {
+                    if(this.state.prevState.toLowerCase().includes("all us"))
+                    {
+                      this.setState({
+                        loading:false,
+                        viewByChoice: "States",
+                        isClicked:true,
+                      })
+                      this.arrayForParent[0]=this.state.prevState.toLowerCase();
+                      this.props.formHandler(this.arrayForParent);                      
+                    } 
+                    else
+                    {
+                      this.setState({
+                        loading:false,
+                        viewByChoice: "Watershed",
+                        isClicked:true,
+                      })
+                    this.arrayForParent[0]=this.state.prevState.toLowerCase();
+                    this.props.formHandler(this.arrayForParent);
+                    }
+                  }
+                             
                 }}>
                 Up to {this.state.prevState} View
-              </Button>
+              </Button>:console.log("")}
               </div>
-                           
             </form>
           </div>
           <div style={{position:"absolute", top:"0"}}>
-          <GoogleMapExample
-            containerElement=
+          <GoogleMapExample containerElement=
             {
               <div style={{ height: `950px`, width: '880px' }}></div>
             }
@@ -694,4 +618,5 @@ class MapContent extends React.PureComponent {
         </div>
         );
     }}}
+    
 export default MapContent;

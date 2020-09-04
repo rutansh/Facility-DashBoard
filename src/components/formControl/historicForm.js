@@ -8,7 +8,9 @@ import Modal from 'react-modal';
 import CheckBox from './checkbox';
 import * as nameData from "../../data/facilityNames.json";
 import * as ReactBootstrap from "react-bootstrap";
-
+import FilterModalforHistoric from "./filterModalforHistoric";
+import CustomSearch from './customSearch';
+import StateContext from '../Context/inputStatecontext';
 Modal.setAppElement('#root')
 class HistoricForm extends Component {
   constructor(props)
@@ -20,7 +22,8 @@ class HistoricForm extends Component {
       endDate:new Date("2015/12"),
       inputState:"ALL US",
       modalIsOpen:false,
-      fruites: [
+      filterstr:"all",
+      filters: [
         {id: 1, value: "Natural Gas", isChecked: true},
         {id: 2, value: "Coal", isChecked: true},
         {id: 3, value: "Nuclear", isChecked: true},
@@ -39,19 +42,35 @@ class HistoricForm extends Component {
     // this.sendDataToParent=this.sendDataToParent.bind(this)
     this.filterByFuel=this.filterByFuel.bind(this)
     this.arrayForParent=[]
+    this.saveOrcloseModal=this.saveOrcloseModal.bind(this) 
+}
+componentDidUpdate(pP,pS)
+{
+  if(pP.historicInputState!==this.props.historicInputState)
+  {
+    this.handleOnSubmit(this.props.historicInputState); 
+
+
+  }
 }
   
   handleOnSubmit(term) {
     // Do whatever you need i.e. calling API
-    this.setState({
+    
+    
+      this.setState({
         inputState:term
     })
     }
+    
+    
   formControl()
   {
-        this.arrayForParent[0]=this.state.inputState;
+        localStorage.setItem("name",this.props.inputstate.name);
+        this.arrayForParent[0]=this.props.inputstate.name;
         this.arrayForParent[1]=this.state.startDate;
         this.arrayForParent[2]=this.state.endDate;
+        this.arrayForParent[3]=this.props.filterstr;
         this.props.historicFormHandler(this.arrayForParent);
   }
 
@@ -61,25 +80,39 @@ class HistoricForm extends Component {
           modalIsOpen:true
         })
   }
-  handleAllChecked = (event) => {
-    let fruites = this.state.fruites
-   
-    fruites.forEach(fruite => fruite.isChecked = event.target.checked) 
-  
-   this.setState({fruites: fruites})
-}
+  saveOrcloseModal(e)
+  {
+    
+    if(e.length==10)
+    {
+      localStorage.setItem("filterstr","all");
+      this.props.setFilterStr("all")
+      this.setState({
+        modalIsOpen:false,
+        
+      })
+      
+    }
+    else
+    {
+      let str=""
+      for(let i=0;i<e.length-1;i++)
+      {
+        str=str+e[i]+","
+      }
+      str=str+e[e.length-1];
+      localStorage.setItem("filterstr",str);
+      this.props.setFilterStr(str);
+      this.setState({
+        modalIsOpen:false,
+        filterstr:str,
+      })
+    }
 
-  handleCheckChieldElement = (event) => {
-    let fruites = this.state.fruites
-   fruites.forEach(fruite => {
-     if (fruite.value === event.target.value)
-       fruite.isChecked =  event.target.checked
-     })
-   this.setState({fruites: fruites})
   }
+
   render()
   {
-  
   const recentSearches =nameData["Names"];
   const inputPosition = 'center';
   const minimumLen=3;
@@ -92,11 +125,15 @@ class HistoricForm extends Component {
             Search for State, HUC or County  <br></br> 
             </div>
             <div style={{marginLeft:'35px'}}>
-            <SuggestionInputSearch onSubmitFunction={this.handleOnSubmit}
+            <CustomSearch inputtext={this.props.inputstate.name}/>
+            <SuggestionInputSearch 
+            onSubmitFunction={this.props.historicInputState}
+            // {this.handleOnSubmit}
             recentSearches={recentSearches}
             inputPosition={inputPosition}
             minLength={minimumLen}
-            placeholder={this.props.historicInputState}/>
+            // placeholder={this.props.historicInputState}
+            floatingLabel={true}/>
             </div>
           </div>
             <div style={{marginLeft:'70px',zIndex:2}}>
@@ -123,55 +160,8 @@ class HistoricForm extends Component {
             </div>        
             <div style={{marginLeft:'40px',marginTop:'10px'}}>
             <Button onClick={this.filterByFuel} variant="outline-primary">Filter By Fuel Type</Button>
-                  
-                  <Modal 
-                  isOpen={this.state.modalIsOpen}
-                  style={
-                    {
-                      overlay: {
-                        position: 'fixed',
-                        zIndex:4,
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundColor: 'rgba(255, 255, 255, 0.75)'
-                      },
-                      content: {
-                        position: 'absolute',
-                        top: '300px',
-                        left: '690px',
-                        right: '690px',
-                        bottom: '300px',
-                        border: '1px solid #ccc',
-                        background: '#fff',
-                        overflow: 'auto',
-                        WebkitOverflowScrolling: 'touch',
-                        borderRadius: '4px',
-                        outline: 'none',
-                        padding: '20px'
-                      }
-                    }
-                  }>
-                  
-                    <h3>Filter Your Choice</h3>
-                    <input type="checkbox" onClick={this.handleAllChecked}  value="checkedall" /> Check / Uncheck All
-
-                    <ul>
-                    {
-                          this.state.fruites.map((fruite) => {
-                            return (<CheckBox handleCheckChieldElement={this.handleCheckChieldElement}  {...fruite} />)
-                          })
-                    }
-                    </ul>
-
-                  <div>
-                    <button onClick={()=>this.setState({modalIsOpen:false})}>Save</button>
-                    <button onClick={()=>this.setState({modalIsOpen:false})}>Close</button>
-                  </div>
-                  
-                  </Modal>
             
+            {this.state.modalIsOpen?<FilterModalforHistoric saveOrcloseModal={(e)=>{this.saveOrcloseModal(e)}} modalIsOpen={this.state.modalIsOpen} filters={this.state.filters}/>:console.log("sdads")}
             </div>
             <div style={{marginLeft:'40px',marginTop:'10px'}}>
             <Button onClick={this.formControl} variant="primary">Search</Button>
@@ -182,7 +172,13 @@ class HistoricForm extends Component {
         </form>
   </div>
 </div>
-)   
-  }  
+)}}
+export default (props)=>{
+  return(
+    <StateContext.Consumer>
+    {(context)=>{
+      return <HistoricForm {...props}{...context}/>
+    }} 
+    </StateContext.Consumer>
+  )
 }
-export default HistoricForm;

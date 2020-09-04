@@ -4,6 +4,7 @@ import NavBar from './navBar';
 import MapContent from './mapContent';
 import Loader from 'react-loader-spinner';
 
+
 class MapControl extends Component {
   constructor(props)
   {
@@ -19,9 +20,9 @@ class MapControl extends Component {
 
       }
       this.formHandler=this.formHandler.bind(this);
-      this.tableDataHandler=this.tableDataHandler.bind(this);
       this.viewByButtonClicked=this.viewByButtonClicked.bind(this);
       this.formHandlerforFacility=this.formHandlerforFacility.bind(this);
+      this.formHandler2=this.formHandler2.bind(this);
   }
   viewByButtonClicked(obj)
   {
@@ -47,11 +48,9 @@ class MapControl extends Component {
     
     else if(obj.viewByChoice=="Counties")
     {
-      
       this.setState({
         mapViewByCalled:true,
         viewByChoice:"Counties",
-        
        });
     }
     else
@@ -69,20 +68,21 @@ class MapControl extends Component {
     //facilities of a state
   
   formHandler(changeEvent){
-    console.log("formhandler from mapcontrol");
+    
     
     this.props.mapHandler(changeEvent[0])
+  }
+  formHandler2(e)
+  {
+    this.props.mapHandler(e);
   }
   formHandlerforFacility(changeEvent){
     this.props.mapHandler(changeEvent[0])
   }
-  tableDataHandler(e)
-  {
-    
-  }
+  
   async componentDidMount()
   {
-    console.log("Didmount of mapcontrol")
+   
     var startDate=this.props.historicStartDate;
     var endDate=this.props.historicEndDate;
     var startYear=parseInt(startDate.split(" ")[3])
@@ -102,18 +102,10 @@ class MapControl extends Component {
           console.log(e);
         })  
   }
-  // shouldComponentUpdate(nextProps,nextState)
-  // {
-  //   // console.log("mapcontrol should component update");
-  //   // console.log("this.state.regions");
-  //   // console.log(this.state.regions);
-  //   // console.log("nextState.regions");
-  //   // console.log(nextState.regions);
-  //   return true;
-  // }
+  
   async componentDidUpdate(pP,state,snap)
   {
-    console.log("component didupdate of mapcontrol"+this.props.historicInputState);
+    
     
     var startDate=this.props.historicStartDate;
     var endDate=this.props.historicEndDate;
@@ -126,16 +118,15 @@ class MapControl extends Component {
     var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
     if(pP.historicInputState==this.props.historicInputState&&pP.historicStartDate==this.props.historicStartDate&&pP.historicEndDate==this.props.historicEndDate)
     {
-      console.log("component didupdate of mapcontrol and everything same :"+this.props.historicInputState);
+      
       if(this.state.mapViewByCalled && this.state.viewByChoice=="Facilities")
       {
-        
-      var url="https://ewed.org:41513/ewedService/getFacilityData/stateName/California/2015/1/2015/12/fuelTypes/all";
+      var name=this.props.historicInputState;
+      name=name.split(" (")[0];  
+      var url="https://ewed.org:41513/ewedService/getFacilityData/stateName/"+name+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
       var response=await fetch(url);
       var json=await response.json();
-      
-      
-        this.setState({
+      this.setState({
           regions:json,
           mapViewByCalled:false,
           loading:true,
@@ -143,7 +134,7 @@ class MapControl extends Component {
       }
       else if(this.state.mapViewByCalled && this.state.viewByChoice=="Counties")
       {
-        var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/CountyState1/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all";
+        var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/CountyState1/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
         var response=await fetch(url);
         var json=await response.json();
         this.setState({
@@ -155,7 +146,7 @@ class MapControl extends Component {
       else if(this.state.mapViewByCalled && this.state.viewByChoice=="Watersheds")
       {
         
-        var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all";
+        var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
         var response=await fetch(url);
         var json=await response.json();
         this.setState({
@@ -164,34 +155,14 @@ class MapControl extends Component {
           regions:json,
         })
       }
-      // else if(!this.state.regionClick&&this.props.historicInputState.toLowerCase().includes("state")&&!this.state.regionLoaded)
-      // {
-      //   console.log("else if condition in mapcontrol")
-      //   var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
-      //   var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
-      //   try{
-      //     var response=await fetch(url)
-      //     var json=await response.json()
-      //     //this.updateState(json,pP);
-      //     this.setState({
-      //       regions:json,
-      //       regionLoaded:true,
-      //       });
-      //   }
-        
-      //   catch(e)
-      //   {
-      //     console.log(e);
-      //   }
-      // }
       
     }
     else
     {
-      console.log("component didupdate of mapcontrol and everything not same :"+this.props.historicInputState);
+      
       if(this.props.historicInputState.toLowerCase().includes("all us"))
       {
-        var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+        var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         try{
           var response=await fetch(url)
           var json=await response.json()
@@ -207,10 +178,8 @@ class MapControl extends Component {
       }
       else if(this.props.historicInputState.toLowerCase().includes("state"))
       {
-        
-        
         var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
-        var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+        var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         try{
           var response=await fetch(url)
           var json=await response.json()
@@ -219,8 +188,7 @@ class MapControl extends Component {
             regions:json,
             regionClick:false,
             });
-            console.log("this is region data from state mapcontrol");
-            console.log(json);
+
         }
         
         catch(e)
@@ -229,12 +197,12 @@ class MapControl extends Component {
         }
 
       }
-      else if(this.props.historicInputState.toLowerCase().includes("county"))
+      else if(this.props.historicInputState.toLowerCase().includes("county")|| (this.props.historicInputState.toLowerCase().search(",") < 0 && this.props.historicInputState.split("(")[1].split(")")[0].length > 2))
       {
   
         
         var countyName=this.props.historicInputState.toLowerCase()
-        var url="https://ewed.org:31567/ewedService/getFacilityData/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+        var url="https://ewed.org:31567/ewedService/getFacilityData/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         try{
           var response=await fetch(url)
           var json=await response.json()
@@ -255,7 +223,7 @@ class MapControl extends Component {
       else if(this.props.historicInputState.toLowerCase().includes("watershed"))
       {
         var hucName=this.props.historicInputState.toLowerCase()
-        var url="https://ewed.org:31567/ewedService/getFacilityData/HUC8Name/"+hucName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+        var url="https://ewed.org:31567/ewedService/getFacilityData/HUC8Name/"+hucName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         try{
           var response=await fetch(url)
           var json=await response.json()
@@ -304,12 +272,14 @@ class MapControl extends Component {
               <div style={{  width: '47vw', height: "890px" }}>
               <MapContent  tabledata={this.state.regions} 
                 notReload={this.state.mapViewByCalled} viewByButtonClicked={(e)=>this.viewByButtonClicked(e)} 
-                formHandler={(e)=>this.formHandler(e)} formHandlerforFacility={(e)=>this.formHandlerforFacility(e)}historicInputState={this.props.historicInputState} 
+                formHandler={(e)=>this.formHandler(e)} formHandlerforFacility={(e)=>this.formHandlerforFacility(e)}
+                historicInputState={this.props.historicInputState} 
                 historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
-                
               </div>
+              
               <div style={{ marginLeft:20,width: '50vw', height: "890px" }}>
                 <NavBar tabledata={this.state.regions}
+                formHandler={(e)=>this.formHandler2(e)}
                 tableDataHandler={(e)=>{this.tableDataHandler(e)}}
                 historicInputState={this.props.historicInputState} 
                 historicStartDate={this.props.historicStartDate} 
