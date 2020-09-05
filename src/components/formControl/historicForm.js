@@ -37,34 +37,14 @@ class HistoricForm extends Component {
       ]     
       };
 
-    this.handleOnSubmit=this.handleOnSubmit.bind(this)
+    // this.handleOnSubmit=this.handleOnSubmit.bind(this)
     this.formControl=this.formControl.bind(this)
     // this.sendDataToParent=this.sendDataToParent.bind(this)
     this.filterByFuel=this.filterByFuel.bind(this)
     this.arrayForParent=[]
     this.saveOrcloseModal=this.saveOrcloseModal.bind(this) 
 }
-componentDidUpdate(pP,pS)
-{
-  if(pP.historicInputState!==this.props.historicInputState)
-  {
-    this.handleOnSubmit(this.props.historicInputState); 
-
-
-  }
-}
-  
-  handleOnSubmit(term) {
-    // Do whatever you need i.e. calling API
-    
-    
-      this.setState({
-        inputState:term
-    })
-    }
-    
-    
-  formControl()
+formControl()
   {
         localStorage.setItem("name",this.props.inputstate.name);
         this.arrayForParent[0]=this.props.inputstate.name;
@@ -101,14 +81,14 @@ componentDidUpdate(pP,pS)
         str=str+e[i]+","
       }
       str=str+e[e.length-1];
-      localStorage.setItem("filterstr",str);
-      this.props.setFilterStr(str);
+      console.log("filter changed",str)
+      
+      
       this.setState({
         modalIsOpen:false,
         filterstr:str,
       })
     }
-
   }
 
   render()
@@ -124,16 +104,8 @@ componentDidUpdate(pP,pS)
             <div style={{marginLeft:'0px'}}>
             Search for State, HUC or County  <br></br> 
             </div>
-            <div style={{marginLeft:'35px'}}>
+            <div style={{}}>
             <CustomSearch inputtext={this.props.inputstate.name}/>
-            <SuggestionInputSearch 
-            onSubmitFunction={this.props.historicInputState}
-            // {this.handleOnSubmit}
-            recentSearches={recentSearches}
-            inputPosition={inputPosition}
-            minLength={minimumLen}
-            // placeholder={this.props.historicInputState}
-            floatingLabel={true}/>
             </div>
           </div>
             <div style={{marginLeft:'70px',zIndex:2}}>

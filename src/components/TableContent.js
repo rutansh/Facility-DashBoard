@@ -33,14 +33,7 @@ class TableContent extends Component
             items:this.props.tabledata,    
         });  
   }
-  // shouldComponentUpdate()
-  // {
-  //   if(this.props.notReload)
-  //   {
-  //     return false;
-  //   }
-  //   return true;
-  // }
+
   async componentDidUpdate(pP,state,snap)
   {
     if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate)

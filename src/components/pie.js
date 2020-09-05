@@ -213,18 +213,18 @@ class PieChart extends Component{
       {
 
         
-        var url="https://ewed.org:31567/ewedService/defaultViewData/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+        var url="https://ewed.org:31567/ewedService/defaultViewData/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         
       }
       else if(this.props.historicInputState.toLowerCase().includes("state"))
       {
         var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
-        var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+        var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
       }
       else if(this.props.historicInputState.toLowerCase().includes("county"))
       {
         var countyName=this.props.historicInputState.toLowerCase();
-        var url="https://ewed.org:31567/ewedService/getSummaryWithin/CountyState1/"+countyName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+        var url="https://ewed.org:31567/ewedService/getSummaryWithin/CountyState1/"+countyName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
       }
       else
       {

@@ -5,6 +5,7 @@ import FormControl from './formControl/formControl.js';
 import MapControl from './mapControl';
 import '../styles/mainContent.css';
 import StateContext from './Context/inputStatecontext';
+import FormContext from './Context/queryFormContext';
 
 class MainContent extends Component {
   constructor(props)
@@ -19,7 +20,8 @@ class MainContent extends Component {
       historicEndDate:"Tue Dec 01 2015 00:00:00 GMT-0800 (Pacific Standard Time)",
       mapChange:true,
       status:true,
-      filterstr:"all"
+      filterstr:"",
+      loading:false,
     }
     this.optionHandler=this.optionHandler.bind(this)   
     this.formHandler=this.formHandler.bind(this)   
@@ -29,12 +31,15 @@ class MainContent extends Component {
    }
   optionHandler(changeEvent)
   {
-    this.setState({selectedOption:changeEvent})    
+    console.log("radio button is changed",changeEvent)
+    this.setState({selectedOption:this.props.form.name,loading:true})    
   }
   formHandler(changeEvent)
   {
     console.log("rerender after filter change",changeEvent[3]);  
-    localStorage.setItem("name",changeEvent[0]);    
+    this.props.setFilterStr(changeEvent[3]);
+    localStorage.setItem("name",changeEvent[0]);
+    localStorage.setItem("filter",changeEvent[3]);    
     this.setState({
       historicInputState:changeEvent[0],
       historicStartDate:String(changeEvent[1]),
@@ -68,39 +73,60 @@ class MainContent extends Component {
   }
   componentDidUpdate(pP,pS)
   {
-    console.log("didupdate of maincontent");
+    if(this.state.loading)
+    {
+      this.setState({
+        loading:false,
+        
+      })
+    }
+    
     
   }
-  shouldComponentUpdate(pP,pS)
+  shouldComponentUpdate(nextProps,nextState)
   {
-    console.log("should component update",this.state.historicInputState===pS.historicInputState);
-   if(this.state.historicInputState===pS.historicInputState && this.state.filterstr===pS.filterstr)
-   {
-    return false;
-   } 
-   return true;
+    console.log("should component update",this.state.filterstr);
+    console.log("should component update",nextProps.filterstr);
+    
+    if(this.state.historicInputState===nextState.historicInputState&&this.props.form===nextProps.form&&this.props.filterstr===nextProps.filterstr&&this.state.historicStartDate===nextState.historicStartDate&&this.state.historicEndDate===nextState.historicEndDate)
+    {
+      return false;
+    } 
+    return true;
   }
-  componentDidMount()
-  {
-    console.log("didmount of mainContent");
-  }
+  
   render()
   {
+    
+    
+      console.log("maincontent context");
+      console.log(this.props)
       return (
         <div>
-        <QueryForm data={this.state.selectedOption} optionHandler={(e)=>this.optionHandler(e)}/>
-        <FormControl historicInputState={this.state.historicInputState} data={this.state.selectedOption} formHandler={(e)=>this.formHandler(e)}/>
-        <MapControl filterstr={this.state.filterstr}historicInputState={this.state.historicInputState} historicStartDate={this.state.historicStartDate} historicEndDate={this.state.historicEndDate} mapHandler={(e)=>this.mapHandler(e)}/>
+        <QueryForm/>
+        <FormControl historicInputState={this.state.historicInputState} data={this.state.selectedOption} formHandler={(e)=>this.formHandler(e)} optionHandler={(e)=>{this.optionHandler(e)}}/>
+        <MapControl form={this.props.form}filterstr={this.props.filterstr}historicInputState={this.state.historicInputState} historicStartDate={this.state.historicStartDate} historicEndDate={this.state.historicEndDate} mapHandler={(e)=>this.mapHandler(e)}/>
         </div>
-      );  
+      );
+    
+        
   }
 }
 export default (props)=>{
   return(
-    <StateContext.Consumer>
-    {(context)=>{
-      return <MainContent {...props}{...context}/>
-    }} 
-    </StateContext.Consumer>
+    <FormContext.Consumer>
+    {
+      (context1)=>{
+        return(
+          <StateContext.Consumer>
+        {(context)=>{
+          return <MainContent {...props}{...context}{...context1}/>
+        }} 
+      </StateContext.Consumer>
+        );
+      }
+    }  
+    </FormContext.Consumer>
+    
   )
 }

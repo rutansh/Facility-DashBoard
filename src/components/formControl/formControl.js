@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import HistoricForm from './historicForm';
 import ProjectedForm from './projectedForm';
-
+import FormContext from '../Context/queryFormContext';
 class FormControl extends Component {
   constructor(props)
   {
@@ -17,14 +17,24 @@ class FormControl extends Component {
   }
   componentDidUpdate(pP,pS)
   {
-    console.log("didupdate");
+    console.log("didupdate of form control");
   }
   render()
   {
+    console.log("render of form control");
+    console.log(this.props.form);
     return(
       <div>
-        {this.props.data==="Historic"?<HistoricForm historicFormHandler={(e)=>this.historicFormHandler(e)} historicInputState={this.props.historicInputState}/>:<ProjectedForm projectedFormHandler={(e)=>this.projectedFormHandler(e)}/>}
+        {this.props.form==="Historic"?<HistoricForm historicFormHandler={(e)=>this.historicFormHandler(e)}/>:<ProjectedForm projectedFormHandler={(e)=>this.projectedFormHandler(e)}/>}
       </div>)
   }
 }
-export default FormControl;
+export default (props)=>{
+  return(
+    <FormContext.Consumer>
+    {(context)=>{
+      return <FormControl {...props}{...context}/>
+    }} 
+    </FormContext.Consumer>
+  )
+}

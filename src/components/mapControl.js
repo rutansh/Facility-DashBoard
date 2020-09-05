@@ -17,7 +17,7 @@ class MapControl extends Component {
         viewByChoice:"States",
         regionClick:false,
         regionLoaded:false,
-
+        filterstr:this.props.filterstr
       }
       this.formHandler=this.formHandler.bind(this);
       this.viewByButtonClicked=this.viewByButtonClicked.bind(this);
@@ -106,7 +106,7 @@ class MapControl extends Component {
   async componentDidUpdate(pP,state,snap)
   {
     
-    
+    console.log("didupdate of mapcontrol");
     var startDate=this.props.historicStartDate;
     var endDate=this.props.historicEndDate;
     var startYear=parseInt(startDate.split(" ")[3])
@@ -155,13 +155,90 @@ class MapControl extends Component {
           regions:json,
         })
       }
-      
+      else if(pP.filterstr!==this.props.filterstr && this.props.historicInputState.toLowerCase().includes("all us"))
+      {
+        console.log("not same");
+        var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+        try{
+          var response=await fetch(url)
+          var json=await response.json()
+          //this.updateState(json,pP);
+          this.setState({
+            regions:json,
+            filterstr:this.props.filterstr
+            });
+        }
+        catch(e)
+        {
+          console.log(e);
+        }
+      }
+      else if(pP.filterstr!==this.props.filterstr && this.props.historicInputState.toLowerCase().includes("state"))
+      {
+        var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
+        var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+        try{
+          var response=await fetch(url)
+          var json=await response.json()
+          //this.updateState(json,pP);
+          this.setState({
+            regions:json,
+            filterstr:this.props.filterstr
+            });
+
+        }
+        
+        catch(e)
+        {
+          console.log(e);
+        }
+        
+
+      }
+      else if(pP.filterstr!==this.props.filterstr && (this.props.historicInputState.toLowerCase().includes("county")|| (this.props.historicInputState.toLowerCase().search(",") < 0 && this.props.historicInputState.split("(")[1].split(")")[0].length > 2)))
+      {
+        var countyName=this.props.historicInputState.toLowerCase()
+        var url="https://ewed.org:31567/ewedService/getFacilityData/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+        try{
+          var response=await fetch(url)
+          var json=await response.json()
+          this.setState({
+            regions:json,
+            filterstr:this.props.filterstr
+          })
+          
+        }
+        catch(e)
+        {
+          console.log(e);
+        }
+
+      }
+      else if(this.props.historicInputState.toLowerCase().includes("watershed")&&pP.filterstr!==this.props.filterstr)
+      {
+        var hucName=this.props.historicInputState.toLowerCase()
+        var url="https://ewed.org:31567/ewedService/getFacilityData/HUC8Name/"+hucName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+        try{
+          var response=await fetch(url)
+          var json=await response.json()
+          //this.updateState(json,pP);
+          this.setState({
+            regions:json,
+            filterstr:this.props.filterstr
+            });
+        }
+        catch(e)
+        {
+          console.log(e);
+        }
+      }
     }
     else
     {
       
       if(this.props.historicInputState.toLowerCase().includes("all us"))
       {
+        console.log("this is all us from mapcontrol",this.props.filterstr)
         var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         try{
           var response=await fetch(url)
@@ -283,7 +360,8 @@ class MapControl extends Component {
                 tableDataHandler={(e)=>{this.tableDataHandler(e)}}
                 historicInputState={this.props.historicInputState} 
                 historicStartDate={this.props.historicStartDate} 
-                historicEndDate={this.props.historicEndDate}/>
+                historicEndDate={this.props.historicEndDate}
+                filterstr={this.props.filterstr}/>
               </div>
             </div>
           </div>

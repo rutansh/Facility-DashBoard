@@ -33,7 +33,7 @@ class NavBar extends Component {
     };
     componentDidUpdate(pP,state,snap)
     {
-      if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate)
+      if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&pP.filterstr==this.props.filterstr)
       {
 
       }
@@ -81,15 +81,15 @@ class NavBar extends Component {
             </div>
           </MDBTabPane>
           <MDBTabPane tabId="2" role="tabpanel">
-            <PieChart historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
+            <PieChart filterstr={this.props.filterstr}historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
           </MDBTabPane>
           <MDBTabPane tabId="3" role="tabpanel">
-            <BarChart historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
+            <BarChart filterstr={this.props.filterstr} historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
           </MDBTabPane>
           {!this.props.historicInputState.toLowerCase().includes("all us")?
             <MDBTabPane tabId="4" role="tabpanel">
             <div>
-            <LineChart historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
+            <LineChart filterstr={this.props.filterstr} historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
             </div>
           </MDBTabPane>: 
           <></>}

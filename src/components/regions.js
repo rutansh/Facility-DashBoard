@@ -227,7 +227,7 @@ class Regions extends React.Component {
                   g.getClassJenks(arr.length);  
                 }
                 else{
-                  g.getClassJenks(10);
+                  g.getClassJenks2(10);
                 }
                 
               }

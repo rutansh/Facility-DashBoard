@@ -160,7 +160,7 @@ class LineChart extends Component {
     var endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
     if (this.props.historicInputState.toLowerCase().includes("state")) {
       var stateName = this.props.historicInputState.toLowerCase().split("(")[0]
-      var url = "https://ewed.org:31567/ewedService/getMonthWiseSummary/stateName/" + stateName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/all"
+      var url = "https://ewed.org:31567/ewedService/getMonthWiseSummary/stateName/" + stateName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/"+this.props.filterstr
     }
     else if (this.props.historicInputState.toLowerCase().includes("county")) {
       var countyName = this.props.historicInputState.toLowerCase();
@@ -201,11 +201,11 @@ class LineChart extends Component {
       var endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
       if (this.props.historicInputState.toLowerCase().includes("state")) {
         var stateName = this.props.historicInputState.toLowerCase().split("(")[0]
-        var url = "https://ewed.org:31567/ewedService/getMonthWiseSummary/stateName/" + stateName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/all"
+        var url = "https://ewed.org:31567/ewedService/getMonthWiseSummary/stateName/" + stateName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/"+this.props.filterstr
       }
       else if (this.props.historicInputState.toLowerCase().includes("county")) {
         var countyName = this.props.historicInputState.toLowerCase();
-        var url = "https://ewed.org:31567/ewedService/getMonthWiseSummary/CountyState1/" + countyName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/all"
+        var url = "https://ewed.org:31567/ewedService/getMonthWiseSummary/CountyState1/" + countyName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/"+this.props.filterstr
       }
       else {
         //watershed
