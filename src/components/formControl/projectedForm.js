@@ -1,9 +1,18 @@
 import React,{Component} from 'react';
 import DatePicker from 'react-datepicker';
 import {Button} from 'react-bootstrap';
+import { makeStyles } from '@material-ui/core/styles';
 import 'react-datepicker/dist/react-datepicker.css';
-import SuggestionInputSearch from 'suggestion-react-input-search'; 
 import * as nameData from "../../data/facilityNames.json";
+import CustomSearch from "./customSearch";
+import FilterModalforHistoric from "./filterModalforHistoric";
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import ClimateModel from './ClimateModel';
+import ProjectedContext from '../Context/projectedFormContext'; 
+import StateContext from '../Context/inputStatecontext';
 
 class ProjectedForm extends Component {
   constructor(props)
@@ -30,86 +39,128 @@ class ProjectedForm extends Component {
   handleOnSubmit(term) {
     // Do whatever you need i.e. calling API
     this.setState({
-        
         inputState:term
     })
     }
- 
+  useStyles = makeStyles((theme) => ({
+      button: {
+        display: 'block',
+        marginTop: theme.spacing(2),
+      },
+      formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+      },
+    }));
   render()
   {
     const recentSearches =nameData["Names"];
     const inputPosition = 'center';
     const minimumLen=3;
+    console.log("context of :");
+    console.log(this.props);
     return(
     <div className="queryForm_container">
     <div>  
     <form style={{display:'flex',flexDirection:'row'}}>
-        <div style={{marginLeft:'0px'}}>
-                            Select Energy Scenario   <br></br>     
-                            <input value={this.state.inputState} />
+        <div>
+        <InputLabel>Select Energy Scenario</InputLabel>
+        <Select
+          defaultValue="REF2019"
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          onClick={(e)=>{
+            this.props.setenergyScenario(e.target.value)
+          }}
+        >
+          <MenuItem value={"REF2019"}>Reference</MenuItem>
+          <MenuItem value={"HIGHMACRO"}>High Growth</MenuItem>
+          <MenuItem value={"LOWMACRO"}>Low Growth</MenuItem>
+          <MenuItem value={"HIGHPRICE"}>High Price</MenuItem>
+          <MenuItem value={"LOWPRICE"}>Low Price</MenuItem>
+          <MenuItem value={"HIGHRT"}>High Resource</MenuItem>
+          <MenuItem value={"LOWRT"}>Low Resource</MenuItem>
+          <MenuItem value={"AEO2018NO"}>AEO2018, no CPP</MenuItem>
+        </Select>
+      </div>
+      {!this.props.inputstate.name.toLowerCase().includes("all us")?                            
+        <div style={{display:'flex',flexDirection:'row'}}>
+          <div>
+          <InputLabel>Select Climate Scenario</InputLabel>    
+          <Select
+          defaultValue="RCP45"       
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          onClick={(e)=>{
+            this.props.setclimateScenario(e.target.value);
+          }}
+        >
+          <MenuItem value={"RCP45"}>RCP 4.5 (Low emissions scenario)</MenuItem>
+          <MenuItem value={"RCP85"}>RCP 8.5 (High emissions scenario)</MenuItem>
+          </Select>
+          </div>
+          <div>
+          <ClimateModel/>
+          </div>
         </div>
-        <div style={{marginLeft:'30px'}}>
-                            Select Climate Scenario   <br></br>     
-                            <input value={this.state.inputState} />
-        </div>
-        <div style={{marginLeft:'30px'}}>
-                            Select Climate Model   <br></br>     
-                            <input value={this.state.inputState} />
-        </div>
-        <div style={{marginLeft:'20px'}}>
-                <div style={{marginLeft:'0px'}}>
-                Search for State, HUC or County  <br></br> 
-                </div>
-                <div style={{marginLeft:'35px'}}>
-                <SuggestionInputSearch onSubmitFunction={this.handleOnSubmit}
-                recentSearches={recentSearches}
-                inputPosition={inputPosition}
-                minLength={minimumLen}/>
-                </div>
-                <div style={{marginBottom:'0px'}}>  
-                <br></br>Current Search : <br></br>{this.state.inputState}
-                </div>
+        :console.log("this is all us")}
+      <div style={{marginLeft:"10px"}}>
+      <InputLabel>Search for State, HUC or County</InputLabel>
+      <CustomSearch/>
+      </div>
+            <div style={{marginLeft:"10px",zIndex:2}}>
+
+            <InputLabel>Select month and year from </InputLabel>
+                    <DatePicker
+                    selected={this.state.startDate}
+                    onChange={date => this.setState({
+                        startDate:date
+                    })}
+                    dateFormat="MM/yyyy"
+                    showMonthYearPicker
+                    /> 
             </div>
-        <div style={{marginLeft:'35px'}}>
-                            Select month and year from   <br></br>
-                            <DatePicker
-                            selected={this.state.startDate}
-                            onChange={date => this.setState({
-                            startDate:date
-                            })}
-                            dateFormat="MM/yyyy"
-                            showMonthYearPicker/>  
-        </div>
-        <div style={{marginLeft:'30px'}}>
-                            Select month and year to  <br></br>
-                            <DatePicker
-                            selected={this.state.endDate}
-                            onChange={date => this.setState({
-                            endDate:date
-                            })}
-                            dateFormat="MM/yyyy"
-                            showMonthYearPicker
-                        />     
-        </div>
-        <div style={{marginLeft:'30px'}}>
-                        <Button>Filter By Fuel Type</Button>
-        </div>
-        <div style={{marginLeft:'20px'}}>
-                        <Button onClick={this.formControl}>Search</Button>
-        </div>
-        <div style={{marginLeft:'20px'}}>
-                        <Button>Reset View</Button> 
-        </div>
-                                
+            <div style={{marginLeft:'10px',zIndex:2}}>
+            <InputLabel>Select month and year to</InputLabel>
+                    <DatePicker
+                    selected={this.state.endDate}
+                    onChange={date => this.setState({
+                        endDate:date
+                    })}
+                    dateFormat="MM/yyyy"
+                    showMonthYearPicker
+                    />
+            </div>
+            <div style={{marginLeft:'40px',marginTop:'10px'}}>
+            <Button onClick={this.filterByFuel} variant="outline-primary">Filter By Fuel Type</Button>
+            
+            {this.state.modalIsOpen?<FilterModalforHistoric saveOrcloseModal={(e)=>{this.saveOrcloseModal(e)}} modalIsOpen={this.state.modalIsOpen} filters={this.state.filters}/>:console.log("sdads")}
+            </div>
+            <div style={{marginLeft:'40px',marginTop:'10px'}}>
+            <Button onClick={this.formControl} variant="primary" active>Search</Button>
+            </div>
+            <div style={{marginLeft:'40px',marginTop:'10px'}}>
+            <Button variant="primary">Reset View</Button>
+            </div>     
     </form>
     </div>
-    
-        </div>
-        )
-
-    
-    
-    }
-  
+    </div>
+  )
 }
-export default ProjectedForm;
+}
+export default (props)=>{
+  return(
+  <ProjectedContext.Consumer>
+  {
+    (context1)=>{
+      return(
+        <StateContext.Consumer>
+          {(context)=>{
+          return <ProjectedForm {...props}{...context}{...context1}/>
+          }}
+        </StateContext.Consumer>
+      );
+    }
+    }
+    </ProjectedContext.Consumer>
+  )}

@@ -8,9 +8,12 @@ class FormControl extends Component {
     super(props);
     this.historicFormHandler=this.historicFormHandler.bind(this);
     this.projectedFormHadnler=this.projectedFormHandler.bind(this);
+    this.arrayforparents=[];
   }
   historicFormHandler(changeEvent){
-    this.props.formHandler(changeEvent)
+    this.arrayforparents[0]=changeEvent
+    this.arrayforparents[1]="Historic"
+    this.props.formHandler(this.arrayforparents);
   }
   projectedFormHandler(changeEvent){
     this.props.formHandler(changeEvent)

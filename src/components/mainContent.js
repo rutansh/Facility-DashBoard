@@ -34,18 +34,38 @@ class MainContent extends Component {
     console.log("radio button is changed",changeEvent)
     this.setState({selectedOption:this.props.form.name,loading:true})    
   }
-  formHandler(changeEvent)
+  formHandler(array)
   {
-    console.log("rerender after filter change",changeEvent[3]);  
-    this.props.setFilterStr(changeEvent[3]);
-    localStorage.setItem("name",changeEvent[0]);
-    localStorage.setItem("filter",changeEvent[3]);    
-    this.setState({
-      historicInputState:changeEvent[0],
-      historicStartDate:String(changeEvent[1]),
-      historicEndDate:String(changeEvent[2]),
-      filterstr:changeEvent[3]
-    })    
+    console.log("rerender after filter change",array[0][3]);  
+    if(array[1]=="Historic")
+    {
+      this.props.setFilterStr(array[0][3]);
+      localStorage.setItem("name",array[0][0]);
+      localStorage.setItem("filter",array[0][3]);    
+      this.setState({
+        historicInputState:array[0][0],
+        historicStartDate:String(array[0][1]),
+        historicEndDate:String(array[0][2]),
+        filterstr:array[0][3]
+      })
+    }
+    else if(array[1]=="Projected")
+    {
+      this.props.setFilterStr(array[0][3]);
+      localStorage.setItem("name",array[0][0]);
+      localStorage.setItem("filter",array[0][3]);    
+      this.setState({
+        historicInputState:array[0][0],
+        historicStartDate:String(array[0][1]),
+        historicEndDate:String(array[0][2]),
+        filterstr:array[0][3]
+      })
+    }
+    else
+    {
+      console.log("do nothing...!")
+    }
+        
   }
   mapHandler(changeEvent)
   {
@@ -54,7 +74,8 @@ class MainContent extends Component {
     localStorage.setItem("name",changeEvent);
     this.props.setInputState(changeEvent);    
     if(changeEvent.includes("watershed"))
-    { this.setState({
+    { 
+      this.setState({
         historicInputState:changeEvent,
         mapChange:false,
         status:false,
@@ -62,14 +83,12 @@ class MainContent extends Component {
     }
     else
     {
-      
       this.setState({
         historicInputState:changeEvent,
         mapChange:false,
         status:false,
       })
-    }
-        
+    }   
   }
   componentDidUpdate(pP,pS)
   {
@@ -85,8 +104,8 @@ class MainContent extends Component {
   }
   shouldComponentUpdate(nextProps,nextState)
   {
-    console.log("should component update",this.state.filterstr);
-    console.log("should component update",nextProps.filterstr);
+    
+    console.log("should component update",nextProps.form);
     
     if(this.state.historicInputState===nextState.historicInputState&&this.props.form===nextProps.form&&this.props.filterstr===nextProps.filterstr&&this.state.historicStartDate===nextState.historicStartDate&&this.state.historicEndDate===nextState.historicEndDate)
     {
@@ -107,9 +126,7 @@ class MainContent extends Component {
         <FormControl historicInputState={this.state.historicInputState} data={this.state.selectedOption} formHandler={(e)=>this.formHandler(e)} optionHandler={(e)=>{this.optionHandler(e)}}/>
         <MapControl form={this.props.form}filterstr={this.props.filterstr}historicInputState={this.state.historicInputState} historicStartDate={this.state.historicStartDate} historicEndDate={this.state.historicEndDate} mapHandler={(e)=>this.mapHandler(e)}/>
         </div>
-      );
-    
-        
+      );    
   }
 }
 export default (props)=>{
@@ -127,6 +144,5 @@ export default (props)=>{
       }
     }  
     </FormContext.Consumer>
-    
   )
 }

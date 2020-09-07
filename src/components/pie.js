@@ -180,7 +180,7 @@ class PieChart extends Component{
     var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};    
     var startmonthinInt=parseInt(mapping[startDate.split(" ")[1]]);
     var endmonthinInt=parseInt(mapping[endDate.split(" ")[1]]);
-    var url="https://ewed.org:31567/ewedService/defaultViewData/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/all"
+    var url="https://ewed.org:31567/ewedService/defaultViewData/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
     try{
       var response=await fetch(url)
       var json=await response.json()
@@ -195,7 +195,7 @@ class PieChart extends Component{
   }
   async componentDidUpdate(pP,pS,snap)
   {
-    if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate)
+    if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&this.props.filterstr==pP.filterstr)
     {
       //do nothing
     }

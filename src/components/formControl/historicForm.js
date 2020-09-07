@@ -16,7 +16,6 @@ class HistoricForm extends Component {
   constructor(props)
   {
     super(props);
-    
     this.state={
       startDate:new Date("2015/01"),
       endDate:new Date("2015/12"),
@@ -69,9 +68,7 @@ formControl()
       this.props.setFilterStr("all")
       this.setState({
         modalIsOpen:false,
-        
       })
-      
     }
     else
     {
@@ -82,8 +79,7 @@ formControl()
       }
       str=str+e[e.length-1];
       console.log("filter changed",str)
-      
-      
+      this.props.setFilterStr(str)
       this.setState({
         modalIsOpen:false,
         filterstr:str,

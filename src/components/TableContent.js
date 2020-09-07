@@ -362,7 +362,6 @@ class TableContent extends Component
         </div>
             );
         }
-        
         else{
           return <div>Loading...</div>
         }

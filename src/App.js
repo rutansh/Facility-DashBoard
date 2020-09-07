@@ -6,11 +6,13 @@ import {BrowserRouter} from 'react-router-dom';
 import {UserProvider} from './components/Context/updateContext';
 import {StateProvider} from './components/Context/inputStatecontext';
 import {FormProvider} from './components/Context/queryFormContext';
+import { ProjectedProvider } from './components/Context/projectedFormContext';
 function App() {
   return (
     <BrowserRouter>
     <div className="GlobalStyle">
       <Header/>
+      <ProjectedProvider>
       <FormProvider>
         <StateProvider>
           <UserProvider>
@@ -18,6 +20,7 @@ function App() {
           </UserProvider>
         </StateProvider>
       </FormProvider>
+      </ProjectedProvider>
       
       
       

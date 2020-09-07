@@ -8,7 +8,6 @@ class FormProvider extends Component {
   // Method to update state
   setForm = (form) => {
     console.log("state context",form);
-    
     this.setState((prevState) => ({ form }))
   }
   render() {

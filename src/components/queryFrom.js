@@ -23,10 +23,11 @@ class QueryForm extends Component {
       <div>  
       <form style={{display:'flex',flexDirection:'row',marginBottom:'10px'}}>
         <div>
-        <input type="radio" name="Options" className="radioButton" value="Historic" onClick={this.selectedItem}  checked={this.props.form === 'Historic'}/>Historic
+          
+        <input type="radio" name="Options" className="radioButton" value="Historic" onChange={this.selectedItem}  checked={this.props.form === 'Historic'}/>Historic
         </div>
         <div>
-        <input type="radio" name="Options" className="radioButton" value="Projected" onClick={this.selectedItem}  checked={this.props.form === 'Projected'}/>Projected  
+        <input type="radio" name="Options" className="radioButton" value="Projected" onChange={this.selectedItem}  checked={this.props.form === 'Projected'}/>Projected  
         </div>  
       </form>
       </div>

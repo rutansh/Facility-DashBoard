@@ -243,13 +243,12 @@ class BarChart extends Component{
   }
   async componentDidUpdate(pP,pS,snap)
   {
-    if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate)
+    if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&this.props.filterstr==pP.filterstr)
     {
       //do nothing
     }
     else
     {
-      
       var startDate=this.props.historicStartDate;
       var endDate=this.props.historicEndDate;
       var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};

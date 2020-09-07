@@ -3,46 +3,6 @@ import React, { Component } from 'react'
 // import * as nameData from "../../data/facilityNames.json";
 // import { statename} from "../../data/stateNames.js";
 import StateContext from '../Context/inputStatecontext';
-
-// class CustomSearch extends Component {
-//   recentSearches =nameData["Names"];
-//   constructor(props)
-//   {
-//       super(props);
-//       this.myRef=React.createRef();
-//   }
-//   render() {
-//     console.log("dsadasdsa:"+this.myRef)
-//     console.log(this.myRef.current);
-//     console.log("customsearch:"+this.props.inputstate.name);
-//     return (
-//         <div>
-                     
-//      {/* <ReactSearchBox
-
-//         placeholder="Placeholder"
-//         value={this.props.inputstate.name}
-//         data={statename}
-//         callback={record => console.log("this is callback:"+record)}
-//         onSelect={e=>{this.props.setInputState(e.key)}}
-//       /> */}
-//         </div>
-   
-//     )
-//   }
-// }
-// export default (props)=>{
-//     return(
-//       <StateContext.Consumer>
-//       {(context)=>{
-//         return <CustomSearch {...props}{...context}/>
-//       }} 
-//       </StateContext.Consumer>
-//     )
-//   }
-
-
-
 import Autosuggest from 'react-autosuggest';
 import * as nameData from "../../data/facilityNames.json";
 
@@ -116,7 +76,7 @@ class CustomSearch extends React.Component {
  
     // Autosuggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: 'Type a programming language',
+      placeholder: 'Type a State, County or watershedname',
       value,
       onChange: this.onChange
     };
@@ -124,15 +84,12 @@ class CustomSearch extends React.Component {
     // Finally, render it!
     return (
       <Autosuggest
-        
         suggestions={suggestions}
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
-        inputProps={inputProps}
-
-      />
+        inputProps={inputProps}   />
     );
   }
 }

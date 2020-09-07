@@ -186,7 +186,7 @@ class LineChart extends Component {
     }
   }
   async componentDidUpdate(pP, pS, snap) {
-    if (pP.historicInputState === this.props.historicInputState && pP.historicStartDate === this.props.historicStartDate && pP.historicEndDate === this.props.historicEndDate) {
+    if (pP.historicInputState === this.props.historicInputState && pP.historicStartDate === this.props.historicStartDate && pP.historicEndDate === this.props.historicEndDate&&this.props.filterstr==pP.filterstr) {
       //do nothing
     }
     else {
@@ -196,7 +196,6 @@ class LineChart extends Component {
       var mapping = { "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sep": "9", "Oct": "10", "Nov": "11", "Dec": "12" };
       var startYear = parseInt(startDate.split(" ")[3])
       var endYear = parseInt(endDate.split(" ")[3])
-
       var startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
       var endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
       if (this.props.historicInputState.toLowerCase().includes("state")) {
