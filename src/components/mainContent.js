@@ -18,6 +18,11 @@ class MainContent extends Component {
       historicInputState:"ALL US",
       historicStartDate:"Thu Jan 01 2015 00:00:00 GMT-0800 (Pacific Standard Time)",
       historicEndDate:"Tue Dec 01 2015 00:00:00 GMT-0800 (Pacific Standard Time)",
+      projectedStartDate:"Fri Jan 01 2049 00:00:00 GMT-0800 (Pacific Standard Time)",
+      projectedEndDate:"Thu Dec 01 2050 00:00:00 GMT-0800 (Pacific Standard Time)",
+      energyScenario:"",
+      climateScenario:"",
+      climateModel:"",
       mapChange:true,
       status:true,
       filterstr:"",
@@ -51,13 +56,15 @@ class MainContent extends Component {
     }
     else if(array[1]=="Projected")
     {
+      console.log("projected form in main content");
+      console.log(array[0][1]+" : "+array[0][2])
       this.props.setFilterStr(array[0][3]);
       localStorage.setItem("name",array[0][0]);
       localStorage.setItem("filter",array[0][3]);    
       this.setState({
         historicInputState:array[0][0],
-        historicStartDate:String(array[0][1]),
-        historicEndDate:String(array[0][2]),
+        projectedStartDate:String(array[0][1]),
+        projectedEndDate:String(array[0][2]),
         filterstr:array[0][3]
       })
     }
@@ -99,8 +106,6 @@ class MainContent extends Component {
         
       })
     }
-    
-    
   }
   shouldComponentUpdate(nextProps,nextState)
   {
@@ -124,7 +129,9 @@ class MainContent extends Component {
         <div>
         <QueryForm/>
         <FormControl historicInputState={this.state.historicInputState} data={this.state.selectedOption} formHandler={(e)=>this.formHandler(e)} optionHandler={(e)=>{this.optionHandler(e)}}/>
-        <MapControl form={this.props.form}filterstr={this.props.filterstr}historicInputState={this.state.historicInputState} historicStartDate={this.state.historicStartDate} historicEndDate={this.state.historicEndDate} mapHandler={(e)=>this.mapHandler(e)}/>
+        {this.props.form=="Historic"?<MapControl form={this.props.form}filterstr={this.props.filterstr}historicInputState={this.state.historicInputState} historicStartDate={this.state.historicStartDate} historicEndDate={this.state.historicEndDate} mapHandler={(e)=>this.mapHandler(e)}/>
+        :<MapControl form={this.props.form}filterstr={this.props.filterstr}historicInputState={this.state.historicInputState} historicStartDate={this.state.historicStartDate} historicEndDate={this.state.historicEndDate} mapHandler={(e)=>this.mapHandler(e)}
+      />}
         </div>
       );    
   }

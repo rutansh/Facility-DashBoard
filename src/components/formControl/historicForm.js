@@ -104,7 +104,7 @@ formControl()
             <CustomSearch inputtext={this.props.inputstate.name}/>
             </div>
           </div>
-            <div style={{marginLeft:'70px',zIndex:2}}>
+            <div style={{marginLeft:'10px',zIndex:2}}>
             Select month and year from    <br></br>
                     <DatePicker
                     selected={this.state.startDate}
@@ -115,7 +115,7 @@ formControl()
                     showMonthYearPicker
                     /> 
             </div>
-            <div style={{marginLeft:'40px',zIndex:2}}>
+            <div style={{marginLeft:'10px',zIndex:2}}>
             Select month and year to    <br></br>
                     <DatePicker
                     selected={this.state.endDate}

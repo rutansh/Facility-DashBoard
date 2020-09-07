@@ -22,9 +22,8 @@ class ClimateModel extends React.Component{
             {this.props.climateScenario=="RCP45"?
             <Select
             defaultValue="AVG45"
-            defaultChecked="AVG45"
             onClick={(e)=>{
-              console.log(e.target.value);
+                this.props.setclimateModel(e.target.value);
             }}
           >
               {climateModels45.map((data)=>{
@@ -35,9 +34,8 @@ class ClimateModel extends React.Component{
           </Select>:
           <Select
             defaultValue="AVG85"
-            defaultChecked="AVG85"
             onClick={(e)=>{
-              console.log(e.target.value);
+                this.props.setclimateModel(e.target.value);
             }}
           >
               {climateModels85.map((data)=>{

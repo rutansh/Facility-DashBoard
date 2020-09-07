@@ -16,7 +16,10 @@ class FormControl extends Component {
     this.props.formHandler(this.arrayforparents);
   }
   projectedFormHandler(changeEvent){
-    this.props.formHandler(changeEvent)
+    console.log("this is projected form handler...!")
+    this.arrayforparents[0]=changeEvent
+    this.arrayforparents[1]="Projected"
+    this.props.formHandler(this.arrayforparents);
   }
   componentDidUpdate(pP,pS)
   {
