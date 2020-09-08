@@ -45,6 +45,7 @@ class NavBar extends Component {
       }
     }
     render() {
+      //https://ewed.org:41513/ewedService/getFutureData/defaultViewData/REF2019/fuelType/2049/1/2050/12/fuelTypes/all
       return (
         <MDBContainer >
         <MDBNav className="nav-tabs mt-6">

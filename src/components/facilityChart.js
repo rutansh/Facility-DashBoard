@@ -167,9 +167,9 @@ class FacilityChart extends Component {
       lineChartData.wc = []
       lineChartData.em = []
       lineChartData.labels = []
-      console.log(this.state.facilityData["MonthlyData"])
+      
       var data=this.state.facilityData["MonthlyData"];
-      console.log("line chart data for facility");
+      
       for(let i=0;i<data.length;i++)
       {
           lineChartData.gen.push(data[i].generation);
@@ -178,8 +178,7 @@ class FacilityChart extends Component {
           lineChartData.em.push(data[i].emissions);
           lineChartData.labels.push(data[i].year+"-"+data[i].month);
       }
-      console.log("dict of facilities in chart")
-      console.log(lineChartData);
+
       chartdata["datasets"][0]["data"]=lineChartData.gen;
       chartdata["datasets"][1]["data"]=lineChartData.em;
       chartdata["datasets"][2]["data"]=lineChartData.ww;
@@ -189,8 +188,6 @@ class FacilityChart extends Component {
       let endDate=this.props.endDate;
       return(
         <div>
-        {console.log("this.props.startDate")}
-        {console.log(this.props.startDate)}
           <b>{this.state.facilityData["Facility"][0]["PRIMARY_NAME"]} - Facility Trends</b>
           <b><p>({startDate.split(" ")[1]} {startDate.split(" ")[3]} - {endDate.split(" ")[1]} {endDate.split(" ")[3]})</p></b>
           <div style={{height:"450px"}}>

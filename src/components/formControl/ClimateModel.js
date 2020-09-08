@@ -14,8 +14,6 @@ class ClimateModel extends React.Component{
     }
     render()
     {
-        console.log("climatemodel");
-        console.log(this.props);
         return(
             <div>
             <InputLabel>Select Climate Model</InputLabel>
@@ -23,19 +21,35 @@ class ClimateModel extends React.Component{
             <Select
             defaultValue="AVG45"
             onClick={(e)=>{
-                this.props.setclimateModel(e.target.value);
-            }}
-          >
+
+                if(this.props.climateModel!==e.target.value)
+                {
+                    this.props.setclimateModel(e.target.value);
+                }
+                else 
+                {
+                    console.log("do nothing");
+                }
+            }}>
+              
               {climateModels45.map((data)=>{
                   return(
                   <MenuItem value={data.value}>{data.name}</MenuItem>
                   );
               })}
+              
           </Select>:
           <Select
             defaultValue="AVG85"
             onClick={(e)=>{
-                this.props.setclimateModel(e.target.value);
+                if(this.props.climateModel!==e.target.value)
+                {
+                    this.props.setclimateModel(e.target.value);
+                }
+                else 
+                {
+                    console.log("do nothing");
+                }
             }}
           >
               {climateModels85.map((data)=>{

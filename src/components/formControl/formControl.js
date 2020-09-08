@@ -16,7 +16,8 @@ class FormControl extends Component {
     this.props.formHandler(this.arrayforparents);
   }
   projectedFormHandler(changeEvent){
-    console.log("this is projected form handler...!")
+    
+    
     this.arrayforparents[0]=changeEvent
     this.arrayforparents[1]="Projected"
     this.props.formHandler(this.arrayforparents);
@@ -27,8 +28,6 @@ class FormControl extends Component {
   }
   render()
   {
-    console.log("render of form control");
-    console.log(this.props.form);
     return(
       <div>
         {this.props.form==="Historic"?<HistoricForm historicFormHandler={(e)=>this.historicFormHandler(e)}/>:<ProjectedForm projectedFormHandler={(e)=>this.projectedFormHandler(e)}/>}

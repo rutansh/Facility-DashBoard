@@ -92,7 +92,7 @@ class CustomMarker extends Component {
                 }}
                 onClick={
                     (async ()=>{
-                        console.log("facility clicked...!");
+                        
                         let startDate = this.props.historicStartDate;
                         let endDate = this.props.historicEndDate;
                         let mapping = { "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sep": "9", "Oct": "10", "Nov": "11", "Dec": "12" };
@@ -100,7 +100,16 @@ class CustomMarker extends Component {
                         let endYear = parseInt(endDate.split(" ")[3])
                         let startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
                         let endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
-                        let fetchFacility="https://ewed.org:31567/ewedService/getFacility/pgmSysId/"+this.state.facility.PGM_SYS_ID+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt;
+                        let fetchFacility=""
+                        if(this.props.form=="Historic")
+                        {
+                          fetchFacility="https://ewed.org:31567/ewedService/getFacility/pgmSysId/"+this.state.facility.PGM_SYS_ID+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt;
+                        }
+                        else if(this.props.form=="Projected")
+                        {
+                          fetchFacility="https://ewed.org:31567/ewedService/getFutureData/getFacility/"+this.props.energyScenario+"/pgmSysId/"+this.state.facility.PGM_SYS_ID+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt;
+                        }
+                        console.log("this url for facility",fetchFacility)
                         var res = await fetch(fetchFacility);
                         var jsondata = await res.json();
                         this.objectForParent.data = jsondata;
@@ -129,7 +138,6 @@ class CustomMarker extends Component {
                     }}>Show Details</button>
                   </div>
                 </InfoWindow>)}  
-                    
             </Marker>
           </div>
           );           

@@ -180,6 +180,7 @@ class PieChart extends Component{
     var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};    
     var startmonthinInt=parseInt(mapping[startDate.split(" ")[1]]);
     var endmonthinInt=parseInt(mapping[endDate.split(" ")[1]]);
+    ////https://ewed.org:41513/ewedService/getFutureData/defaultViewData/REF2019/fuelType/2049/1/2050/12/fuelTypes/all
     var url="https://ewed.org:31567/ewedService/defaultViewData/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
     try{
       var response=await fetch(url)
@@ -195,6 +196,7 @@ class PieChart extends Component{
   }
   async componentDidUpdate(pP,pS,snap)
   {
+    //https://ewed.org:41513/ewedService/getFutureData/getSummaryWithin/REF2019/stateName/california/fuelType/2049/1/2050/12/fuelTypes/all
     if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&this.props.filterstr==pP.filterstr)
     {
       //do nothing

@@ -22,19 +22,8 @@ class HistoricForm extends Component {
       inputState:"ALL US",
       modalIsOpen:false,
       filterstr:"all",
-      filters: [
-        {id: 1, value: "Natural Gas", isChecked: true},
-        {id: 2, value: "Coal", isChecked: true},
-        {id: 3, value: "Nuclear", isChecked: true},
-        {id: 4, value: "Water", isChecked: true},
-        {id: 5, value: "Wind", isChecked: true},
-        {id: 6, value: "Solar", isChecked: true},
-        {id: 7, value: "Biomass", isChecked: true},
-        {id: 8, value: "Geothermal", isChecked: true},
-        {id: 9, value: "Petroleum", isChecked: true},
-        {id: 10, value: "Other", isChecked: true}
-      ]     
       };
+      this.filters= this.props.filters
 
     // this.handleOnSubmit=this.handleOnSubmit.bind(this)
     this.formControl=this.formControl.bind(this)
@@ -65,7 +54,15 @@ formControl()
     if(e.length==10)
     {
       localStorage.setItem("filterstr","all");
+      
+      for(let i=0;i<this.filters.length;i++)
+      {
+        this.filters[i].isChecked=true;
+      }
+
       this.props.setFilterStr("all")
+
+      this.props.setFilters(this.filters);
       this.setState({
         modalIsOpen:false,
       })
@@ -78,8 +75,24 @@ formControl()
         str=str+e[i]+","
       }
       str=str+e[e.length-1];
-      console.log("filter changed",str)
+      for(let i=0;i<this.filters.length;i++)
+      {
+        this.filters[i].isChecked=false;
+      }
+      for(let i=0;i<e.length;i++)
+      {
+        for(let j=0;j<this.filters.length;j++)
+        {
+          if(this.filters[j].value.toLowerCase()==e[i])
+          {
+            this.filters[j].isChecked=true;
+          }
+          
+        } 
+      }
+      
       this.props.setFilterStr(str)
+      this.props.setFilters(this.filters);
       this.setState({
         modalIsOpen:false,
         filterstr:str,
@@ -129,7 +142,7 @@ formControl()
             <div style={{marginLeft:'40px',marginTop:'10px'}}>
             <Button onClick={this.filterByFuel} variant="outline-primary">Filter By Fuel Type</Button>
             
-            {this.state.modalIsOpen?<FilterModalforHistoric saveOrcloseModal={(e)=>{this.saveOrcloseModal(e)}} modalIsOpen={this.state.modalIsOpen} filters={this.state.filters}/>:console.log("sdads")}
+            {this.state.modalIsOpen?<FilterModalforHistoric saveOrcloseModal={(e)=>{this.saveOrcloseModal(e)}} modalIsOpen={this.state.modalIsOpen} filters={this.props.filters}/>:console.log("")}
             </div>
             <div style={{marginLeft:'40px',marginTop:'10px'}}>
             <Button onClick={this.formControl} variant="primary">Search</Button>

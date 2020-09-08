@@ -12,7 +12,7 @@ const languages = nameData["Names"];;
 
  
 // Teach Autosuggest how to calculate suggestions for any given input value.
-const getSuggestions = value => {
+  const getSuggestions = value => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
  

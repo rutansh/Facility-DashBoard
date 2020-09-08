@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React from 'react';
 import DatePicker from 'react-datepicker';
 import {Button} from 'react-bootstrap';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,43 +14,27 @@ import ClimateModel from './ClimateModel';
 import ProjectedContext from '../Context/projectedFormContext'; 
 import StateContext from '../Context/inputStatecontext';
 
-class ProjectedForm extends Component {
+class ProjectedForm extends React.Component {
   constructor(props)
   {
     super(props);
-    this.props=props;
     this.state={
       startDate:new Date("2049/01"),
       endDate:new Date("2050/12"),
       inputState:"ALL US",
       modalIsOpen:false,
       filterstr:"all",
-      filters: [
-        {id: 1, value: "Natural Gas", isChecked: true},
-        {id: 2, value: "Coal", isChecked: true},
-        {id: 3, value: "Nuclear", isChecked: true},
-        {id: 4, value: "Water", isChecked: true},
-        {id: 5, value: "Wind", isChecked: true},
-        {id: 6, value: "Solar", isChecked: true},
-        {id: 7, value: "Biomass", isChecked: true},
-        {id: 8, value: "Geothermal", isChecked: true},
-        {id: 9, value: "Petroleum", isChecked: true},
-        {id: 10, value: "Other", isChecked: true}
-      ]
       };
-      // this.handleDateChange=this.handleDateChange.bind(this)
       this.formControl=this.formControl.bind(this)
       this.handleOnSubmit=this.handleOnSubmit.bind(this)
       this.filterByFuel=this.filterByFuel.bind(this)
       this.saveOrcloseModal=this.saveOrcloseModal.bind(this) 
       this.arrayForParent=[]
+      this.filters=this.props.filters;
       
   }
   formControl()
   {
-        console.log("this is form control");
-        console.log(this.props);
-        console.log(this.state);
         this.arrayForParent[0]=this.props.inputstate.name;
         this.arrayForParent[1]=this.state.startDate;
         this.arrayForParent[2]=this.state.endDate;
@@ -72,25 +56,46 @@ class ProjectedForm extends Component {
       if(e.length==10)
       {
         localStorage.setItem("filterstr","all");
+        for(let i=0;i<this.filters.length;i++)
+        {
+          this.filters[i].isChecked=true;
+        }
         this.props.setFilterStr("all")
+        this.props.setFilters(this.filters);
         this.setState({
           modalIsOpen:false,
         })
       }
       else
       {
-        let str=""
-        for(let i=0;i<e.length-1;i++)
+      let str=""
+      for(let i=0;i<e.length-1;i++)
+      {
+        str=str+e[i]+","
+      }
+      str=str+e[e.length-1];
+      for(let i=0;i<this.filters.length;i++)
+      {
+        this.filters[i].isChecked=false;
+      }
+      for(let i=0;i<e.length;i++)
+      {
+        for(let j=0;j<this.filters.length;j++)
         {
-          str=str+e[i]+","
-        }
-        str=str+e[e.length-1];
-        console.log("filter changed",str)
-        this.props.setFilterStr(str)
-        this.setState({
-          modalIsOpen:false,
-          filterstr:str,
-        })
+          if(this.filters[j].value.toLowerCase()==e[i])
+          {
+            this.filters[j].isChecked=true;
+          }
+          
+        } 
+      }
+      
+      this.props.setFilterStr(str)
+      this.props.setFilters(this.filters);
+      this.setState({
+        modalIsOpen:false,
+        filterstr:str,
+      })
       }
     }
   useStyles = makeStyles((theme) => ({
@@ -104,8 +109,31 @@ class ProjectedForm extends Component {
       },
     }));
     
-  filterByFuel()
+  filterByFuel(e)
   {
+        // if(this.props.filterstr=="all")
+        // {
+        //   this.filters.map((filter)=>{filter.isChecked=true})
+        // }
+        // else
+        // {
+        //   let temparr=this.props.filterstr.split(",");
+        //   for(let i=0;i<temparr.length;i++)
+        //   {
+        //     this.filters.map((filter)=>
+        //     {
+        //       if(filter.value.toLowerCase()==temparr[i].toLowerCase())
+        //       {
+        //         filter.isChecked=true;
+        //       }
+        //       else
+        //       {
+        //         filter.isChecked=false;
+        //       }
+        //       filter.isChecked=true}
+        //     )
+        //   }
+        // }
         this.setState({
           modalIsOpen:true
         })
@@ -115,8 +143,6 @@ class ProjectedForm extends Component {
     const recentSearches =nameData["Names"];
     const inputPosition = 'center';
     const minimumLen=3;
-    console.log("context of :");
-    console.log(this.props);
     return(
     <div className="queryForm_container">
     <div>  
@@ -128,7 +154,15 @@ class ProjectedForm extends Component {
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
           onClick={(e)=>{
-            this.props.setenergyScenario(e.target.value)
+            if(this.props.climateScenario!==e.target.value)
+            {
+              this.props.setenergyScenario(e.target.value)
+            }
+            else
+            {
+              console.log("do nothing..");
+            }
+            
           }}
         >
           <MenuItem value={"REF2019"}>Reference</MenuItem>
@@ -190,7 +224,7 @@ class ProjectedForm extends Component {
             </div>
             <div style={{marginLeft:'40px',marginTop:'10px'}}>
             <Button onClick={this.filterByFuel} variant="outline-primary">Filter By Fuel Type</Button>
-            {this.state.modalIsOpen?<FilterModalforHistoric saveOrcloseModal={(e)=>{this.saveOrcloseModal(e)}} modalIsOpen={this.state.modalIsOpen} filters={this.state.filters}/>:console.log("sdads")}           
+            {this.state.modalIsOpen?<FilterModalforHistoric saveOrcloseModal={(e)=>{this.saveOrcloseModal(e)}} modalIsOpen={this.state.modalIsOpen} filters={this.props.filters}/>:console.log("sdads")}           
             </div>
             <div style={{marginLeft:'40px',marginTop:'10px'}}>
             <Button onClick={this.formControl} variant="primary" active>Search</Button>

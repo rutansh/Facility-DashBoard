@@ -124,8 +124,6 @@ class Regions extends React.Component {
                 }
                 else
                 {
-                  console.log(arr);
-                  console.log(g);
                   g.setSerie(arr);
                   g.setPrecision(2);
                   g.getClassJenks2(5);
@@ -136,6 +134,7 @@ class Regions extends React.Component {
               return  (
               <div>
                 {<CustomMarker 
+                form={this.props.form} energyScenario={this.props.energyScenario}
                 facility={facility} arrIndex={index} index={this.state.index} 
                 data={this.state.data} modalOpen={(e)=>{this.modalClick(e)}} 
                 markerClick={(e)=>this.markerClick(e)} historicInputState={this.props.historicInputState} 

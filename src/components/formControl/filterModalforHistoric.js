@@ -96,15 +96,11 @@ class FilterModalforHistoric extends React.Component {
                        <div>
                        <Button>Close</Button> 
                         </div>
-                        
                       </div>
-                       
-                      
                       </Modal>
             </div>
         )
       }
-    
 }
 
 export default FilterModalforHistoric

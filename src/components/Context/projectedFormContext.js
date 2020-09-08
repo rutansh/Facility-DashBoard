@@ -3,14 +3,20 @@ const ProjectedContext=React.createContext();
 class ProjectedProvider extends React.Component{
     state={
         climateScenario:"RCP45",
-        climateModel:"AVG85",
+        climateModel:"AVG45",
         energyScenario:"REF2019"
     }
     setclimateScenario = (climateScenario) => {
-        this.setState((prevState) => ({ climateScenario }))
+        if(climateScenario!==0)
+        {
+            this.setState((prevState) => ({ climateScenario }))
+        }
       }
     setclimateModel = (climateModel) => {
-        this.setState((prevState) => ({ climateModel }))
+        if(climateModel!==0)
+        {
+            this.setState((prevState) => ({ climateModel }))
+        }
       }
     setenergyScenario=(energyScenario)=>{
         this.setState((prevState) => ({ energyScenario }))

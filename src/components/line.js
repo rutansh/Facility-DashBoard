@@ -150,7 +150,8 @@ class LineChart extends Component {
     }
   }
   async componentDidMount() {
-    
+    //Request URL: https://ewed.org:28469/ewedService/getFutureData/getMonthWiseSummary/REF2019/AVG45/stateName/california/2049/1/2050/12/fuelTypes/all
+
     var startDate = this.props.historicStartDate;
     var endDate = this.props.historicEndDate;
     var mapping = { "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sep": "9", "Oct": "10", "Nov": "11", "Dec": "12" };
@@ -281,3 +282,4 @@ class LineChart extends Component {
   }
 }
 export default LineChart;
+//https://ewed.org:41513/ewedService/getFutureData/getMonthWiseSummary/REF2019/AVG45/HUC8Name/upper%20tuolumne%20watershed%20(ca)/2049/1/2050/12/fuelTypes/all
