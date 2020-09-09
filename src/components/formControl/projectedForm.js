@@ -174,7 +174,7 @@ class ProjectedForm extends React.Component {
                     </MenuItem>
                   </Select>
                 </div>
-                <div className="projected-form__input">
+                <div className="projected-form__input climate-model_container">
                   <ClimateModel />
                 </div>
               </div>

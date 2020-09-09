@@ -142,27 +142,3 @@
   margin: 0px 5px 5px 5px;
   min-height: 0;
 }
-
-.queryForm_container__inner form {
-    display: flex;
-    flex-direction: row;
-    background: white;
-    align-items: center;
-    width: 100%;
-    justify-content: flex-start;
-    padding: 15px;
-}
-
-.queryForm_container__inner form > div:not(:first-child) {
-    margin-left: 25px;
-    height: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-}
-
-.queryForm_container__inner form input {
-    border-width: 0 0 1px 0;
-    height: 30px;
-    font-size: 13px;
-}

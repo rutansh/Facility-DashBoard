@@ -60,3 +60,40 @@ button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-contained
 .queryForm_container .MuiRadio-colorPrimary.Mui-checked {
     color: #42a5f5;
 }
+
+.projected-form__input div {
+    font-size: 13px;
+}
+
+.projected-form__input > div {
+    height: 50px;
+}
+
+.climate-model_container {
+    position: relative;
+    bottom: -2px;
+}
+
+.queryForm_container__inner form {
+    display: flex;
+    flex-direction: row;
+    background: white;
+    align-items: center;
+    width: 100%;
+    justify-content: flex-start;
+    padding: 15px;
+}
+
+.queryForm_container__inner form > div:not(:first-child) {
+    margin-left: 25px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.queryForm_container__inner form input {
+    border-width: 0 0 1px 0;
+    height: 30px;
+    font-size: 13px;
+}
