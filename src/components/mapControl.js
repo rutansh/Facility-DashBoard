@@ -564,9 +564,9 @@ class MapControl extends Component {
       return (
         <div>
           <div className="main_content_container">        
-            <div style={{display:'flex',flexDirection:'row',width:'100%',marginTop:0}}>
+            <div className="main_content_inner">
               
-              <div style={{  width: '47vw', height: "890px" }}>
+              <div className="map-container">
               <MapContent  filterstr={this.props.filterstr}energyScenario={this.props.energyScenario}form={this.props.form} tabledata={this.state.regions} 
                 notReload={this.state.mapViewByCalled} viewByButtonClicked={(e)=>this.viewByButtonClicked(e)} 
                 formHandler={(e)=>this.formHandler(e)} formHandlerforFacility={(e)=>this.formHandlerforFacility(e)}
@@ -574,7 +574,7 @@ class MapControl extends Component {
                 historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
               </div>
               
-              <div style={{ marginLeft:20,width: '50vw', height: "890px" }}>
+              <div className="table-container">
                 <NavBar energyScenario={this.props.energyScenario} form={this.props.form} tabledata={this.state.regions}
                 formHandler={(e)=>this.formHandler2(e)}
                 tableDataHandler={(e)=>{this.tableDataHandler(e)}}

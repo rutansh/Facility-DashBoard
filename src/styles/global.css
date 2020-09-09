@@ -49,51 +49,61 @@ label.MuiInputLabel-root.MuiFormLabel-root {
 }
 
 .queryForm_container__historic.queryForm_container__inner label {
-    position: relative;
-    top: 8px;
+  position: relative;
+  top: 8px;
 }
 
 button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary {
-    background-color: #42a5f5;
+  background-color: #42a5f5;
 }
 
 .queryForm_container .MuiRadio-colorPrimary.Mui-checked {
-    color: #42a5f5;
+  color: #42a5f5;
 }
 
 .projected-form__input div {
-    font-size: 13px;
+  font-size: 13px;
 }
 
 .projected-form__input > div {
-    height: 50px;
+  height: 50px;
 }
 
 .climate-model_container {
-    position: relative;
-    bottom: -2px;
+  position: relative;
+  bottom: -2px;
 }
 
 .queryForm_container__inner form {
-    display: flex;
-    flex-direction: row;
-    background: white;
-    align-items: center;
-    width: 100%;
-    justify-content: flex-start;
-    padding: 15px;
+  display: flex;
+  flex-direction: row;
+  background: white;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-start;
+  padding: 15px;
 }
 
 .queryForm_container__inner form > div:not(:first-child) {
-    margin-left: 25px;
-    height: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+  margin-left: 25px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .queryForm_container__inner form input {
-    border-width: 0 0 1px 0;
-    height: 30px;
-    font-size: 13px;
+  border-width: 0 0 1px 0;
+  height: 30px;
+  font-size: 13px;
+}
+
+.main_content_inner {
+  width: 100%;
+  display: flex;
+}
+
+.map-container,
+.table-container {
+  width: 50%;
 }

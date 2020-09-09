@@ -15,7 +15,7 @@
   min-height: 0;
   flex-wrap: wrap;
 }
-.main_content_container {
+/* .main_content_container {
   display: -webkit-box;
   display: flex;
   position: relative;
@@ -30,7 +30,7 @@
   margin: 4px 0;
   height: 950px;
   flex-wrap: wrap;
-}
+} */
 .map_container {
   display: -webkit-box;
   display: flex;
@@ -116,13 +116,14 @@
   align-items: flex-start;
   -webkit-box-pack: justify;
   justify-content: flex-start;
-  padding: 10px 15px 5px 15px;
+  padding: 10px 15px 15px 15px;
+  margin-bottom: 15px;
   width: 100%;
   background: rgb(255, 255, 255);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   border-radius: 3px;
   margin: 4px 0;
-  height: 950px;
+  height: auto;
   flex-wrap: wrap;
 }
 .filterForm {

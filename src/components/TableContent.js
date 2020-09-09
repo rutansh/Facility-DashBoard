@@ -79,7 +79,7 @@ class TableContent extends Component
         {
           
           return(
-            <div style={{ height: "885px",overflowY: "scroll"}} >
+            <div>
             <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '5px' }}>
             <div style={{marginTop:"20px"}}>
               <b>Activity for {nameOfState}</b>
