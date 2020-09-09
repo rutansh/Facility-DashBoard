@@ -203,7 +203,6 @@ class PieChart extends Component{
     }
     else
     {
-      
       var startDate=this.props.historicStartDate;
       var endDate=this.props.historicEndDate;
       var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};
@@ -324,3 +323,4 @@ class PieChart extends Component{
   }
 }
 export default PieChart;
+//https://ewed.org:28469/ewedService/getFutureData/getSummaryWithin/REF2019/HUC8Name/upper%20tuolumne%20watershed%20(ca)/fuelType/2049/1/2050/12/fuelTypes/all

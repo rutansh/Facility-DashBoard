@@ -1,24 +1,33 @@
 import React from 'react';
 import '../styles/header.css';
-
-function Header() {
-  function handleClick(e) {
-    e.preventDefault();
-    console.log('The link was clicked.');
+import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button';
+class Header extends React.Component{
+  constructor(props)
+  {
+    super(props);
+    this.state={
+      isOpen:false,
+      modelName:"",
+    }
+    this.handleClick=this.handleClick.bind(this);
+    
   }
-  
-  return (
-    <div className="menu-container">
+   handleClick=(e)=>{
+    console.log("asdsa"+e);
+  }
+  render(){
+    return(
+      <div className="menu-container">
       <div className="menu">
       
-          <ul className="navbar-nav" className="menuList">
+          <ul className="menuList">
             <li className="li">
-            <a href="#" onClick={handleClick}>
-      Home
-    </a>
+            <a onClick={(e)=>{console.log("About")}}>Home</a>
+            
             </li>
             <li className="li">
-            <a href="www.google.com">About</a>
+            <a onClick={(e)=>{console.log("About")}}>About</a>
             </li>
             <li className="li">
             <a href="www.google.com">Tutorial</a>
@@ -41,9 +50,11 @@ function Header() {
       </div>
         
       </div>
+    );
+  
+}
     
-    
-  );
+  
 }
 
 export default Header;

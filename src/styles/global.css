@@ -13,3 +13,14 @@
 .MuiInput-root{
     width: 150px;
 }
+.menuList li a{
+    color:black
+
+}
+
+.menuList li a:hover{
+    font-weight:bold;
+}
+label.MuiInputLabel-root.MuiFormLabel-root {
+    font-size: 0.6rem;
+}

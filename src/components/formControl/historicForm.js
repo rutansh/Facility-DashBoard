@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import DatePicker from 'react-datepicker';
-import {Button} from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
+import InputLabel from '@material-ui/core/InputLabel';
 import 'react-datepicker/dist/react-datepicker.css';
 import SuggestionInputSearch from 'suggestion-react-input-search'; 
 import '../../styles/historicForm.css';
@@ -11,7 +12,10 @@ import * as ReactBootstrap from "react-bootstrap";
 import FilterModalforHistoric from "./filterModalforHistoric";
 import CustomSearch from './customSearch';
 import StateContext from '../Context/inputStatecontext';
+import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
 Modal.setAppElement('#root')
+
 class HistoricForm extends Component {
   constructor(props)
   {
@@ -23,8 +27,7 @@ class HistoricForm extends Component {
       modalIsOpen:false,
       filterstr:"all",
       };
-      this.filters= this.props.filters
-
+    this.filters= this.props.filters
     // this.handleOnSubmit=this.handleOnSubmit.bind(this)
     this.formControl=this.formControl.bind(this)
     // this.sendDataToParent=this.sendDataToParent.bind(this)
@@ -41,7 +44,17 @@ formControl()
         this.arrayForParent[3]=this.props.filterstr;
         this.props.historicFormHandler(this.arrayForParent);
   }
-
+useStyles = makeStyles((theme) => ({
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: 200,
+    },
+  }));
   filterByFuel()
   {
         this.setState({
@@ -111,15 +124,15 @@ formControl()
   <form style={{display:'flex',flexDirection:'row'}}>
           <div>
             <div style={{marginLeft:'0px'}}>
-            Search for State, HUC or County  <br></br> 
+            <InputLabel>Search for State, HUC or County</InputLabel>
             </div>
             <div style={{}}>
             <CustomSearch inputtext={this.props.inputstate.name}/>
             </div>
           </div>
             <div style={{marginLeft:'10px',zIndex:2}}>
-            Select month and year from    <br></br>
-                    <DatePicker
+            <InputLabel>Select month and year from</InputLabel>
+            <DatePicker
                     selected={this.state.startDate}
                     onChange={date => this.setState({
                         startDate:date
@@ -129,7 +142,17 @@ formControl()
                     /> 
             </div>
             <div style={{marginLeft:'10px',zIndex:2}}>
-            Select month and year to    <br></br>
+            {/* <TextField
+              id="date"
+              label="Birthday"
+              type="date"
+              defaultValue="2017-05-24"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={(e,date)=>console.log(date)}
+            /> */}
+            <InputLabel>Select month and year to</InputLabel>
                     <DatePicker
                     selected={this.state.endDate}
                     onChange={date => this.setState({
@@ -140,15 +163,15 @@ formControl()
                     />
             </div>        
             <div style={{marginLeft:'40px',marginTop:'10px'}}>
-            <Button onClick={this.filterByFuel} variant="outline-primary">Filter By Fuel Type</Button>
+            <Button onClick={this.filterByFuel} variant="contained" color="primary">Filter By Fuel Type</Button>
             
             {this.state.modalIsOpen?<FilterModalforHistoric saveOrcloseModal={(e)=>{this.saveOrcloseModal(e)}} modalIsOpen={this.state.modalIsOpen} filters={this.props.filters}/>:console.log("")}
             </div>
             <div style={{marginLeft:'40px',marginTop:'10px'}}>
-            <Button onClick={this.formControl} variant="primary">Search</Button>
+            <Button onClick={this.formControl} variant="contained" color="primary">Search</Button>
             </div>
             <div style={{marginLeft:'40px',marginTop:'10px'}}>
-            <Button variant="primary">Reset View</Button>
+            <Button variant="contained" color="primary">Reset View</Button>
             </div>
         </form>
   </div>

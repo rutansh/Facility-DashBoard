@@ -1,6 +1,7 @@
 //set form value,
 import React,{Component} from 'react';
 import FormContext from './Context/queryFormContext';
+import { Radio,InputLabel } from '@material-ui/core';
 class QueryForm extends Component {
   constructor(props)
   {
@@ -22,13 +23,26 @@ class QueryForm extends Component {
       <div className="queryForm_container" style={{display:'flex',flexDirection:'column'}}>
       <div>  
       <form style={{display:'flex',flexDirection:'row',marginBottom:'10px'}}>
-        <div>
-          
-        <input type="radio" name="Options" className="radioButton" value="Historic" onChange={this.selectedItem}  checked={this.props.form === 'Historic'}/>Historic
-        </div>
-        <div>
-        <input type="radio" name="Options" className="radioButton" value="Projected" onChange={this.selectedItem}  checked={this.props.form === 'Projected'}/>Projected  
-        </div>  
+        
+          <div style={{display:'flex',flexDirection:'row'}}>
+            <div>
+            <Radio color="primary" name="Options" value="Historic" onChange={this.selectedItem}  checked={this.props.form === 'Historic'}/>
+            </div>
+            <div style={{marginTop:"10px"}}> 
+            Historic
+            </div>
+          </div>
+          <div>
+          <div style={{display:'flex',flexDirection:'row'}}>
+            <div>
+              <Radio color="primary" name="Options" value="Projected" onChange={this.selectedItem}  checked={this.props.form === 'Projected'}/>  
+            </div>  
+            <div style={{marginTop:"10px"}}>
+              Projected 
+            </div>
+          </div>
+          </div>
+        
       </form>
       </div>
       </div> 
