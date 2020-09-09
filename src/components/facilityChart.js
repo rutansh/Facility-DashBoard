@@ -190,7 +190,7 @@ class FacilityChart extends Component {
         <div>
           <b>{this.state.facilityData["Facility"][0]["PRIMARY_NAME"]} - Facility Trends</b>
           <b><p>({startDate.split(" ")[1]} {startDate.split(" ")[3]} - {endDate.split(" ")[1]} {endDate.split(" ")[3]})</p></b>
-          <div style={{height:"450px"}}>
+          <div>
           <Line data={chartdata} options={options} redraw />
         </div>
         </div>

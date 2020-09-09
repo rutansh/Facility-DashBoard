@@ -171,7 +171,7 @@ class Regions extends React.Component {
                       }
                     }
                   }>
-                <FacilityChart facilityData={this.state.data} startDate={this.props.historicStartDate} endDate={this.props.historicEndDate}/>
+                <FacilityChart className="facility-chart-container" facilityData={this.state.data} startDate={this.props.historicStartDate} endDate={this.props.historicEndDate}/>
                 <button onClick={()=>{this.setState({ismodalOpen:false})}}>Close</button>
                 </Modal>} 
               </div>

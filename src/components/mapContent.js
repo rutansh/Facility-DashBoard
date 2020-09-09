@@ -1,5 +1,5 @@
 import React from "react";
-import { withGoogleMap, GoogleMap } from "react-google-maps";
+import { withGoogleMap, GoogleMap, MapTypeControlStyle, ControlPosition } from "react-google-maps";
 import mapStyles from "./mystyle";
 import { stateLatLngs } from "../data/stateLatLong";
 import { Button } from "react-bootstrap";
@@ -631,7 +631,15 @@ class MapContent extends React.PureComponent {
       <GoogleMap
         defaultCenter={{ lat: this.state.latitude, lng: this.state.longitude }}
         defaultZoom={this.state.zoom}
-        // defaultOptions={{ styles: mapStyles }}
+        defaultOptions={{ styles: mapStyles }}
+        options={{
+          mapTypeControlOptions: {
+            style: 1,
+            position: 3
+          },
+          streetViewControl: false,
+          fullscreenControl: false,
+        }}
       >
         {this.state.regions !== null ? (
           <Regions
@@ -660,8 +668,9 @@ class MapContent extends React.PureComponent {
       return (
         <div>
           <div>
-            <div style={{ position: "absolute", zIndex: 1 }}>
+            <div className="map-form-container">
               <form
+              className="display-form-container"
                 style={{
                   display: "flex",
                   flexDirection: "row",
@@ -709,6 +718,7 @@ class MapContent extends React.PureComponent {
                 </div>
               </form>
               <form
+                className="view-by-form-container"
                 style={{
                   display: "flex",
                   flexDirection: "row",
@@ -803,7 +813,10 @@ class MapContent extends React.PureComponent {
                     Facilities
                   </div>
                 </div>
-                <div style={{ marginLeft: "50px" }}>
+                
+              </form>
+            </div>
+            <div className="up-to-btn" style={{ marginLeft: "50px" }}>
                   {this.state.prevState ? (
                     <Button
                       style={{ width: "200px", height: "40px" }}
@@ -833,14 +846,13 @@ class MapContent extends React.PureComponent {
                         }
                       }}
                     >
-                      Up to {this.state.prevState} View
+                      ← Up to {this.state.prevState} View
                     </Button>
                   ) : (
                     console.log("")
                   )}
                 </div>
-              </form>
-            </div>
+              
             <div>
               <GoogleMapExample
                 containerElement={<div></div>}
