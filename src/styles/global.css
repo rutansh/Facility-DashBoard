@@ -210,3 +210,6 @@ button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-contained
 .ReactModal__Content.ReactModal__Content--after-open.filter-modal-main {
   width: 400px;
 }
+.about-modal-header{
+    width: 100vh;
+}

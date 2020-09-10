@@ -112,7 +112,11 @@ class FilterModalforHistoric extends React.Component {
               Save
             </Button>
 
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary"
+            onClick={(e) => {
+              this.props.saveOrcloseModal("Close");
+            }}
+            >
               Close
             </Button>
           </div>
@@ -121,5 +125,4 @@ class FilterModalforHistoric extends React.Component {
     );
   }
 }
-
 export default FilterModalforHistoric;

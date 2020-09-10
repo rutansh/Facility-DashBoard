@@ -59,7 +59,13 @@ class HistoricForm extends Component {
     });
   }
   saveOrcloseModal(e) {
-    if (e.length == 10) {
+    if(e=="Close")
+    {
+      this.setState({
+        modalIsOpen: false,
+      });
+    }
+    else if (e.length == 10) {
       localStorage.setItem("filterstr", "all");
 
       for (let i = 0; i < this.filters.length; i++) {

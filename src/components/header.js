@@ -2,6 +2,10 @@ import React from 'react';
 import '../styles/header.css';
 import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
+import About from './About';
+import Tutorials from './Tutorial';
+import Methods from './Methods';
+import FAQs from './FAQs'; 
 class Header extends React.Component{
   constructor(props)
   {
@@ -13,28 +17,70 @@ class Header extends React.Component{
     this.handleClick=this.handleClick.bind(this);
     
   }
-   handleClick=(e)=>{
-    console.log("asdsa"+e);
+  handleChild=(e)=>{
+    this.setState({
+      isOpen:false
+    })
+  }
+   handleClick=(e,name)=>{
+     if(name=="About")
+     {
+       this.setState({
+         modelName:"About",
+         isOpen:true,
+       })
+     }
+     else if(name=="FAQs")
+     {
+       this.setState({
+         modelName:"FAQs",
+         isOpen:true,
+       })
+     }
+     else if(name=="Tutorial")
+     {
+       this.setState({
+         modelName:"Tutorial",
+         isOpen:true,
+       })
+     }
+     else if(name=="Methods")
+     {
+       this.setState({
+         modelName:"Methods",
+         isOpen:true,
+       })
+     }
+
+    
   }
   render(){
     return(
+      <div>
+        {this.state.modelName=="About" && this.state.isOpen?<About handleChild={(e)=>{this.handleChild(e)}}/>:console.log("assa")}  
+        {this.state.modelName=="FAQs" && this.state.isOpen?<FAQs handleChild={(e)=>{this.handleChild(e)}}/>:console.log("assa")}
+        {this.state.modelName=="Tutorial"&& this.state.isOpen ?<Tutorials handleChild={(e)=>{this.handleChild(e)}}/>:console.log("assa")}
+        {this.state.modelName=="Methods" && this.state.isOpen?<Methods handleChild={(e)=>{this.handleChild(e)}}/>:console.log("assa")}
+
+
       <div className="menu-container">
+      
       <div className="menu">
         <ul className="menuList">
             <li className="li">
-            <a onClick={(e)=>{console.log("Home")}}>Home</a>
+            <a onClick={(e)=>console.log("Home")}>Home</a>
             </li>
             <li className="li">
-            <a onClick={(e)=>{console.log("About")}}>About</a>
+            <a onClick={(e)=>this.handleClick(e,"About") }>About</a>
             </li>
             <li className="li">
-            <a onClick={(e)=>{console.log("Tutorial")}}>Tutorial</a>
+            <a onClick={(e)=>this.handleClick(e,"Tutorial") }>Tutorial</a>
             </li>
             <li className="li">
-            <a onClick={(e)=>{console.log("Methods")}}>Methods</a>
+            <a onClick={(e)=>this.handleClick(e,"Methods") }>Methods</a>
             </li>
             <li className="li">
-            <a onClick={(e)=>{console.log("FAQs")}}>FAQs</a>
+            <a onClick={(e)=>this.handleClick(e,"FAQs") }>FAQs</a>
             </li>
           </ul>
       </div>
@@ -47,6 +93,8 @@ class Header extends React.Component{
       </div>
         
       </div>
+      </div>
+      
     );
   
 }
