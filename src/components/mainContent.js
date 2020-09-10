@@ -80,7 +80,7 @@ class MainContent extends Component {
     let newState=changeEvent;
     localStorage.setItem("name",changeEvent);
     this.props.setInputState(changeEvent);
-    console.log("main content maphandler");    
+    
     if(changeEvent.includes("watershed"))
     { 
       this.setState({
@@ -124,12 +124,13 @@ class MainContent extends Component {
   
   render()
   {
-      console.log("render of maincontent");
+      
       return (
         <div>
         <QueryForm/>
         <FormControl historicInputState={this.state.historicInputState} data={this.state.selectedOption} formHandler={(e)=>this.formHandler(e)} optionHandler={(e)=>{this.optionHandler(e)}}/>
-        {this.props.form=="Historic"?<MapControl form={this.props.form}filterstr={this.props.filterstr}historicInputState={this.state.historicInputState} historicStartDate={this.state.historicStartDate} historicEndDate={this.state.historicEndDate} mapHandler={(e)=>this.mapHandler(e)}/>
+        {this.props.form=="Historic"?<MapControl climateScenario={this.state.climateScenario} climateModel={this.state.climateModel}
+        energyScenario={this.state.energyScenario} form={this.props.form}filterstr={this.props.filterstr}historicInputState={this.state.historicInputState} historicStartDate={this.state.historicStartDate} historicEndDate={this.state.historicEndDate} mapHandler={(e)=>this.mapHandler(e)}/>
         :<MapControl form={this.props.form} climateScenario={this.state.climateScenario} climateModel={this.state.climateModel}
         energyScenario={this.state.energyScenario}filterstr={this.props.filterstr}historicInputState={this.state.historicInputState} 
         historicStartDate={this.state.projectedStartDate} historicEndDate={this.state.projectedEndDate} mapHandler={(e)=>this.mapHandler(e)}

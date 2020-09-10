@@ -1,7 +1,7 @@
 import React from 'react'
 import Modal from 'react-modal';
 import CheckBox from './checkbox';
-import {Button} from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
 class FilterModalforHistoric extends React.Component {
     constructor(props)
     {
@@ -64,10 +64,10 @@ class FilterModalforHistoric extends React.Component {
                       <center>
                       <div style={{display: 'flex', flexDirection: 'row',}}>
                         <div>
-                        <Button onClick={(e)=>{this.handleAllChecked(e)}}>Select All</Button>  
+                        <Button  variant="contained" color="primary" onClick={(e)=>{this.handleAllChecked(e)}}>Select All</Button>  
                         </div>
                         <div>
-                        <Button onClick={(e)=>{this.handleAllNoneChecked(e)}}>Select None</Button>
+                        <Button  variant="contained" color="primary" onClick={(e)=>{this.handleAllNoneChecked(e)}}>Select None</Button>
                         </div>
                       </div>
                       </center>
@@ -80,7 +80,7 @@ class FilterModalforHistoric extends React.Component {
                        </ul>
                        <div style={{display: 'flex', flexDirection: 'row',}}>
                        <div style={{marginLeft:"50%"}}>
-                        <Button onClick={(e)=>{
+                        <Button variant="contained" color="primary"onClick={(e)=>{
                         let arr=[]    
                         for(let i=0;i<this.state.filters.length;i++)
                         {
@@ -94,7 +94,7 @@ class FilterModalforHistoric extends React.Component {
                         }}>Save</Button>
                        </div>
                        <div>
-                       <Button>Close</Button> 
+                       <Button variant="contained" color="primary">Close</Button> 
                         </div>
                       </div>
                       </Modal>

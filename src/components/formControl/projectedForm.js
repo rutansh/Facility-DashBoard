@@ -1,6 +1,6 @@
 import React from "react";
 import DatePicker from "react-datepicker";
-import { Button } from "react-bootstrap";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import "react-datepicker/dist/react-datepicker.css";
 import * as nameData from "../../data/facilityNames.json";
@@ -212,7 +212,7 @@ class ProjectedForm extends React.Component {
               />
             </div>
             <div>
-              <Button onClick={this.filterByFuel} variant="outline-primary">
+              <Button variant="contained" color="primary" onClick={this.filterByFuel} >
                 Filter By Fuel Type
               </Button>
               {this.state.modalIsOpen ? (
@@ -228,12 +228,12 @@ class ProjectedForm extends React.Component {
               )}
             </div>
             <div>
-              <Button onClick={this.formControl} variant="primary" active>
+              <Button variant="contained" color="primary"onClick={this.formControl}>
                 Search
               </Button>
             </div>
             <div>
-              <Button variant="primary">Reset View</Button>
+              <Button variant="contained" color="primary">Reset View</Button>
             </div>
           </form>
         </div>

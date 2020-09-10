@@ -2,9 +2,10 @@ import React from "react";
 import { withGoogleMap, GoogleMap, MapTypeControlStyle, ControlPosition } from "react-google-maps";
 import mapStyles from "./mystyle";
 import { stateLatLngs } from "../data/stateLatLong";
-import { Button } from "react-bootstrap";
+import Button  from "@material-ui/core/Button";
 import { stateAbr } from "../data/stateAbr";
 import Regions from "./regions";
+import { Radio, InputLabel } from "@material-ui/core";
 
 class MapContent extends React.PureComponent {
   constructor(props) {
@@ -679,9 +680,9 @@ class MapContent extends React.PureComponent {
               >
                 <div className="filterForm">
                   <b style={{ marginRight: "20px" }}>Display :</b>
-                  <div>
-                    <input
-                      type="radio"
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div>
+                    <Radio
                       name="Options"
                       className="radioButtonDisplay"
                       value="Water Consumption"
@@ -689,11 +690,15 @@ class MapContent extends React.PureComponent {
                       checked={this.state.displayChoice === "Water Consumption"}
                       style={{ marginRight: "5px" }}
                     />
+                    </div>
+                    <div>
                     Water Consumption
+                    </div>
+                    
                   </div>
-                  <div style={{ marginLeft: "10px" }}>
-                    <input
-                      type="radio"
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div>
+                    <Radio
                       name="Options"
                       className="radioButtonDisplay"
                       value="Water Withdrawal"
@@ -701,11 +706,15 @@ class MapContent extends React.PureComponent {
                       checked={this.state.displayChoice === "Water Withdrawal"}
                       style={{ marginRight: "5px" }}
                     />
+                    </div>
+                    <div>
                     Water Withdrawal
+                    </div>
+                    
                   </div>
-                  <div style={{ marginLeft: "10px" }}>
-                    <input
-                      type="radio"
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div>
+                    <Radio
                       name="Options"
                       className="radioButtonDisplay"
                       value="Water Emission"
@@ -713,7 +722,11 @@ class MapContent extends React.PureComponent {
                       checked={this.state.displayChoice === "Water Emission"}
                       style={{ marginRight: "5px" }}
                     />
+                    </div>
+                    <div>
                     Water Emission
+                    </div>
+                    
                   </div>
                 </div>
               </form>
@@ -727,9 +740,9 @@ class MapContent extends React.PureComponent {
               >
                 <div className="filterForm">
                   <b style={{ marginRight: "15px" }}>View By :</b>
-                  <div>
-                    <input
-                      type="radio"
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div>
+                    <Radio
                       name="Options"
                       className="radioButtonViewBy"
                       value="States"
@@ -739,11 +752,15 @@ class MapContent extends React.PureComponent {
                         .includes("all us")}
                       style={{ marginRight: "5px" }}
                     />
+                    </div>
+                    <div>
                     States
+                    </div>
+                    
                   </div>
-                  <div style={{ marginLeft: "10px" }}>
-                    <input
-                      type="radio"
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div>
+                    <Radio
                       name="Options"
                       className="radioButtonViewBy"
                       value="Watersheds"
@@ -767,11 +784,16 @@ class MapContent extends React.PureComponent {
                       }
                       style={{ marginRight: "5px" }}
                     />
-                    Watersheds
+                    </div>
+                    <div>
+                    Watersheds  
+                    </div>
+                    
                   </div>
-                  <div style={{ marginLeft: "10px" }}>
-                    <input
-                      type="radio"
+                  
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div>
+                    <Radio
                       name="Options"
                       className="radioButtonViewBy"
                       value="Counties"
@@ -790,11 +812,16 @@ class MapContent extends React.PureComponent {
                       }
                       style={{ marginRight: "5px" }}
                     />
+                    </div>
+                    <div>
                     Counties
+                    </div>
+
+                    
                   </div>
-                  <div style={{ marginLeft: "10px" }}>
-                    <input
-                      type="radio"
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div>
+                    <Radio
                       name="Options"
                       className="radioButtonViewBy"
                       value="Facilities"
@@ -810,7 +837,11 @@ class MapContent extends React.PureComponent {
                         .includes("all us")}
                       style={{ marginRight: "5px" }}
                     />
+                    </div>
+                    <div>
                     Facilities
+                    </div>
+                    
                   </div>
                 </div>
                 
@@ -819,6 +850,8 @@ class MapContent extends React.PureComponent {
             <div className="up-to-btn" style={{ marginLeft: "50px" }}>
                   {this.state.prevState ? (
                     <Button
+                      color="primary"
+                      variant="contained"
                       style={{ width: "200px", height: "40px" }}
                       onClick={() => {
                         if (this.state.prevState.length > 0) {

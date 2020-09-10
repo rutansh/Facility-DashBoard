@@ -52,16 +52,16 @@ class MapControl extends Component {
     //facilities of a state
   
   formHandler(changeEvent){
-    console.log("mapcontrol formhandler where parent function is called");
+    
     this.props.mapHandler(changeEvent[0])
   }
   formHandler2(e)
   {
-    console.log("mapcontrol formhandler2 where parent function is called");
+    
     this.props.mapHandler(e);
   }
   formHandlerforFacility(changeEvent){
-    console.log("changeEvent:"+changeEvent[0]);
+    
     this.props.mapHandler(changeEvent[0])
   }
   shouldComponentUpdate(nextProps,nextState)
@@ -93,10 +93,6 @@ class MapControl extends Component {
   
   async componentDidUpdate(pP,state,snap)
   {
-    console.log("mapcontroldid update where parent function is called");
-    console.log("this is for county",this.props);
-    console.log('state -', this.state);
-    console.log('pP -', pP);
     var startDate=this.props.historicStartDate;
     var endDate=this.props.historicEndDate;
     var startYear=parseInt(startDate.split(" ")[3])
@@ -112,9 +108,6 @@ class MapControl extends Component {
           pP.historicStartDate == this.props.historicStartDate && 
           pP.historicEndDate == this.props.historicEndDate)
       {
-        console.log("this is for county",this.props);
-        console.log('state -', this.state);
-        console.log('pP -', pP);
         if(this.state.mapViewByCalled && this.state.viewByChoice=="Facilities")
         {
           var name=this.props.historicInputState;
@@ -130,7 +123,7 @@ class MapControl extends Component {
         }
         else if(this.state.mapViewByCalled && this.state.viewByChoice=="Counties")
           {
-            console.log("county data fetch for table...!")
+            
             var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/stateName/"+stateName+"/CountyState1/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
             var response=await fetch(url);
             var json=await response.json();
@@ -195,7 +188,7 @@ class MapControl extends Component {
         (this.props.historicInputState.toLowerCase().includes("county")|| (this.props.historicInputState.toLowerCase().search(",") < 0 
         && this.props.historicInputState.split("(")[1].split(")")[0].length > 2)))
       {
-        console.log("county data fetch for table...!")
+        
         //https://ewed.org:31567/ewedService/getFutureData/getFacilityData/REF2019/CountyState1/umatilla%20county%20(oregon)/2049/1/2050/12/fuelTypes/all
         var countyName=this.props.historicInputState.toLowerCase()
         var url = "https://ewed.org:31567/ewedService/getFutureData/getFacilityData/"+this.props.energyScenario+"/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
@@ -237,7 +230,7 @@ class MapControl extends Component {
     }
     else
     {
-      console.log("county data else part");
+     
       if(this.props.historicInputState.toLowerCase().includes("all us"))
       {
         
@@ -293,7 +286,7 @@ class MapControl extends Component {
       }
       else if(this.props.historicInputState.toLowerCase().includes("county"))
       {
-        console.log("county data");
+       
         var countyName=this.props.historicInputState.toLowerCase()
         var url="https://ewed.org:31567/ewedService/getFacilityData/"+this.props.energyScenario+"/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         try{
@@ -311,10 +304,10 @@ class MapControl extends Component {
       }
       else if(this.props.historicInputState.toLowerCase().includes("watershed"))
       {
-        console.log("this is watershed",this.props.energyScenario);
+        
         var hucName=this.props.historicInputState.toLowerCase()
         var url="https://ewed.org:31567/ewedService/getFutureData/getFacilityData/"+this.props.energyScenario+"/HUC8Name/"+hucName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
-        console.log("this is watershed",url);
+        
         try{
           var response=await fetch(url)
           var json=await response.json()
@@ -377,7 +370,7 @@ class MapControl extends Component {
       }
       else if(pP.filterstr!==this.props.filterstr && this.props.historicInputState.toLowerCase().includes("all us"))
       {
-        console.log("not same");
+        
         var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         try{
           var response=await fetch(url)
@@ -459,7 +452,7 @@ class MapControl extends Component {
     { 
       if(this.props.historicInputState.toLowerCase().includes("all us"))
       {
-        console.log("this is all us from mapcontrol",this.props.filterstr)
+        
         var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         try{
           var response=await fetch(url)
@@ -560,7 +553,7 @@ class MapControl extends Component {
     }
     
     else{
-      {console.log("render of mapcontrol");}
+      
       return (
         <div>
           <div className="main_content_container">        
@@ -575,7 +568,7 @@ class MapControl extends Component {
               </div>
               
               <div className="table-container">
-                <NavBar energyScenario={this.props.energyScenario} form={this.props.form} tabledata={this.state.regions}
+                <NavBar climateScenario={this.props.climateScenario} climateModel={this.props.climateModel} energyScenario={this.props.energyScenario} form={this.props.form} tabledata={this.state.regions}
                 formHandler={(e)=>this.formHandler2(e)}
                 tableDataHandler={(e)=>{this.tableDataHandler(e)}}
                 historicInputState={this.props.historicInputState} 

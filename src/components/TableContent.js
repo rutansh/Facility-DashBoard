@@ -102,7 +102,7 @@ class TableContent extends Component {
                   filename={this.props.historicInputState}
                   sheet="sheet 1"
                   buttonText="Download .CSV"
-                  className="btn"
+                  className="btn btn-primary"
                 />
               </div>
             </div>
@@ -125,29 +125,29 @@ class TableContent extends Component {
                     <td>
                       <b>
                         {
-                          this.props.tabledata["Total Summary"][0]
-                            .totalGeneration
+                          Number(this.props.tabledata["Total Summary"][0]
+                          .totalGeneration).toLocaleString()
                         }
                       </b>
                     </td>
                     <td>
                       <b>
-                        {this.props.tabledata["Total Summary"][0].totalEmission}
+                        {Number(this.props.tabledata["Total Summary"][0].totalEmission).toLocaleString()}
                       </b>
                     </td>
                     <td>
                       <b>
                         {
-                          this.props.tabledata["Total Summary"][0]
-                            .totalWaterConsumption
+                          Number(this.props.tabledata["Total Summary"][0]
+                          .totalWaterConsumption).toLocaleString()
                         }
                       </b>
                     </td>
                     <td>
                       <b>
                         {
-                          this.props.tabledata["Total Summary"][0]
-                            .totalWaterWithdrawal
+                          Number(this.props.tabledata["Total Summary"][0]
+                          .totalWaterWithdrawal).toLocaleString()
                         }
                       </b>
                     </td>
@@ -171,10 +171,10 @@ class TableContent extends Component {
                       }}
                     >
                       <td>{item.filterName}</td>
-                      <td>{item.generation}</td>
-                      <td>{item.emission}</td>
-                      <td>{item.waterConsumption}</td>
-                      <td>{item.waterWithdrawal}</td>
+                      <td>{Number(item.generation).toLocaleString()}</td>
+                      <td>{Number(item.emission).toLocaleString()}</td>
+                      <td>{Number(item.waterConsumption).toLocaleString()}</td>
+                      <td>{Number(item.waterWithdrawal).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -202,7 +202,7 @@ class TableContent extends Component {
                   filename=""
                   sheet="sheet 1"
                   buttonText="Download .CSV"
-                  className="btn"
+                  className="btn btn-primary"
                 />
               </div>
             </div>
@@ -224,29 +224,29 @@ class TableContent extends Component {
                       <b>Total</b>
                     </td>
                     <td>
-                      <b>{this.state.items["Summary"][0].totalGeneration}</b>
+                      <b>{Number(this.state.items["Summary"][0].totalGeneration).toLocaleString()}</b>
                     </td>
                     <td>
-                      <b>{this.state.items["Summary"][0].totalEmission}</b>
+                      <b>{Number(this.state.items["Summary"][0].totalEmission).toLocaleString()}</b>
                     </td>
                     <td>
                       <b>
-                        {this.state.items["Summary"][0].totalWaterConsumption}
+                        {Number(this.state.items["Summary"][0].totalWaterConsumption).toLocaleString()}
                       </b>
                     </td>
                     <td>
                       <b>
-                        {this.state.items["Summary"][0].totalWaterWithdrawal}
+                        {Number(this.state.items["Summary"][0].totalWaterWithdrawal).toLocaleString()}
                       </b>
                     </td>
                   </tr>
                   {this.state.items["All Facilities"].map((item, index) => (
                     <tr key={index}>
                       <td>{item.PRIMARY_NAME}</td>
-                      <td>{item.GenerationSummary}</td>
-                      <td>{item.EmissionSummary}</td>
-                      <td>{item.WaterConsumptionSummary}</td>
-                      <td>{item.WaterWithdrawalSummary}</td>
+                      <td>{Number(item.GenerationSummary).toLocaleString()}</td>
+                      <td>{Number(item.EmissionSummary).toLocaleString()}</td>
+                      <td>{Number(item.WaterConsumptionSummary).toLocaleString()}</td>
+                      <td>{Number(item.WaterWithdrawalSummary).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -276,7 +276,7 @@ class TableContent extends Component {
                   filename=""
                   sheet="sheet 1"
                   buttonText="Download .CSV"
-                  className="btn"
+                  className="btn btn-primary"
                 />
               </div>
             </div>
@@ -299,29 +299,30 @@ class TableContent extends Component {
                     <td>
                       <b>
                         {
-                          this.props.tabledata["Total Summary"][0]
-                            .totalGeneration
+                          Number(this.props.tabledata["Total Summary"][0]
+                          .totalGeneration).toLocaleString()
                         }
                       </b>
                     </td>
                     <td>
                       <b>
-                        {this.props.tabledata["Total Summary"][0].totalEmission}
+                        {Number(this.props.tabledata["Total Summary"][0].totalEmission).toLocaleString()}
                       </b>
                     </td>
                     <td>
                       <b>
                         {
-                          this.props.tabledata["Total Summary"][0]
-                            .totalWaterConsumption
+                          Number(this.props.tabledata["Total Summary"][0]
+                          .totalWaterConsumption).toLocaleString()
+                          
                         }
                       </b>
                     </td>
                     <td>
                       <b>
                         {
-                          this.props.tabledata["Total Summary"][0]
-                            .totalWaterWithdrawal
+                          Number(this.props.tabledata["Total Summary"][0]
+                          .totalWaterWithdrawal).toLocaleString()
                         }
                       </b>
                     </td>
@@ -343,10 +344,10 @@ class TableContent extends Component {
                       }}
                     >
                       <td>{item.filterName}</td>
-                      <td>{item.generation}</td>
-                      <td>{item.emission}</td>
-                      <td>{item.waterConsumption}</td>
-                      <td>{item.waterWithdrawal}</td>
+                      <td>{Number(item.generation).toLocaleString()}</td>
+                      <td>{Number(item.emission).toLocaleString()}</td>
+                      <td>{Number(item.waterConsumption).toLocaleString()}</td>
+                      <td>{Number(item.waterWithdrawal).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -373,7 +374,7 @@ class TableContent extends Component {
                   filename=""
                   sheet="sheet 1"
                   buttonText="Download .CSV"
-                  className="btn"
+                  className="btn btn-primary"
                 />
               </div>
             </div>
@@ -396,25 +397,25 @@ class TableContent extends Component {
                     </td>
                     <td>
                       <b>
-                        {this.props.tabledata["Summary"][0].totalGeneration}
+                        {Number(this.props.tabledata["Summary"][0].totalGeneration).toLocaleString()}
                       </b>
                     </td>
                     <td>
-                      <b>{this.props.tabledata["Summary"][0].totalEmission}</b>
+                      <b>{Number(this.props.tabledata["Summary"][0].totalEmission).toLocaleString()}</b>
                     </td>
                     <td>
                       <b>
                         {
-                          this.props.tabledata["Summary"][0]
-                            .totalWaterConsumption
+                          Number(this.props.tabledata["Summary"][0]
+                          .totalWaterConsumption).toLocaleString()
                         }
                       </b>
                     </td>
                     <td>
                       <b>
                         {
-                          this.props.tabledata["Summary"][0]
-                            .totalWaterWithdrawal
+                          Number(this.props.tabledata["Summary"][0]
+                            .totalWaterWithdrawal).toLocaleString()
                         }
                       </b>
                     </td>
@@ -433,10 +434,10 @@ class TableContent extends Component {
                       }}
                     >
                       <td>{item.PRIMARY_NAME}</td>
-                      <td>{item.GenerationSummary}</td>
-                      <td>{item.EmissionSummary}</td>
-                      <td>{item.WaterConsumptionSummary}</td>
-                      <td>{item.WaterWithdrawalSummary}</td>
+                      <td>{Number(item.GenerationSummary).toLocaleString()}</td>
+                      <td>{Number(item.EmissionSummary).toLocaleString()}</td>
+                      <td>{Number(item.WaterConsumptionSummary).toLocaleString()}</td>
+                      <td>{Number(item.WaterWithdrawalSummary).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -464,7 +465,7 @@ class TableContent extends Component {
                   filename=""
                   sheet="sheet 1"
                   buttonText="Download .CSV"
-                  className="btn"
+                  className="btn btn-primary"
                 />
               </div>
             </div>
@@ -486,19 +487,19 @@ class TableContent extends Component {
                       <b>Total</b>
                     </td>
                     <td>
-                      <b>{this.state.items["Summary"][0].totalGeneration}</b>
+                      <b>{Number(this.state.items["Summary"][0].totalGeneration).toLocaleString()}</b>
                     </td>
                     <td>
-                      <b>{this.state.items["Summary"][0].totalEmission}</b>
+                      <b>{Number(this.state.items["Summary"][0].totalEmission).toLocaleString()}</b>
                     </td>
                     <td>
                       <b>
-                        {this.state.items["Summary"][0].totalWaterConsumption}
+                        {Number(this.state.items["Summary"][0].totalWaterConsumption).toLocaleString()}
                       </b>
                     </td>
                     <td>
                       <b>
-                        {this.state.items["Summary"][0].totalWaterWithdrawal}
+                        {Number(this.state.items["Summary"][0].totalWaterWithdrawal).toLocaleString()}
                       </b>
                     </td>
                   </tr>
@@ -506,10 +507,10 @@ class TableContent extends Component {
                     this.state.items["All Facilities"].map((item, index) => (
                       <tr key={index}>
                         <td>{item.PRIMARY_NAME}</td>
-                        <td>{item.GenerationSummary}</td>
-                        <td>{item.EmissionSummary}</td>
-                        <td>{item.WaterConsumptionSummary}</td>
-                        <td>{item.WaterWithdrawalSummary}</td>
+                        <td>{Number(item.GenerationSummary).toLocaleString()}</td>
+                        <td>{Number(item.EmissionSummary).toLocaleString()}</td>
+                        <td>{Number(item.WaterConsumptionSummary).toLocaleString()}</td>
+                        <td>{Number(item.WaterWithdrawalSummary).toLocaleString()}</td>
                       </tr>
                     ))
                   ) : (

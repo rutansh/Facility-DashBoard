@@ -20,26 +20,23 @@ class Header extends React.Component{
     return(
       <div className="menu-container">
       <div className="menu">
-      
-          <ul className="menuList">
+        <ul className="menuList">
             <li className="li">
-            <a onClick={(e)=>{console.log("About")}}>Home</a>
-            
+            <a onClick={(e)=>{console.log("Home")}}>Home</a>
             </li>
             <li className="li">
             <a onClick={(e)=>{console.log("About")}}>About</a>
             </li>
             <li className="li">
-            <a href="www.google.com">Tutorial</a>
+            <a onClick={(e)=>{console.log("Tutorial")}}>Tutorial</a>
             </li>
             <li className="li">
-            <a href="www.google.com">Methods</a>
+            <a onClick={(e)=>{console.log("Methods")}}>Methods</a>
             </li>
             <li className="li">
-            <a href="www.google.com">FAQs</a>
+            <a onClick={(e)=>{console.log("FAQs")}}>FAQs</a>
             </li>
           </ul>
-        
       </div>
       <div className="menu-bar-center">
         <h1 className="h1class">Energy-Water-Emissions Dashboard</h1>

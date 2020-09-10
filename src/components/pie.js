@@ -167,12 +167,12 @@ class PieChart extends Component{
       startDateProps:this.props.historicStartDate,
       endDateProps:this.props.historicEndDate,
       nameOfState:this.props.historicInputState,
-      
+      projectedDidmount:false,
+      energyScenario:this.props.enegyScenario,
     }
   }
   async componentDidMount()
   {
-   
     var startDate=this.state.startDateProps;
     var endDate=this.state.endDateProps;
     var startYear=parseInt(startDate.split(" ")[3])
@@ -196,13 +196,17 @@ class PieChart extends Component{
   }
   async componentDidUpdate(pP,pS,snap)
   {
+    
     //https://ewed.org:41513/ewedService/getFutureData/getSummaryWithin/REF2019/stateName/california/fuelType/2049/1/2050/12/fuelTypes/all
-    if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&this.props.filterstr==pP.filterstr)
+    if(this.props.form=="Historic")
     {
+      if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&this.props.filterstr==pP.filterstr)
+      {
       //do nothing
-    }
-    else
-    {
+      }
+      else
+      {
+        console.log("pie chart for watershed"+this.props.historicInputState);
       var startDate=this.props.historicStartDate;
       var endDate=this.props.historicEndDate;
       var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};
@@ -227,9 +231,11 @@ class PieChart extends Component{
         var countyName=this.props.historicInputState.toLowerCase();
         var url="https://ewed.org:31567/ewedService/getSummaryWithin/CountyState1/"+countyName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
       }
-      else
+      else if(this.props.historicInputState.toLowerCase().includes("watershed"))
       {
-        
+        console.log("pie chart data for watershed")
+        var url="https://ewed.org:31567/ewedService/getSummaryWithin/HUC8Name/"+this.props.historicInputState.toLowerCase()+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+        console.log(url)
       }
       try{
         var response=await fetch(url)
@@ -246,15 +252,73 @@ class PieChart extends Component{
       }
     }
   }
+  else if(this.props.form=="Projected")
+  {
+    if(this.props.energyScenario===pP.energyScenario&&this.state.projectedDidmount&&pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&this.props.filterstr===pP.filterstr)
+    {
+      
+    }
+    else
+    {
+      var startDate=this.props.historicStartDate;
+      var endDate=this.props.historicEndDate;
+      var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};
+      var startYear=parseInt(startDate.split(" ")[3])
+      var endYear=parseInt(endDate.split(" ")[3])
+      var startmonthinInt=parseInt(mapping[startDate.split(" ")[1]]);
+      var endmonthinInt=parseInt(mapping[endDate.split(" ")[1]]);
+      if(this.props.historicInputState.toLowerCase().includes("all us"))
+      {
+        var url="https://ewed.org:41513/ewedService/getFutureData/defaultViewData/"+this.props.energyScenario+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
+        
+      }
+      else if(this.props.historicInputState.toLowerCase().includes("state"))
+      {
+        var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
+        //https://ewed.org:41513/ewedService/getFutureData/getSummaryWithin/REF2019/stateName/california/fuelType/2049/1/2050/12/fuelTypes/"+this.props.filterstr
+        var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/stateName/"+stateName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+      }
+      else if(this.props.historicInputState.toLowerCase().includes("county"))
+      {
+        var countyName=this.props.historicInputState.toLowerCase();
+        var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/CountyState1/"+countyName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+      }
+      else if(this.props.historicInputState.toLowerCase().includes("watershed"))
+      {
+        var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/HUC8Name/"+this.props.historicInputState.toLowerCase()+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+      }
+      
+      try{
+        var response=await fetch(url)
+        var json=await response.json()
+        //this.updateState(json,pP);
+        this.setState({
+          items:json["Summary"],
+          projectedDidmount:true,   
+        });
+          }
+      
+      catch(e)
+      {
+        console.log(e);
+      }
+    }
+  }
+    
+  }
   
   
   
   render() {
-    if(!this.state.isLoaded || this.state.items===undefined)
+    
+    if(!this.state.isLoaded)
     {
       return <div>Loading...</div>
     }
-    
+    else if(this.state.items===undefined)
+    {
+      return <div>No Data to show</div>
+    }
     else
     {
 
@@ -281,7 +345,6 @@ class PieChart extends Component{
       }
       
     })
-
     if ((typeof this.state.items) !== "undefined")
     {
       return (

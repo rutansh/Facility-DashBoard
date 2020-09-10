@@ -2,6 +2,7 @@ import React, { Component, useState } from 'react';
 import { Marker, InfoWindow } from 'react-google-maps';
 import {geostats} from './geostats';
 import {facilityHax} from './facilityHax';
+import Button from '@material-ui/core/Button'; 
 
 
 class CustomMarker extends Component {
@@ -133,9 +134,9 @@ class CustomMarker extends Component {
                     <div style={{display: 'flex', flexDirection: 'row'}}><b>Water Withdrawal: </b>{this.props.data.FacilityDataSummary[0].waterWithdrawalSummary}</div>
                     <div style={{display: 'flex', flexDirection: 'row'}}><b>Water Consumption: </b>{this.props.data.FacilityDataSummary[0].waterConsumptionSummary}</div>
                     <br></br>
-                    <button onClick={(e)=>{
+                    <Button variant="contained" color="primary" onClick={(e)=>{
                       this.props.modalOpen(e)
-                    }}>Show Details</button>
+                    }}>Show Details</Button>
                   </div>
                 </InfoWindow>)}  
             </Marker>

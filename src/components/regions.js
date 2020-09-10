@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import {geostats} from './geostats';
 import StateLayer from './stateLayer';
 import UserContext from './Context/updateContext';
-
+import Button from '@material-ui/core/Button';
 class Regions extends React.Component {
   constructor(props) {
     super(props);
@@ -172,7 +172,7 @@ class Regions extends React.Component {
                     }
                   }>
                 <FacilityChart className="facility-chart-container" facilityData={this.state.data} startDate={this.props.historicStartDate} endDate={this.props.historicEndDate}/>
-                <button onClick={()=>{this.setState({ismodalOpen:false})}}>Close</button>
+                <Button variant="contained" color="primary"onClick={()=>{this.setState({ismodalOpen:false})}}>Close</Button>
                 </Modal>} 
               </div>
           )}
