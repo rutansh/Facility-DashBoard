@@ -679,7 +679,7 @@ class MapContent extends React.PureComponent {
                 }}
               >
                 <div className="filterForm">
-                  <b style={{ marginRight: "20px" }}>Display :</b>
+                  <b>Display :</b>
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     <div>
                     <Radio
@@ -739,7 +739,7 @@ class MapContent extends React.PureComponent {
                 }}
               >
                 <div className="filterForm">
-                  <b style={{ marginRight: "15px" }}>View By :</b>
+                  <b>View By :</b>
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     <div>
                     <Radio
