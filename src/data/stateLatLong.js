@@ -39,6 +39,11 @@ export const stateLatLngs = {
       latitude: 39.3498,
       longitude: -75.5148
     },
+    "District Of Columbia": {
+      state: "District Of Columbia",
+      latitude: 38.7345537,
+      longitude: -77.0956379,
+    },
     Florida: {
       state: "Florida",
       latitude: 27.8333,

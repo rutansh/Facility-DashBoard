@@ -115,6 +115,7 @@ class MainContent extends Component {
     
     if(this.state.historicInputState===nextState.historicInputState&&this.props.form===nextProps.form&&this.props.filterstr===nextProps.filterstr
       &&this.state.historicStartDate===nextState.historicStartDate&&this.state.historicEndDate===nextState.historicEndDate
+      &&this.state.projectedStartDate===nextState.projectedStartDate&&this.state.projectedEndDate===nextState.projectedEndDate
       &&this.state.energyScenario==nextState.energyScenario&&this.state.climateModel==nextState.climateModel&&this.state.climateScenario==nextState.climateScenario)
     {
       return false;

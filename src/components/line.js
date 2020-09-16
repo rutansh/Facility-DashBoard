@@ -210,8 +210,8 @@ class LineChart extends Component {
           var countyName = this.props.historicInputState.toLowerCase();
           var url = "https://ewed.org:31567/ewedService/getMonthWiseSummary/CountyState1/" + countyName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/"+this.props.filterstr
         }
-        else {
-          //https://ewed.org:28469/ewedService/getMonthWiseSummary/HUC8Name/devils%20lake%20watershed%20(nd)/2015/1/2015/12/fuelTypes/all
+        else if(this.props.historicInputState.toLowerCase().includes("watershed")) {
+          var url="https://ewed.org:28469/ewedService/getMonthWiseSummary/HUC8Name/"+this.props.historicInputState.toLowerCase()+"/"+startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/"+this.props.filterstr
           //watershed
         }
         try {
@@ -276,18 +276,18 @@ class LineChart extends Component {
           }
           
         }
-        else
+        else if(this.props.historicInputState.toLowerCase().includes("watershed"))
         {
           //https://ewed.org:41513/ewedService/getFutureData/getMonthWiseSummary/REF2019/AVG45/HUC8Name/lake%20sakakawea%20watershed%20(nd)/2049/1/2050/12/fuelTypes/all
 
           var countyName=this.props.historicInputState.toLowerCase();
           if(this.props.climateModel=="AVG45" || this.props.climateModel=="AVG85")
           {
-            var url="https://ewed.org:28469/ewedService/getFutureData/getMonthWiseSummary/"+this.props.energyScenario+"/"+this.props.climateModel+"/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+            var url="https://ewed.org:28469/ewedService/getFutureData/getMonthWiseSummary/"+this.props.energyScenario+"/"+this.props.climateModel+"/HUC8Name/"+this.props.historicInputState.toLowerCase()+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
           }
           else
           {
-            var url="https://ewed.org:28469/ewedService/getFutureData/getMonthWiseSummary/"+this.props.energyScenario+"/"+this.props.climateModel+"_"+this.props.climateScenario+"/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+            var url="https://ewed.org:28469/ewedService/getFutureData/getMonthWiseSummary/"+this.props.energyScenario+"/"+this.props.climateModel+"_"+this.props.climateScenario+"/HUC8Name/"+this.props.historicInputState.toLowerCase()+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
           }
         }
         
@@ -368,7 +368,6 @@ class LineChart extends Component {
       chartdata.labels=lineChartData.labels;
       return (
         <div style={{height:"800px",overflowY:"scroll"}}>
-          <p>Line chart</p>
           <Line data={chartdata} options={options} redraw />
         </div>
       );

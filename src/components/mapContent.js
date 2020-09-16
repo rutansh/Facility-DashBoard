@@ -19,7 +19,7 @@ class MapContent extends React.PureComponent {
       nameOfState: this.props.historicInputState,
       longitude: -98.583333,
       latitude: 39.833333,
-      zoom: 4.46,
+      zoom: 4.30,
       isClicked: false,
       displayChoice: "Water Consumption",
       viewByChoice: "States",

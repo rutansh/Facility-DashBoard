@@ -29,18 +29,36 @@ class HistoricForm extends Component {
     this.filters = this.props.filters;
     // this.handleOnSubmit=this.handleOnSubmit.bind(this)
     this.formControl = this.formControl.bind(this);
+    this.resetControl=this.resetControl.bind(this);
     // this.sendDataToParent=this.sendDataToParent.bind(this)
     this.filterByFuel = this.filterByFuel.bind(this);
     this.arrayForParent = [];
     this.saveOrcloseModal = this.saveOrcloseModal.bind(this);
   }
-  formControl() {
+  formControl(e) {
+    console.log("e.target")
+    console.log(e)
     localStorage.setItem("name", this.props.inputstate.name);
     this.arrayForParent[0] = this.props.inputstate.name;
     this.arrayForParent[1] = this.state.startDate;
     this.arrayForParent[2] = this.state.endDate;
     this.arrayForParent[3] = this.props.filterstr;
     this.props.historicFormHandler(this.arrayForParent);
+  }
+  resetControl (e){
+    console.log("e.target reset")
+    console.log(e)
+    
+    this.arrayForParent[0] = "all us";
+    let date=new Date("2015/01");
+    this.arrayForParent[1] =date;
+    date= new Date("2015/12");
+    this.arrayForParent[2] = date;
+    this.arrayForParent[3] = "all";
+    this.props.setInputState("all us")
+    localStorage.setItem("name", this.props.inputstate.name);
+    this.props.historicFormHandler(this.arrayForParent);
+    
   }
   useStyles = makeStyles((theme) => ({
     container: {
@@ -64,6 +82,8 @@ class HistoricForm extends Component {
       this.setState({
         modalIsOpen: false,
       });
+
+
     }
     else if (e.length == 10) {
       localStorage.setItem("filterstr", "all");
@@ -186,7 +206,7 @@ class HistoricForm extends Component {
             </Button>
           </div>
           <div>
-            <Button variant="contained" color="primary">
+            <Button onClick={this.resetControl} variant="contained" color="primary" >
               Reset View
             </Button>
           </div>

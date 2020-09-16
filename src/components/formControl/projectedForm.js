@@ -25,6 +25,7 @@ class ProjectedForm extends React.Component {
       filterstr: "all",
     };
     this.formControl = this.formControl.bind(this);
+    this.resetControl = this.resetControl.bind(this);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.filterByFuel = this.filterByFuel.bind(this);
     this.saveOrcloseModal = this.saveOrcloseModal.bind(this);
@@ -40,6 +41,30 @@ class ProjectedForm extends React.Component {
     this.arrayForParent[5] = this.props.climateScenario;
     this.arrayForParent[6] = this.props.climateModel;
     this.props.projectedFormHandler(this.arrayForParent);
+  }
+  resetControl (e){
+    // this.arrayForParent[0] = this.props.inputstate.name;
+    // this.arrayForParent[1] = ;
+    // this.arrayForParent[2] = this.state.endDate;
+    // this.arrayForParent[3] = this.props.energyScenario;
+    // this.arrayForParent[4] = "all";
+    // this.arrayForParent[5] = this.props.climateScenario;
+    // this.arrayForParent[6] = this.props.climateModel;
+    // this.props.setInputState("all us")
+    // localStorage.setItem("name", this.props.inputstate.name);
+    // this.props.projectedFormHandler(this.arrayForParent);
+    // //////
+    // console.log("e.target reset")
+    // console.log(e)
+    // this.arrayForParent[0] = "all us";
+    // let date=new Date("2015/01");
+    // this.arrayForParent[1] =date;
+    // date= new Date("2015/12");
+    // this.arrayForParent[2] = date;
+    // this.arrayForParent[3] = "all";
+    // this.props.setInputState("all us")
+    // localStorage.setItem("name", this.props.inputstate.name);
+    // this.props.historicFormHandler(this.arrayForParent);
   }
   handleOnSubmit(term) {
     // Do whatever you need i.e. calling API
@@ -233,7 +258,9 @@ class ProjectedForm extends React.Component {
               </Button>
             </div>
             <div>
-              <Button variant="contained" color="primary">Reset View</Button>
+              <Button onClick={this.resetControl} variant="contained" color="primary" >
+                Reset View
+              </Button>
             </div>
           </form>
         </div>
