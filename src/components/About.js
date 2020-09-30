@@ -43,7 +43,7 @@ class About extends React.Component{
         <p>EWED is being developed at California State University Sacramento through a collaboration between faculty and students in the departments of Environmental Studies and Computer Science.</p>
         <p>Funding for EWED is currently provided through a grant from the US EPA Environmental Information Exchange Network.</p>
         
-        <p><b>Contact:</b> <a href="mailto:julian.fulton@csus.edu">julian.fulton@csus.edu</a></p>
+        {/* <p><b>Contact:</b> <a href="mailto:julian.fulton@csus.edu">julian.fulton@csus.edu</a></p> */}
         
         <h2>Background</h2>
         
@@ -51,28 +51,12 @@ class About extends React.Component{
         
         <p>Understanding synergies and tradeoffs among different energy and water management options is thus critical, but is hindered by disparate and complex information sources.  Moreover, energy system operators and managers must often make quick decisions in response to environmental or regulatory constraints. Thus, to support better environmental decision making in the energy-water nexus, there is a need to provide information in an integrated and timely manner.</p>
         
-        <b>Team</b>
-        <ul>    
+        {/* <b>Team</b> */}
+        {/* <ul>    
           <li>Julian Fulton</li>
           <li>Ying Jin</li>
         </ul>        
-        
-        <b>Current Students</b>
-        <ul>
-          <li>Gaurav Bora</li>
-          <li>Khoi Hoang</li>
-          <li>Jasmie Guan</li>
-          <li>Trent Buchanan</li>
-          <li>Priyanka Makwana</li>
-        </ul>
-        
-        <b>Former Students</b>
-        <ul>
-          <li>Aaron Enberg</li>
-          <li>Tejaswini Bhorkar</li>
-          <li>Priya Gundlupet</li>
-          <li>Karan Mitra</li>
-        </ul>
+         */}
         
           </div>
           <Button variant="contained" color="primary"onClick={(e)=>{this.props.handleChild(e)}}>Close</Button>

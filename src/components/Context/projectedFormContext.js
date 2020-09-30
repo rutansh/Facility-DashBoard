@@ -17,7 +17,7 @@ class ProjectedProvider extends React.Component{
         {
             this.setState((prevState) => ({ climateModel }))
         }
-      }
+    }
     setenergyScenario=(energyScenario)=>{
         this.setState((prevState) => ({ energyScenario }))
     }

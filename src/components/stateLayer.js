@@ -248,19 +248,13 @@ regionColor(regionName,map,g)
         }
         }
         onMouseOver={()=>{
-          
-          
-          
           if(this.props.viewByChoice=="States")
           {
-           
-            this.props.setRegion(this.props.regionJ["properties"]["NAME"])
-            
+           this.props.setRegion(this.props.regionJ["properties"]["NAME"])
           } 
           else if(this.props.viewByChoice=="Watersheds")
           {
             this.props.setRegion(this.props.regionJ.properties.SUBBASIN)
-           
           }
           else if(this.props.viewByChoice=="Counties")
           {

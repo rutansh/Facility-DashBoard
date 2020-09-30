@@ -287,8 +287,7 @@ class BarChart extends Component{
               items:json["Summary"],
               },() => { });}, 0);
           }
-          catch(e)
-          {
+          catch(e){
             console.log(e);
           }
         }
@@ -358,6 +357,7 @@ class BarChart extends Component{
     }
     else
     {
+      let myset=new Set();
       data1.datasets[0]["data"]=[]
       data2.datasets[0]["data"]=[]
       data3.datasets[0]["data"]=[]
@@ -365,6 +365,7 @@ class BarChart extends Component{
       this.state.items.map(item=>{
       if(item["filterName"]!==null)
       {
+        myset.add(item.filterName);
         data1.datasets[0]["data"].push(item["generation"])
         data2.datasets[0]["data"].push(item["emission"])
         data3.datasets[0]["data"].push(item["waterConsumption"])
@@ -372,6 +373,10 @@ class BarChart extends Component{
       }
     }
     )
+    data1.labels=Array.from(myset);
+    data2.labels=Array.from(myset);
+    data3.labels=Array.from(myset);
+    data4.labels=Array.from(myset);
 
     if ((typeof this.state.items) !== "undefined")
     {

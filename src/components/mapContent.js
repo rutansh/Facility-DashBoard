@@ -6,6 +6,7 @@ import Button  from "@material-ui/core/Button";
 import { stateAbr } from "../data/stateAbr";
 import Regions from "./regions";
 import { Radio, InputLabel } from "@material-ui/core";
+import Loader from 'react-loader-spinner';
 
 class MapContent extends React.PureComponent {
   constructor(props) {
@@ -236,7 +237,6 @@ class MapContent extends React.PureComponent {
         try {
           var response = await fetch(url);
           var json = await response.json();
-
           await this.setState({
             regions: json["features"],
             loading: true,
@@ -664,7 +664,21 @@ class MapContent extends React.PureComponent {
     ));
 
     if (!this.state.loading) {
-      return <div>Loading...!</div>;
+      return <div>
+        <div style={{marginTop:"600px"}}>
+          <div style={{marginTop:"-300px"}} >
+          <center>
+          <Loader
+         type="Puff"
+         color="#00BFFF"
+         height={100}
+         width={100}
+         timeout={3000} //3 secs
+      />
+          </center>
+          </div>         
+      </div>
+      </div>;
     } else {
       return (
         <div>
@@ -756,7 +770,6 @@ class MapContent extends React.PureComponent {
                     <div>
                     States
                     </div>
-                    
                   </div>
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     <div>
@@ -816,8 +829,6 @@ class MapContent extends React.PureComponent {
                     <div>
                     Counties
                     </div>
-
-                    
                   </div>
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     <div>
@@ -841,10 +852,8 @@ class MapContent extends React.PureComponent {
                     <div>
                     Facilities
                     </div>
-                    
                   </div>
                 </div>
-                
               </form>
             </div>
             <div className="up-to-btn" style={{ marginLeft: "50px" }}>

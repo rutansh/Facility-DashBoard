@@ -187,7 +187,7 @@ class Regions extends React.Component {
           );
         }
       }
-      else if(this.props.regions.length>0 && this.props.tabledata.Summary.length!==1){
+      else if(this.props.regions&&this.props.regions.length>0 && this.props.tabledata.Summary.length!==1){
       {
         //pattern find the data in facility , what is in data and in datacolor
         let dataforcolor=this.props.tabledata;

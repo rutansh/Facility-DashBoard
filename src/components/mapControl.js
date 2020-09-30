@@ -534,7 +534,8 @@ class MapControl extends Component {
   render()
   {
 
-    if(!this.state.loading){
+    if(!this.state.loading)
+    {
       return(
         <div style={{marginTop:"600px"}}>
           <div style={{marginTop:"-300px"}} >
