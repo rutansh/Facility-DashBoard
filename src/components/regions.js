@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import {geostats} from './geostats';
 import StateLayer from './stateLayer';
 import UserContext from './Context/updateContext';
-
+import Button from '@material-ui/core/Button';
 class Regions extends React.Component {
   constructor(props) {
     super(props);
@@ -124,8 +124,6 @@ class Regions extends React.Component {
                 }
                 else
                 {
-                  console.log(arr);
-                  console.log(g);
                   g.setSerie(arr);
                   g.setPrecision(2);
                   g.getClassJenks2(5);
@@ -136,6 +134,7 @@ class Regions extends React.Component {
               return  (
               <div>
                 {<CustomMarker 
+                form={this.props.form} energyScenario={this.props.energyScenario}
                 facility={facility} arrIndex={index} index={this.state.index} 
                 data={this.state.data} modalOpen={(e)=>{this.modalClick(e)}} 
                 markerClick={(e)=>this.markerClick(e)} historicInputState={this.props.historicInputState} 
@@ -172,8 +171,8 @@ class Regions extends React.Component {
                       }
                     }
                   }>
-                <FacilityChart facilityData={this.state.data} startDate={this.props.historicStartDate} endDate={this.props.historicEndDate}/>
-                <button onClick={()=>{this.setState({ismodalOpen:false})}}>Close</button>
+                <FacilityChart className="facility-chart-container" facilityData={this.state.data} startDate={this.props.historicStartDate} endDate={this.props.historicEndDate}/>
+                <Button variant="contained" color="primary"onClick={()=>{this.setState({ismodalOpen:false})}}>Close</Button>
                 </Modal>} 
               </div>
           )}
@@ -188,7 +187,7 @@ class Regions extends React.Component {
           );
         }
       }
-      else if(this.props.regions.length>0 && this.props.tabledata.Summary.length!==1){
+      else if(this.props.regions&&this.props.regions.length>0 && this.props.tabledata.Summary.length!==1){
       {
         //pattern find the data in facility , what is in data and in datacolor
         let dataforcolor=this.props.tabledata;
@@ -224,10 +223,10 @@ class Regions extends React.Component {
                 g.setPrecision(2);
                 if(arr.length<10)
                 {
-                  g.getClassJenks(arr.length);  
+                  g.getClassJenks2(arr.length-1);  
                 }
                 else{
-                  g.getClassJenks(10);
+                  g.getClassJenks2(10);
                 }
                 
               }

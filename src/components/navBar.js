@@ -33,18 +33,36 @@ class NavBar extends Component {
     };
     componentDidUpdate(pP,state,snap)
     {
-      if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate)
+      if(this.props.form=="Historic")
       {
+        if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&pP.filterstr==this.props.filterstr)
+        {
 
+        }
+        else
+        {
+          this.setState({
+            items:this.props.tabledata,
+          })
+        }
       }
-      else
+      else if(this.props.form=="Projected")
       {
-        this.setState({
-          items:this.props.tabledata,
-        })
+        if(pP.climateScenario===this.props.climateScenario&&pP.climateModel===this.props.climateModel&&pP.energyScenario===this.props.energyScenario&&pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&pP.filterstr==this.props.filterstr)
+        {
+
+        }
+        else
+        {
+          this.setState({
+            items:this.props.tabledata,
+          })
+        }
       }
+      
     }
     render() {
+      //https://ewed.org:41513/ewedService/getFutureData/defaultViewData/REF2019/fuelType/2049/1/2050/12/fuelTypes/all
       return (
         <MDBContainer >
         <MDBNav className="nav-tabs mt-6">
@@ -81,15 +99,15 @@ class NavBar extends Component {
             </div>
           </MDBTabPane>
           <MDBTabPane tabId="2" role="tabpanel">
-            <PieChart historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
+            <PieChart form={this.props.form} energyScenario={this.props.energyScenario}filterstr={this.props.filterstr}historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
           </MDBTabPane>
           <MDBTabPane tabId="3" role="tabpanel">
-            <BarChart historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
+            <BarChart form={this.props.form} energyScenario={this.props.energyScenario} filterstr={this.props.filterstr} historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
           </MDBTabPane>
           {!this.props.historicInputState.toLowerCase().includes("all us")?
             <MDBTabPane tabId="4" role="tabpanel">
             <div>
-            <LineChart historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
+            <LineChart form={this.props.form}energyScenario={this.props.energyScenario} climateModel={this.props.climateModel} climateScenario={this.props.climateScenario}filterstr={this.props.filterstr} historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
             </div>
           </MDBTabPane>: 
           <></>}

@@ -1,12 +1,225 @@
 .GlobalStyle {
-    background-color: #f5f5f5;
-    padding: 0 15px;
-    padding-top: 0px;
-    padding-right: 15px;
-    padding-bottom: 0px;
-    padding-left: 15px;
-    width:100%;
+  background-color: #f5f5f5;
+  padding: 0 15px;
+  padding-top: 0px;
+  padding-right: 15px;
+  padding-bottom: 0px;
+  padding-left: 15px;
+  width: 100%;
 }
-#root, body, html {
-    background-color: #f5f5f5;
+#root,
+body,
+html {
+  background-color: #f5f5f5;
+}
+.MuiInput-root {
+  width: 150px;
+}
+.menuList li a {
+  color: black;
+}
+
+.menuList li a:hover {
+  font-weight: bold;
+}
+label.MuiInputLabel-root.MuiFormLabel-root {
+  font-size: 0.6rem;
+}
+.queryForm_container__inner.queryForm_container__projected
+  form
+  .scenario-model-forms {
+  flex-direction: row;
+}
+
+.scenario-model-forms > div:first-child {
+  margin-right: 25px;
+}
+
+.projected-form__input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: end;
+  height: 50px;
+}
+
+.projected-form__input label {
+  top: 8px;
+  position: relative;
+}
+
+.queryForm_container__historic.queryForm_container__inner label {
+  position: relative;
+  top: 8px;
+}
+
+button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary {
+  background-color: #42a5f5;
+}
+
+.queryForm_container .MuiRadio-colorPrimary.Mui-checked,
+.map-form-container .MuiRadio-colorSecondary.Mui-checked {
+  color: #42a5f5;
+}
+
+.table-top-bar-container button {
+  background-color: #42a5f5 !important;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+}
+
+.projected-form__input div {
+  font-size: 13px;
+}
+
+.projected-form__input > div {
+  height: 50px;
+}
+
+.climate-model_container {
+  position: relative;
+  bottom: -2px;
+}
+
+.queryForm_container__inner form {
+  display: flex;
+  flex-direction: row;
+  background: white;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-start;
+  padding: 15px;
+}
+
+.queryForm_container__inner form > div:not(:first-child) {
+  margin-left: 25px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.queryForm_container__inner form input {
+  border-width: 0 0 1px 0;
+  height: 30px;
+  font-size: 13px;
+}
+
+.main_content_inner {
+  width: 100%;
+  display: flex;
+}
+
+.map-container,
+.table-container {
+  width: 50%;
+  position: relative;
+}
+
+.table-top-bar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.activity-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-container > .container {
+  width: 100%;
+  max-width: none;
+  padding-left: 15px;
+}
+
+.table-wrapper {
+  height: 530px;
+  overflow: auto;
+}
+
+.map-form-container {
+  position: absolute;
+  z-index: 1;
+  top: 10px;
+  left: 6px;
+  width: 0;
+}
+
+.up-to-btn {
+  position: absolute;
+  top: 55px;
+  right: 3px;
+  z-index: 1;
+}
+
+.ReactModal__Content.ReactModal__Content--after-open {
+  position: fixed !important;
+  width: 650px;
+  height: 450px;
+  left: calc(50% - 325px) !important;
+  margin: auto;
+}
+
+.queryForm_container__inner {
+  position: relative;
+  z-index: 2;
+}
+
+.display-form-container {
+  width: 500px;
+}
+
+.view-by-form-container {
+  width: 510px;
+}
+
+.display-form-container div,
+.view-by-form-container div {
+  display: flex;
+  align-items: center;
+}
+
+.display-form-container .MuiRadio-root,
+.view-by-form-container .MuiRadio-root {
+  padding: 0 0 0 7px;
+}
+
+.filter-modal-btns-top-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.filter-modal-btns-top-container button {
+  margin-right: 10px;
+}
+
+.filter-modal-btns-bottom-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.filter-modal-btns-bottom-container button {
+  margin-left: 10px;
+}
+
+.ReactModal__Content.ReactModal__Content--after-open.filter-modal-main {
+  width: 400px;
+}
+.ReactModal__Content.ReactModal__Content--after-open.about-modal-header,
+.ReactModal__Content.ReactModal__Content--after-open.tutorial-modal-header, 
+.ReactModal__Content.ReactModal__Content--after-open.methods-modal-header,
+.ReactModal__Content.ReactModal__Content--after-open.faqs-modal-header{
+  width: 850px;
+  height: 650px;
+  left: calc(50% - 425px) !important;
+  font-size: 13px;
+}
+
+.ReactModal__Content.ReactModal__Content--after-open img {
+  max-width: 100%;
 }

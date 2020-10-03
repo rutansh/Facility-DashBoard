@@ -1,0 +1,32 @@
+1. Introduction
+
+2. Background 
+
+3. Comparision between React/Angular(React Advantages over Angular)
+
+4. Mobile Application with React Native
+4.1 Why React Native vs Flutter
+4.2 Flow Diagram
+4.3 Optimization
+4.4 Screenshots 
+
+5. Web Application with React.js
+5.1 Why React
+5.2 Dependecies, Tools, Transpilers, Webpack
+5.3 React Life Cycle Methods (class components/functional components)
+5.4 Issues with traditional approach(props drilling) vs Modern methodology Context API/Global state management 
+5.5 Flow diagram / Components Interrelationships
+5.6 React MaterialUI for styling
+5.8 Charts and Map Layer
+5.9 Filtering Based on Dynamic Input
+5.7 Code snippet
+5.8 Screenshots
+
+6. Functionality of Emission Dashboard
+6.1 What problem it solves
+6.2 Different forms (Projected/Historic)
+6.3 Filtering based on dynamic inputs
+6.4 Relationship between Map and Table Layer
+
+
+7. 

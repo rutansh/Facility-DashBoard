@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Line } from 'react-chartjs-2';
+import { Line,Chart } from 'react-chartjs-2';
 import Modal from 'react-modal';
+let minTick = Infinity,maxTick=-Infinity;
+let minPow=0,maxPow=0;
 var chartdata = {
   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',"Aug","Sep","Oct","Nov","Dec"],
   datasets: [
@@ -120,18 +122,32 @@ var options = {
       fontColor: 'brown'
     }
   },
-  scales:{
+  scales: {
     yAxes: [{
-      display: true,
-      type: 'logarithmic',
-      ticks:{
-          //  min: 100, //minimum tick
-          //  max: 10000000, //maximum tick
-          callback: function (value, index, values) 
-          {
-            return ""+Number(value.toString());
-          }    
+
+      type: "logarithmic",
+      scaleLabel: {
+        display: true,
+      },
+      ticks: {
+
+        // autoSkip: true,
+        callback: (value, index) => {       
+          return value.toLocaleString();
+        },
+      },
+      afterBuildTicks: function (chartObj) { //Build ticks labelling as per your need
+
+        chartObj.ticks = [];
+        console.log(minPow-1);
+        for(let i=minPow;i<=maxPow;i++)
+        {
+          chartObj.ticks.push(Math.pow(10,i));  
         }
+        console.log("ChartObj")
+        console.log(chartObj.ticks)
+      }
+
     }]
   }
   
@@ -167,9 +183,9 @@ class FacilityChart extends Component {
       lineChartData.wc = []
       lineChartData.em = []
       lineChartData.labels = []
-      console.log(this.state.facilityData["MonthlyData"])
+      
       var data=this.state.facilityData["MonthlyData"];
-      console.log("line chart data for facility");
+      
       for(let i=0;i<data.length;i++)
       {
           lineChartData.gen.push(data[i].generation);
@@ -178,8 +194,6 @@ class FacilityChart extends Component {
           lineChartData.em.push(data[i].emissions);
           lineChartData.labels.push(data[i].year+"-"+data[i].month);
       }
-      console.log("dict of facilities in chart")
-      console.log(lineChartData);
       chartdata["datasets"][0]["data"]=lineChartData.gen;
       chartdata["datasets"][1]["data"]=lineChartData.em;
       chartdata["datasets"][2]["data"]=lineChartData.ww;
@@ -187,13 +201,15 @@ class FacilityChart extends Component {
       chartdata.labels=lineChartData.labels;
       let startDate=this.props.startDate;
       let endDate=this.props.endDate;
+      maxTick=Math.max(maxTick,...chartdata["datasets"][0]["data"],...chartdata["datasets"][1]["data"],...chartdata["datasets"][2]["data"],...chartdata["datasets"][3]["data"]);
+      minTick=Math.min(minTick,...chartdata["datasets"][0]["data"],...chartdata["datasets"][1]["data"],...chartdata["datasets"][2]["data"],...chartdata["datasets"][3]["data"]);
+      minPow=minTick.toExponential(0).split("+")[1]
+      maxPow=maxTick.toExponential(0).split("+")[1]
       return(
         <div>
-        {console.log("this.props.startDate")}
-        {console.log(this.props.startDate)}
           <b>{this.state.facilityData["Facility"][0]["PRIMARY_NAME"]} - Facility Trends</b>
           <b><p>({startDate.split(" ")[1]} {startDate.split(" ")[3]} - {endDate.split(" ")[1]} {endDate.split(" ")[3]})</p></b>
-          <div style={{height:"450px"}}>
+          <div>
           <Line data={chartdata} options={options} redraw />
         </div>
         </div>

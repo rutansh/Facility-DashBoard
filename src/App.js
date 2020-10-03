@@ -5,16 +5,25 @@ import MainContent from './components/mainContent';
 import {BrowserRouter} from 'react-router-dom';
 import {UserProvider} from './components/Context/updateContext';
 import {StateProvider} from './components/Context/inputStatecontext';
+import {FormProvider} from './components/Context/queryFormContext';
+import { ProjectedProvider } from './components/Context/projectedFormContext';
 function App() {
   return (
     <BrowserRouter>
     <div className="GlobalStyle">
       <Header/>
-      <StateProvider>
-      <UserProvider>
-        <MainContent/>
-      </UserProvider>
-      </StateProvider>
+      <ProjectedProvider>
+      <FormProvider>
+        <StateProvider>
+          <UserProvider>
+            <MainContent/>
+          </UserProvider>
+        </StateProvider>
+      </FormProvider>
+      </ProjectedProvider>
+    
+    
+      
       
       
     </div>

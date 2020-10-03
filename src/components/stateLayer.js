@@ -203,7 +203,7 @@ regionColor(regionName,map,g)
     }
     else if(this.props.viewByChoice=="Counties")
     {
-      console.log("shouldComponent update county")
+     
       if(this.props.regionJ.properties.CountyState1===this.props.region)
       {
         return true;
@@ -241,7 +241,6 @@ regionColor(regionName,map,g)
               this.props.formHandlerforFacility(this.arrayForParent);
             }
             else if (this.props.viewByChoice == "Counties") {
-              console.log("county selected...")
               this.arrayForParent[0] = this.props.regionJ.properties.CountyState1;
               this.props.formHandlerforFacility(this.arrayForParent); 
             }
@@ -249,19 +248,13 @@ regionColor(regionName,map,g)
         }
         }
         onMouseOver={()=>{
-          
-          
-          
           if(this.props.viewByChoice=="States")
           {
-           
-            this.props.setRegion(this.props.regionJ["properties"]["NAME"])
-            
+           this.props.setRegion(this.props.regionJ["properties"]["NAME"])
           } 
           else if(this.props.viewByChoice=="Watersheds")
           {
             this.props.setRegion(this.props.regionJ.properties.SUBBASIN)
-           
           }
           else if(this.props.viewByChoice=="Counties")
           {

@@ -1,152 +1,127 @@
 .queryForm_container {
-    display: -webkit-box;
-    display: flex;
-    position: relative;
-    -webkit-box-align: flex-start;
-    align-items: flex-start;
-    -webkit-box-pack: justify;
-    justify-content: flex-start;
-    padding: 10px 15px 5px 15px;
-    width:1869px;
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    border-radius: 3px;
-    margin: 4px 0;
-    min-height: 0;
-    flex-wrap: wrap;
-    
-    
-}
-.main_content_container{
-    display: -webkit-box;
-    display: flex;
-    position: relative;
-    align-items: flex-start;
-    -webkit-box-pack: justify;
-    justify-content: flex-start;
-    padding: 10px 15px 5px 15px;
-    width:1869px;
-    background: rgb(255, 255, 255);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    border-radius: 3px;
-    margin: 4px 0;
-    height: 950px;
-    flex-wrap: wrap;
+  display: -webkit-box;
+  display: flex;
+  position: relative;
+  -webkit-box-align: flex-start;
+  align-items: flex-start;
+  -webkit-box-pack: justify;
+  justify-content: flex-start;
+  padding: 10px 15px 5px 15px;
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 3px;
+  margin: 4px 0;
+  min-height: 0;
+  flex-wrap: wrap;
 }
 .map_container {
-    display: -webkit-box;
-    display: flex;
-    position: relative;
-    -webkit-box-align: flex-start;
-    align-items: flex-start;
-    -webkit-box-pack: justify;
-    justify-content: flex-start;
-    padding: 10px 15px 5px 15px;
-    width:650px;
-    height: 900px;
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    border-radius: 3px;
-    margin: 3px 0;
-    min-height: 0;
-    flex-wrap: wrap;
-    
-    
+  display: -webkit-box;
+  display: flex;
+  position: relative;
+  -webkit-box-align: flex-start;
+  align-items: flex-start;
+  -webkit-box-pack: justify;
+  justify-content: flex-start;
+  padding: 10px 15px 5px 15px;
+  width: 650px;
+  height: 900px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 3px;
+  margin: 3px 0;
+  min-height: 0;
+  flex-wrap: wrap;
 }
 .scrollit {
-    overflow:scroll;
-    height:100px;
+  overflow: scroll;
+  height: 100px;
 }
-.navigation_container{
-    display: -webkit-box;
-    display: flex;
-    position: relative;
-    -webkit-box-align: flex-start;
-    align-items: flex-start;
-    -webkit-box-pack: justify;
-    justify-content: flex-start;
-    padding: 10px 15px 5px 15px;
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    border-radius: 3px;
-    margin: 4px 0;
-    min-height: 0;
-    flex-wrap: wrap;
+.navigation_container {
+  display: -webkit-box;
+  display: flex;
+  position: relative;
+  -webkit-box-align: flex-start;
+  align-items: flex-start;
+  -webkit-box-pack: justify;
+  justify-content: flex-start;
+  padding: 10px 15px 5px 15px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 3px;
+  margin: 4px 0;
+  min-height: 0;
+  flex-wrap: wrap;
 }
-.datetime
-{
-    margin-right: 10px;
+.datetime {
+  margin-right: 10px;
 }
-.display-linebreak{
-    white-space: pre-line;
+.display-linebreak {
+  white-space: pre-line;
 }
-.select-query-form-container{
-    position: relative;
-    z-index: 9;
-    width: 100%;
-    margin-bottom: 10px;
+.select-query-form-container {
+  position: relative;
+  z-index: 9;
+  width: 100%;
+  margin-bottom: 10px;
 }
-.radioButton{
-    margin-left: 10px;
-    margin-right: 10px;
+.radioButton {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 .search-input-container .suggestion-input {
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 1px solid #aed69e;
-    outline: none;
-    width: 250px;
-    font-size: .8rem;
-    font-family: Open Sans,sans-serif;
-    line-height: 1.2;
-    margin-left: 70px;
-    height: 25px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #aed69e;
+  outline: none;
+  width: 250px;
+  font-size: 0.8rem;
+  font-family: Open Sans, sans-serif;
+  line-height: 1.2;
+  margin-left: 70px;
+  height: 25px;
 }
 .suggestions-container {
-    width: 250px;
-    box-shadow: 0 4px 10px rgba(53,60,72,.1);
-    border-radius: 4px;
-    z-index: 2;
-    background-color: #fff;
-    margin-top: .5rem;
-    position: absolute;
-    overflow: scroll;
-    margin-left: 70px;
+  width: 250px;
+  box-shadow: 0 4px 10px rgba(53, 60, 72, 0.1);
+  border-radius: 4px;
+  z-index: 2;
+  background-color: #fff;
+  margin-top: 0.5rem;
+  position: absolute;
+  overflow: scroll;
+  margin-left: 70px;
 }
-.main_content_container{
-    display: -webkit-box;
-    display: flex;
-    position: relative;
-    align-items: flex-start;
-    -webkit-box-pack: justify;
-    justify-content: flex-start;
-    padding: 10px 15px 5px 15px;
-    width:1869px;
-    background: rgb(255, 255, 255);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    border-radius: 3px;
-    margin: 4px 0;
-    height: 950px;
-    flex-wrap: wrap;
+.main_content_container {
+  display: -webkit-box;
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  -webkit-box-pack: justify;
+  justify-content: flex-start;
+  padding: 10px 15px 15px 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  background: rgb(255, 255, 255);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 3px;
+  margin: 4px 0;
+  height: auto;
+  flex-wrap: wrap;
 }
 .filterForm {
-    display: -webkit-box;
-    display: flex;
-    position: relative;
-    -webkit-box-align: flex-start;
-    
-    -webkit-box-pack: justify;
-    justify-content: flex-start;
-    padding: 10px 15px 15px 15px;
-    width:600px;
-    height: 50px;
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    border-radius: 3px;
-    margin: 0px 5px 5px 5px;
-    min-height: 0;
-    
-    
-    
+  display: flex;
+  position: relative;
+  -webkit-box-align: flex-start;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 15px;
+  height: 35px;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 3px;
+  margin: 0px 5px 5px 5px;
+  min-height: 0;
+  font-size: 13px;
 }

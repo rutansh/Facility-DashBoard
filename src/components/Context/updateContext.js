@@ -22,14 +22,14 @@ class UserProvider extends Component {
     const { region } = this.state
     const { setRegion } = this
     const { setprevState } = this
-    const { setstoreState } = this
+    
     return (
       <UserContext.Provider
         value={{
           region,
           setRegion,
           setprevState,
-          setprevState,
+          
         }}
       >
         {children}
