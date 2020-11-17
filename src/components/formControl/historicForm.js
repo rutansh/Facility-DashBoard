@@ -55,7 +55,7 @@ class HistoricForm extends Component {
       }
       else
       {
-        console.log("historicform for url change");
+        
         localStorage.setItem("viewBy","Facilities");
       }
       // Storing new search region in local storage 

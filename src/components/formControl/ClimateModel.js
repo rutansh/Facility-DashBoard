@@ -28,7 +28,7 @@ class ClimateModel extends React.Component{
             <InputLabel>Select Climate Model</InputLabel>
             {localStorage.getItem("climateModel")=="na" && this.props.climateScenario=="RCP45"?localStorage.setItem("climateModel","AVG45"):console.log()}
             {localStorage.getItem("climateModel")=="na" && this.props.climateScenario=="RCP85"?localStorage.setItem("climateModel","AVG85"):console.log()}
-            {console.log("this is climate model",localStorage.getItem("climateModel")+"climate scenario:"+this.props.climateScenario)}
+            
             {this.props.climateScenario=="RCP45"?
             <Select
             defaultValue={localStorage.getItem("climateModel")}
@@ -41,10 +41,10 @@ class ClimateModel extends React.Component{
                     if(e.target.value=="undefined" || e.target.value==0){
                         this.props.setclimateModel("AVG45");   
                     }
-                    console.log("this is climate model",e.target.value);
+                    
                     if(e.target.value!=="undefined" && e.target.value &&e.target.value!==0)
                     {
-                        console.log("this is climate model inside",e.target.value);
+  
                         this.props.setclimateModel(e.target.value);
                     }
                     

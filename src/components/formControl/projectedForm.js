@@ -281,7 +281,7 @@ class ProjectedForm extends React.Component {
             <div className="projected-form__input">
               {localStorage.getItem("energyScenario")=="na"?localStorage.setItem("energyScenario","REF2019"):console.log("energy Scenario exist")}
               <InputLabel>Select Energy Scenario</InputLabel>
-              {console.log("this.props.energyscenario",this.props.energyScenario)}
+              
               {localStorage.getItem("selfreset") =="true"?
               <div>
                 <Select
@@ -290,7 +290,7 @@ class ProjectedForm extends React.Component {
                 id="demo-controlled-open-select"
                 onClick={(e) => {
                   // updating energy scenario
-                  console.log("this.props.energyscenario calling....",this.props.energyScenario)
+                  
                   if (this.props.energyScenario !== e.target.value && e.target.value) {
                     localStorage.setItem("energyScenario",e.target.value);
                     this.props.setenergyScenario(e.target.value);
@@ -342,7 +342,7 @@ class ProjectedForm extends React.Component {
               <div className="scenario-model-forms">
                 <div className="projected-form__input">
                   <InputLabel>Select Climate Scenario</InputLabel>
-                  {localStorage.getItem("climateScenario")=="na"?localStorage.setItem("climateScenario","RCP45"):console.log("not na")}
+                  {localStorage.getItem("climateScenario")=="na"?localStorage.setItem("climateScenario","RCP45"):console.log("")}
                   <Select
                     defaultValue={localStorage.getItem("climateScenario")=="na"?"RCP45":localStorage.getItem("climateScenario")}
                     labelId="demo-controlled-open-select-label"

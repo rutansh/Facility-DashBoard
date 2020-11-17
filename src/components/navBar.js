@@ -34,7 +34,7 @@ class NavBar extends Component {
       
       //changing URL 
       const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-      console.log("Historic Url change from Navbar",localStorage.getItem("viewBy"));
+      
       urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")
       +"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"
       +startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);           

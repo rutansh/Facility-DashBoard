@@ -53,7 +53,7 @@ class TableContent extends Component {
   //region requested by the user
   async componentDidUpdate(pP, state, snap) {
     const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-    console.log("Historic Url change from table didupdate",localStorage.getItem("viewBy"));
+    
     urlchange("/"+this.props.form+"/"+localStorage.getItem("name")+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);
     if (
       pP.historicInputState === this.props.historicInputState &&
@@ -89,7 +89,6 @@ class TableContent extends Component {
 
     //Changing URL whenever this component gets rerendered
     const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-    console.log("Historic Url change from table",localStorage.getItem("viewBy"));
     urlchange("/"+this.props.form+"/"+localStorage.getItem("name")+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);
     var startDate = this.state.startDateProps;
     var endDate = this.state.endDateProps;
@@ -303,8 +302,7 @@ class TableContent extends Component {
         this.state.nameOfState.toLowerCase().includes("state") &&
         this.props.viewByChoice !== "Facilities"
       ) {
-        console.log("this is table data");
-        console.log(this.props.tabledata);
+        
         nameOfState = this.props.historicInputState;
 
         return (

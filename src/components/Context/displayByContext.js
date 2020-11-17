@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 const DisplayByContext = React.createContext()
 
 // This component is used to set value of Display by form in the map layer
-//
+
 
 class DisplayByProvider extends Component {
 

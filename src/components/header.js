@@ -70,10 +70,10 @@ class Header extends React.Component{
   render(){
     return(
       <div>
-        {this.state.modelName=="About" && this.state.isOpen?<About handleChild={(e)=>{this.handleChild(e)}}/>:console.log("About Page")}  
-        {this.state.modelName=="FAQs" && this.state.isOpen?<FAQs handleChild={(e)=>{this.handleChild(e)}}/>:console.log("FAQs Page")}
-        {this.state.modelName=="Tutorial"&& this.state.isOpen ?<Tutorials handleChild={(e)=>{this.handleChild(e)}}/>:console.log("Tutorials age")}
-        {this.state.modelName=="Methods" && this.state.isOpen?<Methods handleChild={(e)=>{this.handleChild(e)}}/>:console.log("Methods Page")}
+        {this.state.modelName=="About" && this.state.isOpen?<About handleChild={(e)=>{this.handleChild(e)}}/>:console.log("")}  
+        {this.state.modelName=="FAQs" && this.state.isOpen?<FAQs handleChild={(e)=>{this.handleChild(e)}}/>:console.log("")}
+        {this.state.modelName=="Tutorial"&& this.state.isOpen ?<Tutorials handleChild={(e)=>{this.handleChild(e)}}/>:console.log("")}
+        {this.state.modelName=="Methods" && this.state.isOpen?<Methods handleChild={(e)=>{this.handleChild(e)}}/>:console.log("")}
 
 
       <div className="menu-container">
@@ -81,7 +81,7 @@ class Header extends React.Component{
       <div className="menu">
         <ul className="menuList">
             <li className="li">
-            <a onClick={(e)=>console.log("Home")}>Home</a>
+            <a onClick={(e)=>console.log("")}>Home</a>
             </li>
             <li className="li">
             <a onClick={(e)=>this.handleClick(e,"About") }>About</a>

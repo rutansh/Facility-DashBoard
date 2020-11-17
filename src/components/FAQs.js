@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 //This is a static page used to render FAQs
 class FAQs extends React.Component{
     render(){
-        console.log("This is FAQs");
+        
         return(
             <div>
                 <Modal

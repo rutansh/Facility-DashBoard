@@ -18,11 +18,10 @@ class QueryForm extends Component {
 
   //This method gets called whenenver user clicks on particular radio button
   selectedItem(event) {
-    console.log("inside child function",localStorage.getItem("energyScenario"));
+    
     localStorage.setItem("formchange","true");
     localStorage.setItem("form",event.target.value);
-    console.log("THis is form");
-    console.log(event.target.value);
+    
 
       
         if(localStorage.getItem("energyScenario")=="na")

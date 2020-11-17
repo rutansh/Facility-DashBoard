@@ -157,9 +157,7 @@ class MapControl extends Component {
         // In state if County is selected as a viewBy
         else if(localStorage.getItem("viewBy")=="Counties")
         {
-          console.log("viewBy:",localStorage.getItem("viewBy"));
           var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName.trim()+"/CountyState1/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+localStorage.getItem("filterstr");
-          console.log("URL:",url);
           try{
             var response=await fetch(url)
             var json=await response.json()
@@ -276,7 +274,6 @@ class MapControl extends Component {
         if(startYear<2048)
         {
           var url="https://ewed.org:31567/ewedService/getFutureData/defaultViewData/"+localStorage.getItem("energyScenario")+"/stateName/"+2049+"/"+1+"/"+2050+"/"+12+"/fuelTypes/"+localStorage.getItem("filterstr");
-          console.log("this is for projected"+url)
           try{
           var response=await fetch(url)
           var json=await response.json()
@@ -350,8 +347,6 @@ class MapControl extends Component {
           }
           
         }
-        
-        console.log("this is url",url);
         try{
           var response=await fetch(url)
           var json=await response.json()
@@ -447,7 +442,7 @@ class MapControl extends Component {
     // If projected form is selected
     if(this.props.form=="Projected")
     {
-      console.log("this is projected form from mapcontrol");
+ 
 
       // Condition is used to stop rerendering of the component 
       if(pP.historicInputState == this.props.historicInputState &&
@@ -455,12 +450,12 @@ class MapControl extends Component {
           pP.historicEndDate == this.props.historicEndDate)
       {
         
-      console.log("this is projected form from mapcontrol inside");
+      
 
       // If a user has selected reset button
       if(localStorage.getItem("p_resetViewforLastLayer")=="true")
       {
-        console.log("url called from map control");
+        
         localStorage.setItem("p_resetViewforLastLayer","false");
 
         // Set view by as states because reset button is called
@@ -486,7 +481,7 @@ class MapControl extends Component {
         // If user has selected "Facilities" from viewby form in map layer and then update the component's state
         else if(this.state.mapViewByCalled && this.state.viewByChoice=="Counties")
           {
-            console.log("counties data");
+            
             var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/stateName/"+stateName+"/CountyState1/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
             var response=await fetch(url);
             var json=await response.json();
@@ -764,7 +759,7 @@ class MapControl extends Component {
         // If reset view is called for the historic form
         if(localStorage.getItem("resetViewforLastLayer")=="true")
         {
-          console.log("url called from map control");
+          
           localStorage.setItem("resetViewforLastLayer","false")
           localStorage.setItem("viewBy","States");
           var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
@@ -1082,7 +1077,7 @@ class MapControl extends Component {
     
     if(!this.state.loader)
     {
-      console.log("loading....");
+      
       return(
         <div style={{marginTop:"600px"}}>
           <div style={{marginTop:"-300px"}} >
@@ -1108,8 +1103,7 @@ class MapControl extends Component {
             <div className="main_content_inner">
               
               <div className="map-container">
-              {console.log("navbar called....",this.state.regions,this.props.historicInputState)}
-              {console.log("view By called....",localStorage.getItem("viewBy"))}
+              
               <MapContent  filterstr={this.props.filterstr}energyScenario={this.props.energyScenario}form={this.props.form} tabledata={this.state.regions} 
                 notReload={this.state.mapViewByCalled} viewByButtonClicked={(e)=>this.viewByButtonClicked(e)} 
                 formHandler={(e)=>this.formHandler(e)} formHandlerforFacility={(e)=>this.formHandlerforFacility(e)}

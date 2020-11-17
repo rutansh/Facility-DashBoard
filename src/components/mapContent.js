@@ -104,7 +104,6 @@ class MapContent extends React.PureComponent {
   displayItem(event) {
     localStorage.setItem("displayBy",event.target.value)
     const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-    console.log("mapContent urlchange",localStorage.getItem("viewBy"));
     urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
     this.setState({
       displayChoice: event.target.value,
@@ -119,7 +118,6 @@ class MapContent extends React.PureComponent {
     {
       localStorage.setItem("viewBy","States");
       const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-      console.log("urlchange");
       urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
     }
 
@@ -140,7 +138,6 @@ class MapContent extends React.PureComponent {
     else if (event.target.value == "Counties") {
       localStorage.setItem("viewBy","Counties");
       const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-      console.log("mapContent urlchange",localStorage.getItem("viewBy"));
       urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
       this.setState({
         isClicked: true,
@@ -150,10 +147,8 @@ class MapContent extends React.PureComponent {
 
     // If clicked on Faclities of view form
     else if (event.target.value == "Facilities") {
-      console.log("this is facility for url change");
       localStorage.setItem("viewBy","Facilities");
       const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-      console.log("mapContent urlchange",localStorage.getItem("viewBy"));
       urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
       this.setState({
         isClicked: true,
@@ -164,7 +159,6 @@ class MapContent extends React.PureComponent {
     else if (event.target.value == "Watersheds") {
       localStorage.setItem("viewBy","Watersheds");
       const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-      console.log("mapContent urlchange",localStorage.getItem("viewBy"));
       urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
       this.setState({
         isClicked: true,
@@ -742,7 +736,6 @@ class MapContent extends React.PureComponent {
       if (this.props.historicInputState.toLowerCase().includes("all us")) {
         var url = "https://ewed.org:3004/all-states";
         const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-        console.log("this is thug viewby", localStorage.getItem("viewBy"))
         urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
         try {
 
@@ -1017,7 +1010,6 @@ class MapContent extends React.PureComponent {
         this.state.viewByChoice == "Facilities" &&
         this.props.notReload
       ) {
-        console.log("Facility data....");
         var name = this.props.historicInputState;
         name = name.split(" (")[0];
         let startDate = this.props.historicStartDate;
@@ -1126,7 +1118,7 @@ class MapContent extends React.PureComponent {
             filterstr={this.props.filterstr}
           />
         ) : (
-            console.log("do nothing")
+            console.log("")
           )}
       </GoogleMap>
     ));
@@ -1349,7 +1341,6 @@ class MapContent extends React.PureComponent {
                       ) {
                         localStorage.setItem("viewBy","States");
                         const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-                        console.log("mapContent urlchange",localStorage.getItem("viewBy"));
                         urlchange("/"+this.props.form+"/"+this.state.prevState.toLowerCase()+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
                         this.setState({
                           loading: false,
@@ -1364,7 +1355,6 @@ class MapContent extends React.PureComponent {
                       else {
                         localStorage.setItem("viewBy","Watersheds");
                         const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-                        console.log("mapContent urlchange",localStorage.getItem("viewBy"));
                         urlchange("/"+this.props.form+"/"+this.state.prevState.toLowerCase()+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
                         this.setState({
                           loading: false,

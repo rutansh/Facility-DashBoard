@@ -113,7 +113,7 @@ class Regions extends React.Component {
           {
             localStorage.setItem("viewBy","Facilities");
             const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-            console.log("regions urlchange",localStorage.getItem("viewBy"));
+            
            
             urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
             let dataforcolor=this.props.tabledata;

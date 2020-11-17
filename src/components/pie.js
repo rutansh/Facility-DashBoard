@@ -335,7 +335,7 @@ class PieChart extends Component{
     if((this.props.energyScenario===pP.energyScenario&&this.state.projectedDidmount&&pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&this.props.filterstr===pP.filterstr))
     {
       const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-      console.log("Historic Url change from Piechart did update",localStorage.getItem("viewBy"));
+      
       urlchange("/"+this.props.form+"/"+localStorage.getItem("name")+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);
     }
     else
@@ -390,7 +390,7 @@ class PieChart extends Component{
 
     //Url change method to update the URL
     const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-    console.log("Historic Url change from Piechart",localStorage.getItem("viewBy"));
+    
     urlchange("/"+this.props.form+"/"+localStorage.getItem("name")+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);
       
     var startDate = this.props.historicStartDate;
@@ -436,8 +436,6 @@ class PieChart extends Component{
       let myset3 = new Set();
       let myset4 = new Set();
       this.state.items.map(item=>{
-      console.log("item:")
-      console.log(item);
       let otherdata={emission:0,consumption:0,withdrawal:0};
       
       //Creating datasets for each type (Generation, Emission, Consumption and withdrawal)
@@ -512,4 +510,3 @@ class PieChart extends Component{
   }
 }
 export default PieChart;
-//https://ewed.org:28469/ewedService/getFutureData/getSummaryWithin/REF2019/HUC8Name/upper%20tuolumne%20watershed%20(ca)/fuelType/2049/1/2050/12/fuelTypes/all

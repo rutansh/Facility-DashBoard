@@ -91,7 +91,7 @@ strokeWeight(region,inputstate,viewByChoice,context)
 
 }
 
-//stroke color will render the border with green color when user hover's mouse on any region
+//stroke color will render the border with green color when user hovers mouse on any region
 strokeColor(region,inputstate,viewByChoice,context)
 {
   if(inputstate.includes("all us"))
@@ -263,17 +263,17 @@ regionColor(regionName,map,g)
             const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
             localStorage.setItem("name",this.props.regionJ["properties"]["NAME"].toLowerCase() + " (state)");
             //To update URL 
-            console.log("stateLayer urlchange",localStorage.getItem("viewBy"));
+            
             urlchange("/"+this.props.form+"/"+this.props.regionJ["properties"]["NAME"].toLowerCase() + " (state)"+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
             this.arrayForParent[0] = this.props.regionJ["properties"]["NAME"].toLowerCase() + " (state)";
             this.props.formHandler(this.arrayForParent);          
           }
           // If user has clicked on particular state
           else if (this.props.historicInputState.toLowerCase().includes("state")) {
-            console.log("this is facility for url change");
+            
             localStorage.setItem("viewBy","Facilities");
             
-            console.log("stateLayer urlchange",localStorage.getItem("viewBy"));
+            
             
             // URL change based on the viewby choice selected from map component
             if (this.props.viewByChoice == "Watersheds" && this.props.regionJ.properties.SUBBASIN.toLowerCase().includes("watershed")) {

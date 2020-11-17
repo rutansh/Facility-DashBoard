@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 //It is a static component used to render tutorials page
 class Tutorials extends React.Component{
     render(){
-        console.log("This is Tutorials");
+        
         return(
             <div>
                 <Modal

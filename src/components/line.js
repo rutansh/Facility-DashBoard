@@ -209,7 +209,6 @@ class LineChart extends Component {
 
      //If state region is requested
     if (this.props.historicInputState.toLowerCase().includes("state")) {
-      console.log("this is componentDidmount for linechart in state");
       var stateName = this.props.historicInputState.toLowerCase().split(" (")[0]
       var url = "https://ewed.org:31567/ewedService/getMonthWiseSummary/stateName/"+ stateName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/" + this.props.filterstr
     }
@@ -217,7 +216,6 @@ class LineChart extends Component {
     //If county is requested
     else if (this.props.historicInputState.toLowerCase().includes("county")) {
       var countyName = this.props.historicInputState.toLowerCase();
-      console.log("this is componentDidmount for linechart");
       var url = "https://ewed.org:31567/ewedService/getMonthWiseSummary/CountyState1/" + countyName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/all"
     }
 
@@ -225,7 +223,7 @@ class LineChart extends Component {
     else {
       var url = "https://ewed.org:28469/ewedService/getMonthWiseSummary/HUC8Name/" + this.props.historicInputState.toLowerCase() + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/" + this.props.filterstr
     }
-    console.log(url);
+    
     try {
       var response = await fetch(url)
       var json = await response.json()
@@ -247,7 +245,6 @@ class LineChart extends Component {
     if (this.props.form == "Historic") {
       if (pP.historicInputState === this.props.historicInputState && pP.historicStartDate === this.props.historicStartDate && pP.historicEndDate === this.props.historicEndDate && this.props.filterstr == pP.filterstr) {
         const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-        console.log("Historic Url change from line didupdate",localStorage.getItem("viewBy"));
         urlchange("/"+this.props.form+"/"+localStorage.getItem("name")+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);
       }
       else {
@@ -264,7 +261,6 @@ class LineChart extends Component {
         if (this.props.historicInputState.toLowerCase().includes("state")) {
           var stateName = this.props.historicInputState.toLowerCase().split(" (")[0]
           stateName = stateName.trim();
-          console.log("historic state");
           var url = "https://ewed.org:31567/ewedService/getMonthWiseSummary/stateName/" + stateName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/" + this.props.filterstr
         }
 
@@ -306,7 +302,6 @@ class LineChart extends Component {
     else if (this.props.form == "Projected") {
       if (this.props.climateModel === pP.climateModel && this.props.climateScenario === pP.climateScenario && this.props.energyScenario === pP.energyScenario && this.state.projectedDidmount && pP.historicInputState === this.props.historicInputState && pP.historicStartDate === this.props.historicStartDate && pP.historicEndDate === this.props.historicEndDate && this.props.filterstr === pP.filterstr) {
         const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-        console.log("Historic Url change from line didupdate",localStorage.getItem("viewBy"));
         urlchange("/"+this.props.form+"/"+localStorage.getItem("name")+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);
       }
       else {
@@ -379,7 +374,6 @@ class LineChart extends Component {
   //This method will render the line chart for with month wise data
   render() {
     const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-    console.log("Historic Url change from line",localStorage.getItem("viewBy"));
     urlchange("/"+this.props.form+"/"+localStorage.getItem("name")+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);
     if (!this.state.isLoaded) {
       return <div>Loading...</div>
@@ -462,8 +456,8 @@ class LineChart extends Component {
         minTick=Math.min(minTick,...chartdata["datasets"][0]["data"],...chartdata["datasets"][1]["data"],...chartdata["datasets"][2]["data"],...chartdata["datasets"][3]["data"],...chartdata["datasets"][4]["data"]);
         minPow=minTick.toExponential(0).split("+")[1]
         maxPow=maxTick.toExponential(0).split("+")[1]
-        console.log("max:"+maxPow);
-        console.log("min:"+minPow);
+        
+        
         
         //Labels for line chart
         chartdata.labels = lineChartData.labels;
