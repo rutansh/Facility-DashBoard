@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from "react-modal";
 import Button from "@material-ui/core/Button";
 
-//This is a static page used to render about information
+//This is a static page used to render "About" information for the web application
 class About extends React.Component{
     render(){
         

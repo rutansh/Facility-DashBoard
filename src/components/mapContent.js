@@ -1362,7 +1362,7 @@ class MapContent extends React.PureComponent {
                           isClicked: true,
                         });
                         this.arrayForParent[0] = this.state.prevState.toLowerCase();
-                        this.props.formHandler(this.arrayForParent);
+                        this.props.formHandler3(this.arrayForParent);
                       }
                     }
                   }}

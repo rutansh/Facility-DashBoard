@@ -562,7 +562,7 @@ class TableContent extends Component {
                       </tr>
                     ))
                   ) : (
-                    <div>Loading...!</div>
+                    <div>Please wait for the data to render on previous layer...!</div>
                   )}
                 </tbody>
               </ReactBootstrap.Table>
