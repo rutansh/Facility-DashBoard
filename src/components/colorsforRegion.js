@@ -1,3 +1,5 @@
+
+//Different hex values to display colors on map layers
 export const mapColorPaletteHex = [
     "#FFFFF8",
     "#FFFFCC",

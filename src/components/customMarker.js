@@ -4,11 +4,13 @@ import {geostats} from './geostats';
 import {facilityHax} from './facilityHax';
 import Button from '@material-ui/core/Button'; 
 
-
+// This component will render all the facilities present in requested watersheds, counties or statas
 class CustomMarker extends Component {
   constructor(props) {
     super(props);
     this.props = props;
+    
+    // Initializing local states with the data received from props
     this.state =
     {
       startDateProps: this.props.historicStartDate,
@@ -21,15 +23,15 @@ class CustomMarker extends Component {
       prevState:"",
       index:this.props.arrIndex,
     }
-    // this.renderRegions = this.renderRegions.bind(this);
+    
     this.objectForParent = {};
+
+    // To set radius based on the values received
     this.setRadius=this.setRadius.bind(this);
-    this.facilityChart=this.facilityChart.bind(this);
   }
   
-  facilityChart(facilityData){
-   console.log("display chart");
-  }
+  //This method will set the radius of marker based on the filter selected on display by form from the map layer
+  // facilityhax method will return the hex color based on the values
   setRadius(g,facility,map)
   {
     
@@ -47,12 +49,16 @@ class CustomMarker extends Component {
     }
     
   }
+
+  // This method is used when facility is loaded,it will update the state of loading to true
   componentDidMount() {
     this.setState({
         loading:true,
     })
   }
-  shouldComponentUpdate(pS,pP)
+
+  // When user clicks on particular facility
+  shouldComponentUpdate(nextState,nextProps)
   {
       if(this.state.loading&&this.props.index!==this.state.index)
       {
@@ -61,17 +67,22 @@ class CustomMarker extends Component {
       return true;
   }
 
+
+  // It will render facilities using <Marker> component if someone clicks on Marker then, <InfoWindow> component is rendered
+  // Both <Marker> and <InfoWindow> are present in reactjs-google library 
   render() {
+
+    // When initially this component gets rendered
     if (!this.state.loading) {
       
       return (
         <div>Loading...!</div>
       )
     }
-    else {
 
-    
-    //component-N facility-props=>title,lat,lng,onClick(e,index),isActive:(index==)
+    // Returning facilities as markers using <Marker> component
+
+    else {
           return(
             <div>
             <Marker key={this.props.arrIndex}
@@ -110,7 +121,6 @@ class CustomMarker extends Component {
                         {
                           fetchFacility="https://ewed.org:31567/ewedService/getFutureData/getFacility/"+this.props.energyScenario+"/pgmSysId/"+this.state.facility.PGM_SYS_ID+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt;
                         }
-                        console.log("this url for facility",fetchFacility)
                         var res = await fetch(fetchFacility);
                         var jsondata = await res.json();
                         this.objectForParent.data = jsondata;
@@ -144,4 +154,3 @@ class CustomMarker extends Component {
           );           
     }}}
 export default CustomMarker;
-//componentDidUpdate or shouldComponentUpdate..!

@@ -6,6 +6,9 @@ import About from './About';
 import Tutorials from './Tutorial';
 import Methods from './Methods';
 import FAQs from './FAQs'; 
+
+
+//This component is a parent component of all the static components
 class Header extends React.Component{
   constructor(props)
   {
@@ -14,15 +17,20 @@ class Header extends React.Component{
       isOpen:false,
       modelName:"",
     }
+
+    // If user clicks on any od the header
     this.handleClick=this.handleClick.bind(this);
-    
   }
+
+  // If user clicks on close button from the static components
   handleChild=(e)=>{
     this.setState({
       isOpen:false
     })
   }
-   handleClick=(e,name)=>{
+
+  //Whenever user clicks on any of the static component, it will update the component's state and render the requested component
+  handleClick=(e,name)=>{
      if(name=="About")
      {
        this.setState({
@@ -54,13 +62,18 @@ class Header extends React.Component{
 
     
   }
+
+  //This method will render the requested static comopnent. This has conditional rendering based on the component requested by the user.
+  
+  // Logo is in SVG format hence, the numerical values are representing the symbol that is rendered on the top right side of the
+  //application
   render(){
     return(
       <div>
-        {this.state.modelName=="About" && this.state.isOpen?<About handleChild={(e)=>{this.handleChild(e)}}/>:console.log("assa")}  
-        {this.state.modelName=="FAQs" && this.state.isOpen?<FAQs handleChild={(e)=>{this.handleChild(e)}}/>:console.log("assa")}
-        {this.state.modelName=="Tutorial"&& this.state.isOpen ?<Tutorials handleChild={(e)=>{this.handleChild(e)}}/>:console.log("assa")}
-        {this.state.modelName=="Methods" && this.state.isOpen?<Methods handleChild={(e)=>{this.handleChild(e)}}/>:console.log("assa")}
+        {this.state.modelName=="About" && this.state.isOpen?<About handleChild={(e)=>{this.handleChild(e)}}/>:console.log("About Page")}  
+        {this.state.modelName=="FAQs" && this.state.isOpen?<FAQs handleChild={(e)=>{this.handleChild(e)}}/>:console.log("FAQs Page")}
+        {this.state.modelName=="Tutorial"&& this.state.isOpen ?<Tutorials handleChild={(e)=>{this.handleChild(e)}}/>:console.log("Tutorials age")}
+        {this.state.modelName=="Methods" && this.state.isOpen?<Methods handleChild={(e)=>{this.handleChild(e)}}/>:console.log("Methods Page")}
 
 
       <div className="menu-container">

@@ -1,13 +1,15 @@
 import React from 'react';
 import Modal from "react-modal";
 import Button from "@material-ui/core/Button";
+
+//This is a static page used to render about information
 class About extends React.Component{
     render(){
-        console.log("This is about");
+        
         return(
             <div>
-                <Modal
-        className="about-modal-header"
+          <Modal
+          className="about-modal-header"
           isOpen={true}
           style={{
             overlay: {

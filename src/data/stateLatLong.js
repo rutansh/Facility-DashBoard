@@ -1,3 +1,5 @@
+// Lat and Long of states
+
 export const stateLatLngs = {
     Alaska: {
       state: "Alaska",

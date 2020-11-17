@@ -3,22 +3,35 @@ import Modal from "react-modal";
 import CheckBox from "./checkbox";
 import Button from "@material-ui/core/Button";
 class FilterModalforHistoric extends React.Component {
+
+  // This component will render the filter by fuel type dialogue box where user can provide filters
+
   constructor(props) {
     super(props);
     this.state = {
       filters: this.props.filters,
     };
   }
+
+  // This function gets called when user clicks on Select None in the box
+  // and it will save the values of updated filters
+
   handleAllNoneChecked = (event) => {
     let filters = this.state.filters;
     this.state.filters.forEach((fruite) => (fruite.isChecked = false));
     this.setState({ filters: filters });
   };
+
+  // This function gets called when user clicks on Select All in the box 
+  // and it will save the values of checked filters by updating component's state
+
   handleAllChecked = (event) => {
     let filters = this.state.filters;
     this.state.filters.forEach((fruite) => (fruite.isChecked = true));
     this.setState({ filters: filters });
   };
+
+  // This function gets called when user clicks on Save to save the checked inputs
   handleCheckChieldElement = (event) => {
     let filters = this.state.filters;
     this.state.filters.forEach((fruite) => {
@@ -27,6 +40,9 @@ class FilterModalforHistoric extends React.Component {
     });
     this.setState({ filters: filters });
   };
+
+  // Modal Component in this is used to display filter by fuel type box
+
   render() {
     return (
       <div>
@@ -34,6 +50,7 @@ class FilterModalforHistoric extends React.Component {
         className="filter-modal-main"
           isOpen={this.props.modalIsOpen}
           style={{
+            // Inline styiling for Modal n filterbyfuel types
             overlay: {
               position: "fixed",
               zIndex: 4,
@@ -44,6 +61,7 @@ class FilterModalforHistoric extends React.Component {
               backgroundColor: "rgba(255, 255, 255, 0.75)",
             },
             content: {
+              // Inside content of modal
               position: "absolute",
               top: "200px",
               left: "690px",
@@ -60,7 +78,7 @@ class FilterModalforHistoric extends React.Component {
           }}
         >
           <div style={{ marginLeft: "10px" }}>
-            <h3>Filter Your Choice</h3>
+            <h4><b>Filter By Fuel Type</b></h4>
           </div>
           <center>
             <div className="filter-modal-btns-top-container">
@@ -68,6 +86,8 @@ class FilterModalforHistoric extends React.Component {
                 variant="contained"
                 color="primary"
                 onClick={(e) => {
+
+                  // Changes values for filters 
                   this.handleAllChecked(e);
                 }}
               >
@@ -78,6 +98,9 @@ class FilterModalforHistoric extends React.Component {
                 variant="contained"
                 color="primary"
                 onClick={(e) => {
+
+                  //Unchecked all filters
+                  
                   this.handleAllNoneChecked(e);
                 }}
               >
@@ -87,6 +110,7 @@ class FilterModalforHistoric extends React.Component {
           </center>
           <ul style={{ marginTop: "30px", marginLeft: "-30px" }}>
             {this.state.filters.map((fruite) => {
+              // If user clicks on any filter
               return (
                 <CheckBox
                   handleCheckChieldElement={this.handleCheckChieldElement}
@@ -100,6 +124,7 @@ class FilterModalforHistoric extends React.Component {
               variant="contained"
               color="primary"
               onClick={(e) => {
+                // If clicks on save then it will update the checked filters
                 let arr = [];
                 for (let i = 0; i < this.state.filters.length; i++) {
                   if (this.state.filters[i].isChecked == true) {
@@ -114,7 +139,8 @@ class FilterModalforHistoric extends React.Component {
 
             <Button variant="contained" color="primary"
             onClick={(e) => {
-              this.props.saveOrcloseModal("Close");
+              // If closes the modal then it will now save the changes
+              this.props.saveOrcloseModal("Close")
             }}
             >
               Close

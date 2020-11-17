@@ -1,4 +1,7 @@
 import React from 'react'
+
+// For checkboxes in filterbyfuel types
+
 export const CheckBox = props => {
 return(
       <li>
