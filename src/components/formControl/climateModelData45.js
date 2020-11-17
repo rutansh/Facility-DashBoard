@@ -1,3 +1,6 @@
+
+// Data for climate model for climate scenario for RCP45
+
 export const climateModels45 = [
     {
       value: "AVG45",

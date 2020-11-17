@@ -3,6 +3,8 @@ import { Line,Chart } from 'react-chartjs-2';
 import Modal from 'react-modal';
 let minTick = Infinity,maxTick=-Infinity;
 let minPow=0,maxPow=0;
+
+// This component will render the line chart for Selected facility from 3rd layer of the map
 var chartdata = {
   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',"Aug","Sep","Oct","Nov","Dec"],
   datasets: [
@@ -113,6 +115,8 @@ var chartdata = {
     }
   ]
 };
+
+// to styling the line chart options property is being used
 var options = {
 
   legend: {
@@ -130,22 +134,19 @@ var options = {
         display: true,
       },
       ticks: {
-
-        // autoSkip: true,
         callback: (value, index) => {       
           return value.toLocaleString();
         },
       },
-      afterBuildTicks: function (chartObj) { //Build ticks labelling as per your need
-
+      afterBuildTicks: function (chartObj) { 
+        
+        //Build ticks labelling as per your need
         chartObj.ticks = [];
-        console.log(minPow-1);
+        
         for(let i=minPow;i<=maxPow;i++)
         {
           chartObj.ticks.push(Math.pow(10,i));  
         }
-        console.log("ChartObj")
-        console.log(chartObj.ticks)
       }
 
     }]
@@ -153,7 +154,10 @@ var options = {
   
 }
 
+
 class FacilityChart extends Component {
+
+  // Initializing the component with the facility selected by the user from the 3rd layer of map
   constructor(props) {
     super(props);
     this.state = {
@@ -164,16 +168,19 @@ class FacilityChart extends Component {
       endDateProps:this.props.endDate,
     }
   }
+
+  // If facility is clicked then update the component's state
   componentDidMount(){
-    console.log("componentDidMount");
+    
     this.setState({
         isLoaded: true,
     })
   }
+
+  //This will render the line chart
   render() {
     if (!this.state.isLoaded || this.state.items === undefined) {
       return <div>Loading...
-
       </div>
     }
     else{
@@ -186,6 +193,7 @@ class FacilityChart extends Component {
       
       var data=this.state.facilityData["MonthlyData"];
       
+      // dividing data for emission, water consumption, water generation, water withdrawal
       for(let i=0;i<data.length;i++)
       {
           lineChartData.gen.push(data[i].generation);
@@ -205,6 +213,8 @@ class FacilityChart extends Component {
       minTick=Math.min(minTick,...chartdata["datasets"][0]["data"],...chartdata["datasets"][1]["data"],...chartdata["datasets"][2]["data"],...chartdata["datasets"][3]["data"]);
       minPow=minTick.toExponential(0).split("+")[1]
       maxPow=maxTick.toExponential(0).split("+")[1]
+
+      // After formatting data this will render line chart
       return(
         <div>
           <b>{this.state.facilityData["Facility"][0]["PRIMARY_NAME"]} - Facility Trends</b>

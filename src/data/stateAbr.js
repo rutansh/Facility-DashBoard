@@ -1,3 +1,5 @@
+// For mappinng State
+
 export  const stateAbr={
     "AL": "Alabama",
     "AK": "Alaska",

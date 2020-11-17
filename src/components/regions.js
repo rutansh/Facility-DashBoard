@@ -6,10 +6,16 @@ import {geostats} from './geostats';
 import StateLayer from './stateLayer';
 import UserContext from './Context/updateContext';
 import Button from '@material-ui/core/Button';
+import urlchange from './GlobalUtil/urlutil';
+import dateFormat from './GlobalState/dateFormat';
+
+// This component is used to display different colors on map layer
 class Regions extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
+    
+    // Initially has a state where setting up local state based on the data received from the parent Mapcontent component 
     this.state =
     {
       regions: this.props.regions,
@@ -28,23 +34,32 @@ class Regions extends React.Component {
       ismodalOpen:false,
       
     }
+
+    // This will help to display different colors on map and divide value of table data using statistics and will create clusters
     var g=new geostats();
     
+    //binding events
     this.markerClick=this.markerClick.bind(this);
     this.modalClick=this.modalClick.bind(this);
     this.formHandler=this.formHandler.bind(this);
     this.formHandlerforFacility=this.formHandlerforFacility.bind(this);
     this.arrayForParent = []; 
   }
+
+  //When clicks on particular region from all us 
   formHandler(e)
   {
     this.props.formHandler(e);
   }
+
+  //When clicks on particular region from state
   formHandlerforFacility(e)
   {
     this.props.formHandlerforFacility(e);
   }
   
+
+  // When marker is clicked from map layer
   markerClick(e)
   {
         this.setState({
@@ -53,13 +68,15 @@ class Regions extends React.Component {
         })  
   }
 
+  // modal is clicked to display line chart
   modalClick(e)
   {
-    // this.props.modalOpen(true)
     this.setState({
         ismodalOpen:true,
     })
   }
+
+  // Initially after component is rendered it will set state of the component with the data provided by parent 
   componentDidMount()
   {
    
@@ -69,6 +86,8 @@ class Regions extends React.Component {
       nameOfState: this.props.historicInputState,
     })
   }
+
+  // If particular facility is selected
   componentDidUpdate(pP,pS,snap)
   { 
     
@@ -83,15 +102,26 @@ class Regions extends React.Component {
   
   render() {
     {
+
         const scale=1;
+        
+        // To display the regions for facilities
         if (this.props.viewByChoice == "Facilities" ) 
         {
+
         if(this.props.regions["All Facilities"])
           {
+            localStorage.setItem("viewBy","Facilities");
+            const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+            
+           
+            urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
             let dataforcolor=this.props.tabledata;
             let data=this.props.tabledata.Summary;
             let arr=[];
             let objforstate={};
+
+            // This will make the cluster of related values
             var g=new geostats();
             if(this.props.regions["All Facilities"].length!==0)
             {
@@ -130,6 +160,9 @@ class Regions extends React.Component {
                 }
               }
             }
+
+            // Custom marker will render different facilities on map layer and props are passed 
+            // FacilityChart will render the facility's line chart
             return this.props.regions["All Facilities"].map((facility, index) => {
               return  (
               <div>
@@ -171,6 +204,7 @@ class Regions extends React.Component {
                       }
                     }
                   }>
+                  
                 <FacilityChart className="facility-chart-container" facilityData={this.state.data} startDate={this.props.historicStartDate} endDate={this.props.historicEndDate}/>
                 <Button variant="contained" color="primary"onClick={()=>{this.setState({ismodalOpen:false})}}>Close</Button>
                 </Modal>} 
@@ -187,14 +221,18 @@ class Regions extends React.Component {
           );
         }
       }
-      else if(this.props.regions&&this.props.regions.length>0 && this.props.tabledata.Summary.length!==1){
+
+      // To display all us layer and state layers
+      else if(this.props.regions&&this.props.regions.length>0 && this.props.tabledata.Summary&&this.props.tabledata.Summary.length!==1){
       {
-        //pattern find the data in facility , what is in data and in datacolor
-        let dataforcolor=this.props.tabledata;
+        
+        //Getting table data (data with emission, water generation, water withdrawal and water generation) to display different colors
         let data=this.props.tabledata.Summary;
 
         let arr=[];
         let objforstate={};
+
+        // geostats is a library that will create different clusters of similar values
         var g=new geostats();
         if(this.props.viewByChoice!=="Facilities")
         {
@@ -230,10 +268,16 @@ class Regions extends React.Component {
                 }
                 
               }
-              //map->based on key name, function -> 2 (g,map,regionJ.properties.NAME)->g.random(map[regionJ.properties.NAME].waterConsumption)
+              
           }
         }
-            return this.props.regions.map(regionJ => {
+
+        //  State layer component will render states for all us and requested state region 
+        return this.props.regions.map(regionJ => {
+
+              // For each layer all the required values are taken to draw borders on the map and fill out those 
+              // border with different colors
+
               let region = regionJ["geometry"];
               let type = region["type"];
               var coordinates=[];
@@ -256,12 +300,17 @@ class Regions extends React.Component {
               }
               let coordArr = []
               coordinates.map(coordinate => coordArr.push({ lat: coordinate[1], lng: coordinate[0] }));
+
+              // State layer is used to render geojson layer of requested state by the parent component
               return(
-                  <StateLayer displayChoice={this.props.displayChoice}viewByChoice={this.props.viewByChoice} coordArr={coordArr} 
-                  regionJ={regionJ} historicInputState={this.props.historicInputState} 
+                  <StateLayer form={this.props.form}displayChoice={this.props.displayChoice}viewByChoice={this.props.viewByChoice} coordArr={coordArr} 
+                  regionJ={regionJ} historicInputState={this.props.historicInputState} historicStartDate={this.props.historicStartDate}
+                  historicEndDate={this.props.historicEndDate} 
                   formHandler={(e)=>{this.formHandler(e)}} 
                   formHandlerforFacility={(e)=>{this.formHandlerforFacility(e)}} 
-                  objforstate={objforstate} g={g}/> 
+                  objforstate={objforstate} g={g}
+                  filterstr={this.props.filterstr}
+                  /> 
               )
             })  
           }
@@ -275,6 +324,8 @@ class Regions extends React.Component {
         }       
     }}
 }
+
+// Global context is imported to provide synchronization between table and map layer to display borders
 export default (props)=>{
   return(
     <UserContext.Consumer>

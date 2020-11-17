@@ -1,8 +1,9 @@
-1. Introduction
+1. Abstract (Not ewed , alternative design approach(3 times))
+2.Introduction
 
 2. Background 
 
-3. Comparision between React/Angular(React Advantages over Angular)
+3. Comparision between React/Angular(React Advantages over Angular)(last)
 
 4. Mobile Application with React Native
 4.1 Why React Native vs Flutter
@@ -22,7 +23,7 @@
 5.7 Code snippet
 5.8 Screenshots
 
-6. Functionality of Emission Dashboard
+6. Functionality of Dashboard
 6.1 What problem it solves
 6.2 Different forms (Projected/Historic)
 6.3 Filtering based on dynamic inputs
@@ -30,3 +31,4 @@
 
 
 7. 
+main content-> props for isurl -> to check whether input is coming from url or its root

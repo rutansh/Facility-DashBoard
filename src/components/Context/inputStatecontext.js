@@ -18,18 +18,25 @@ class StateProvider extends Component {
       {id: 10, value: "Other", isChecked: true}
     ]
   }
-  // Method to update state
+  // Method to update state of region provided by user
   setInputState = (region) => {
     let inputstate={name:region}
     this.setState((prevState) => ({ inputstate }))
   }
+
+  // Method used to update filter string
   setFilterStr = (filterstr) => {
+    
     this.setState((prevState) => ({ filterstr }))
+    
   }
+  // Set filters and give updated state to all the children components
   setFilters=(filters)=>{
     this.setState((prevState)=>({filters}))
   }
   
+  // It will set the input state context with filters and provide values to all children components
+
   render() {
     const { children } = this.props
     const { inputstate } = this.state

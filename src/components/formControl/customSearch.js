@@ -1,18 +1,16 @@
 import React, { Component } from 'react'
-// import ReactSearchBox from 'react-search-box'
-// import * as nameData from "../../data/facilityNames.json";
-// import { statename} from "../../data/stateNames.js";
 import StateContext from '../Context/inputStatecontext';
 import Autosuggest from 'react-autosuggest';
 import * as nameData from "../../data/facilityNames.json";
 
 
-// Imagine you have a list of languages that you'd like to autosuggest.
+
 const languages = nameData["Names"];;
 
  
-// Teach Autosuggest how to calculate suggestions for any given input value.
-  const getSuggestions = value => {
+// This component will search for the suggestions in the search form for different regions
+  
+const getSuggestions = value => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
  
@@ -93,6 +91,7 @@ class CustomSearch extends React.Component {
     );
   }
 }
+// Importing Context to set new seached value 
 export default (props)=>{
     return(
       <StateContext.Consumer>
