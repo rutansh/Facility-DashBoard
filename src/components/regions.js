@@ -62,6 +62,7 @@ class Regions extends React.Component {
   // When marker is clicked from map layer
   markerClick(e)
   {
+        
         this.setState({
           index:e.index,
           data:e.data,
@@ -92,6 +93,8 @@ class Regions extends React.Component {
   { 
     
     let i=this.state.index;
+    localStorage.setItem("id",i);
+
     if(pS.index!==this.state.index)
     {
         this.setState({
@@ -99,6 +102,7 @@ class Regions extends React.Component {
         })
     }
   }
+  
   
   render() {
     {
@@ -113,8 +117,6 @@ class Regions extends React.Component {
           {
             localStorage.setItem("viewBy","Facilities");
             const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-            
-           
             urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
             let dataforcolor=this.props.tabledata;
             let data=this.props.tabledata.Summary;

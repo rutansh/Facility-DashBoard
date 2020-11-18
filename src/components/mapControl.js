@@ -88,13 +88,10 @@ class MapControl extends Component {
     {
       // When form is changed then we will need to again fetch the data from updated form for that again loader is set to false
       localStorage.setItem("formchange","false");
-      
       this.setState({
         loader:false,
       })  
-    }
-
-          
+    }   
   }
   
   // All api calls will be handled during initial rendering 
