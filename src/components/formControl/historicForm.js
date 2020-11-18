@@ -51,7 +51,14 @@ class HistoricForm extends Component {
       }
       else if(this.props.inputstate.name.toLowerCase().includes("state"))
       {
-        localStorage.setItem("viewBy","Watersheds");
+        if(localStorage.getItem("viewBy")=="Watersheds")
+        {
+          localStorage.setItem("viewBy","Watersheds");
+        }
+        else
+        {
+          localStorage.setItem("viewBy","Counties");
+        }
       }
       else
       {

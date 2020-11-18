@@ -31,7 +31,8 @@ class MapControl extends Component {
       this.viewByButtonClicked=this.viewByButtonClicked.bind(this);
       this.formHandlerforFacility=this.formHandlerforFacility.bind(this);
       this.formHandler2=this.formHandler2.bind(this);
-  }
+      this.formHandler3=this.formHandler3.bind(this);
+    }
 
   // This method is used when user clicks on viewBy from the mao layer 
   viewByButtonClicked(obj)
@@ -70,7 +71,11 @@ class MapControl extends Component {
   {
     this.props.mapHandler(e);
   }
-
+  formHandler3(changeEvent)
+  {
+    localStorage.setItem("backbutton","true");
+    this.props.mapHandler(changeEvent[0]);
+  }
   // When clicks for facility data from map layer
   formHandlerforFacility(changeEvent){
 
@@ -83,11 +88,13 @@ class MapControl extends Component {
     {
       // When form is changed then we will need to again fetch the data from updated form for that again loader is set to false
       localStorage.setItem("formchange","false");
+      
       this.setState({
         loader:false,
-      })      
-      
-    } 
+      })  
+    }
+
+          
   }
   
   // All api calls will be handled during initial rendering 
@@ -218,6 +225,7 @@ class MapControl extends Component {
               loading:true,
               mapViewByCalled:false,
               loader:true,
+
             })
           }
           catch(e)
@@ -453,16 +461,33 @@ class MapControl extends Component {
       
 
       // If a user has selected reset button
-      if(localStorage.getItem("p_resetViewforLastLayer")=="true")
-      {
+        console.log("this is projected form");
         
-        localStorage.setItem("p_resetViewforLastLayer","false");
-
-        // Set view by as states because reset button is called
-        localStorage.setItem("viewBy","States");
-      }
-
       // If user has selected facilities from viewby form in map layer and then update the component's state
+      // if(localStorage.getItem("p_resetViewforLastLayer")=="true")
+      // {
+      //   localStorage.setItem("p_resetViewforLastLayer","false");
+      //   var url="https://ewed.org:31567/ewedService/getFutureData/defaultViewData/"+this.props.energyScenario+"/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
+      //     // Update state
+      //     try{
+      //       localStorage.setItem("loadingfordata","true");
+      //       localStorage.setItem("viewBy","States");
+            
+      //       var response= await fetch(url)
+      //       var json= await response.json()
+      //       //this.updateState(json,pP);
+      //       this.setState({
+      //         regions:json,
+      //         loader:true,
+      //         viewByChoice:"States",
+      //       });
+      //     }
+      //     catch(e)
+      //     {
+      //       console.log(e);
+      //     }
+
+      // }
       if(this.state.mapViewByCalled && this.state.viewByChoice=="Facilities")
       {
           var name=this.props.historicInputState;
@@ -494,8 +519,25 @@ class MapControl extends Component {
           }
 
         // If user has selected "Watersheds" from viewby form in map layer and then update the component's state
-        else if(this.state.mapViewByCalled && this.state.viewByChoice=="Watersheds")
+        else if((this.state.mapViewByCalled && localStorage.getItem("viewBy")=="Watersheds") && localStorage.getItem("isClicked")=="false")
         {
+          
+          if(localStorage.getItem("backbutton")==="true")
+          {
+            console.log("backbutton")
+            localStorage.setItem("backbutton","false");
+            localStorage.setItem("2backbutton","true");
+          }
+          else if(localStorage.getItem("2backbutton")==="true")
+          {
+            localStorage.setItem("2backbutton","false");
+          }
+          else
+          {
+            if(localStorage.getItem("isClicked")=="true")
+            {
+              localStorage.setItem("isClicked","false")
+            }
           var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
           var response=await fetch(url);
           var json=await response.json();
@@ -505,7 +547,48 @@ class MapControl extends Component {
             regions:json,
             loader:true,
           })
+          }
+
+          
+          
+          
         }
+        else if((this.state.mapViewByCalled && localStorage.getItem("viewBy")=="Watersheds") && localStorage.getItem("isClicked")=="true")
+        {
+          localStorage.getItem("isClicked","false");
+          if(localStorage.getItem("backbutton")==="true")
+          {
+            console.log("backbutton")
+            localStorage.setItem("backbutton","false");
+            localStorage.setItem("2backbutton","true");
+          }
+          else if(localStorage.getItem("2backbutton")==="true")
+          {
+            localStorage.setItem("2backbutton","false");
+          }
+          else
+          {
+            if(localStorage.getItem("isClicked")=="true")
+            {
+              localStorage.setItem("isClicked","false")
+            }
+          var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
+          var response=await fetch(url);
+          var json=await response.json();
+          this.setState({
+            mapViewByCalled:false,
+            loading:true,
+            regions:json,
+            loader:true,
+          })
+          }
+
+          
+          
+          
+        }
+
+        
 
         // If projected form's filters are changed for all us and then update the component's state
         else if((pP.filterstr !== this.props.filterstr || pP.energyScenario !== this.props.energyScenario) && 
@@ -616,32 +699,29 @@ class MapControl extends Component {
       if(this.props.historicInputState.toLowerCase().includes("all us"))
       {
         // If all us data is requested update the state
-        if(!this.state.initialrender)
-        {
-          this.setState({
-            initialrender:true,
-          })
-        }
-        else
-        {
+        
+        
           // If all us data is to call the API to fetch the data
           var url="https://ewed.org:31567/ewedService/getFutureData/defaultViewData/"+this.props.energyScenario+"/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
           // Update state
           try{
             localStorage.setItem("loadingfordata","true");
+            localStorage.setItem("viewBy","States");
+            
             var response= await fetch(url)
             var json= await response.json()
             //this.updateState(json,pP);
             this.setState({
               regions:json,
               loader:true,
+              viewByChoice:"States",
             });
           }
           catch(e)
           {
             console.log(e);
           }
-        }
+        
         
       }
       // If state data is requested update the state
@@ -652,12 +732,14 @@ class MapControl extends Component {
         // If viewBy is "Watersheds"
         if(localStorage.getItem("viewBy")=="Watersheds")
         {
+          
           var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
         }
 
         // If viewBy is "Counties"
         else if(localStorage.getItem("viewBy")=="Counties")
         {
+          
           var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/stateName/"+stateName+"/CountyState1/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
         }
 
@@ -757,32 +839,32 @@ class MapControl extends Component {
       if(pP.historicInputState==this.props.historicInputState&&pP.historicStartDate==this.props.historicStartDate&&pP.historicEndDate==this.props.historicEndDate)
       {
         // If reset view is called for the historic form
-        if(localStorage.getItem("resetViewforLastLayer")=="true")
-        {
+        // if(localStorage.getItem("resetViewforLastLayer")=="true")
+        // {
           
-          localStorage.setItem("resetViewforLastLayer","false")
-          localStorage.setItem("viewBy","States");
-          var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
-          try{
-            var response=await fetch(url);
-            var json=await response.json();
+        //   localStorage.setItem("resetViewforLastLayer","false")
+        //   localStorage.setItem("viewBy","States");
+        //   var url="https://ewed.org:31567/ewedService/defaultViewData/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+        //   try{
+        //     var response=await fetch(url);
+        //     var json=await response.json();
 
-            // Updating the component's state
-            this.setState({
-              regions:json,
-              filterstr:this.props.filterstr,
-              viewByChoice:"States",
-              loader:true,  
-            });
-          }
-          catch(e)
-          {
-            console.log(e);
-          }
-        }
+        //     // Updating the component's state
+        //     this.setState({
+        //       regions:json,
+        //       filterstr:this.props.filterstr,
+        //       viewByChoice:"States",
+        //       loader:true,  
+        //     });
+        //   }
+        //   catch(e)
+        //   {
+        //     console.log(e);
+        //   }
+        // }
 
         // If viewby choice is Facilities for a state in historic form
-        else if(this.state.mapViewByCalled && this.state.viewByChoice=="Facilities" )
+        if(this.state.mapViewByCalled && this.state.viewByChoice=="Facilities" )
         {
         
           var name=this.props.historicInputState;
@@ -813,8 +895,20 @@ class MapControl extends Component {
         }
 
         // If viewby choice is watersheds for a state in historic form
-        else if(this.state.mapViewByCalled && this.state.viewByChoice=="Watersheds")
+        else if(this.state.mapViewByCalled && localStorage.getItem("viewBy")=="Watersheds" && localStorage.getItem("isClicked")=="false")
         {
+          if(localStorage.getItem("backbutton")==="true")
+          {
+            console.log("backbutton")
+            localStorage.setItem("backbutton","false");
+            localStorage.setItem("2backbutton","true");
+          }
+          else if(localStorage.getItem("2backbutton")==="true")
+          {
+            localStorage.setItem("2backbutton","false");
+          }
+          else 
+          {
             var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
             var response=await fetch(url);
             var json=await response.json();
@@ -824,6 +918,35 @@ class MapControl extends Component {
               regions:json,
               loader:true,
             })
+          }
+            
+      }
+      else if(this.state.mapViewByCalled && localStorage.getItem("viewBy")=="Watersheds" && localStorage.getItem("isClicked")=="true")
+      {
+        localStorage.setItem("isClicked","false");
+        if(localStorage.getItem("backbutton")==="true")
+          {
+            console.log("backbutton")
+            localStorage.setItem("backbutton","false");
+            localStorage.setItem("2backbutton","true");
+          }
+          else if(localStorage.getItem("2backbutton")==="true")
+          {
+            localStorage.setItem("2backbutton","false");
+          }
+          else 
+          {
+            var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
+            var response=await fetch(url);
+            var json=await response.json();
+            this.setState({
+              mapViewByCalled:false,
+              loading:true,
+              regions:json,
+              loader:true,
+            })
+          }
+
       }
 
         // If filters are changed in historic form and all us is selected
@@ -982,6 +1105,7 @@ class MapControl extends Component {
         // If view by is Watersheds
         if(localStorage.getItem("viewBy")=="Watersheds")
         {
+          
           var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
           var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
           try{
@@ -1107,7 +1231,7 @@ class MapControl extends Component {
               <MapContent  filterstr={this.props.filterstr}energyScenario={this.props.energyScenario}form={this.props.form} tabledata={this.state.regions} 
                 notReload={this.state.mapViewByCalled} viewByButtonClicked={(e)=>this.viewByButtonClicked(e)} 
                 formHandler={(e)=>this.formHandler(e)} formHandlerforFacility={(e)=>this.formHandlerforFacility(e)}
-                historicInputState={this.props.historicInputState} 
+                historicInputState={this.props.historicInputState} formHandler3={(e)=>this.formHandler3(e)}
                 historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}/>
               </div>
               
