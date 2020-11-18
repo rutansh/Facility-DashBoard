@@ -542,6 +542,7 @@ class MapContent extends React.PureComponent {
 
       // If viewby "counties" is selected from view by form
       else if (this.state.viewByChoice == "Counties" && this.state.isClicked) {
+        localStorage.setItem("isClicked","true");
         var stateName = this.props.historicInputState.split(" (");
         stateName = stateName[0].split(" ");
         var state = "";
@@ -589,6 +590,7 @@ class MapContent extends React.PureComponent {
         this.state.viewByChoice == "Watersheds" &&
         this.state.isClicked
       ) {
+        localStorage.setItem("isClicked","true");
         var stateName = this.props.historicInputState.split(" (");
         stateName = stateName[0].split(" ");
         var state = "";
@@ -1083,8 +1085,8 @@ class MapContent extends React.PureComponent {
   // This render method will render child component Regions and has view by and display by forms
   // In regions, all the props recieved from the parent component and is used to display diffrent colors on the map layer
   render() {
-    
-      // To fetch google map using 3rd party component
+
+    // To fetch google map using 3rd party component
       // Pass all the necessary props required by the component
       let GoogleMapExample = withGoogleMap((props) => (
 
@@ -1203,7 +1205,7 @@ class MapContent extends React.PureComponent {
                       />
                     </div>
                     <div>
-                      Water Emission
+                      Emission
                     </div>
 
                   </div>
@@ -1303,11 +1305,16 @@ class MapContent extends React.PureComponent {
                         value="Facilities"
                         onChange={this.viewByItem}
                         checked={
-                          localStorage.getItem("viewBy") === "Facilities" ||
-                          this.props.historicInputState
+                          localStorage.getItem("viewBy") === "Facilities" &&
+                          (this.props.historicInputState
                             .toLowerCase()
-                            .includes("watershed")
+                            .includes("watershed") ||this.props.historicInputState
+                            .toLowerCase()
+                            .includes("county")||this.props.historicInputState
+                            .toLowerCase()
+                            .includes("state"))
                         }
+                        unchecked={this.state.viewByChoice==="Facilities"&&this.props.historicInputState.toLowerCase().includes("all us")}
                         disabled={this.props.historicInputState
                           .toLowerCase()
                           .includes("all us")}

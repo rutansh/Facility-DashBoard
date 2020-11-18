@@ -114,13 +114,18 @@ class TableContent extends Component {
 
     // If data is not yet loaded
     if (!this.state.isLoaded) {
-      return <div>Loading...</div>;
+      return(
+        <div>Loading..</div>
+      );
+      
     } 
     else {
 
       //If user has requested for all us region
       if (
+        this.props.tabledata&&
         typeof this.props.tabledata["Total Summary"] !== "undefined" &&
+        
         this.props.historicInputState.toLowerCase().includes("all us")
       ) {
         return (
@@ -189,7 +194,7 @@ class TableContent extends Component {
                       </b>
                     </td>
                   </tr>
-                  {this.props.tabledata["Summary"].map((item, index) => (
+                  {this.props.tabledata?this.props.tabledata["Summary"].map((item, index) => (
                     <tr
                       key={index}
                       onMouseOver={() => {
@@ -214,7 +219,7 @@ class TableContent extends Component {
                       <td>{Number(item.waterConsumption).toLocaleString()}</td>
                       <td>{Number(item.waterWithdrawal).toLocaleString()}</td>
                     </tr>
-                  ))}
+                  )):console.log()}
                 </tbody>
               </ReactBootstrap.Table>
             </div>
@@ -570,7 +575,11 @@ class TableContent extends Component {
           </div>
         );
       } else {
-        return <div>Loading...</div>;
+        return(
+          <div>
+            Loading....
+          </div>
+        );
       }
     }
   }
