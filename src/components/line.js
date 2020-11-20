@@ -216,7 +216,7 @@ class LineChart extends Component {
     //If county is requested
     else if (this.props.historicInputState.toLowerCase().includes("county")) {
       var countyName = this.props.historicInputState.toLowerCase();
-      var url = "https://ewed.org:31567/ewedService/getMonthWiseSummary/CountyState1/" + countyName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/all"
+      var url = "https://ewed.org:31567/ewedService/getMonthWiseSummary/CountyState1/" + countyName + "/" + startYear + "/" + startmonthinInt + "/" + endYear + "/" + endmonthinInt + "/fuelTypes/"+this.props.filterstr
     }
 
     //If watershed is requested

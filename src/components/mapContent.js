@@ -339,6 +339,7 @@ class MapContent extends React.PureComponent {
             longitude: long,
             latitude: lat,
             viewByChoice: "Facilities",
+            prevState: "all us",
           });
         } catch (e) {
           console.log("");
@@ -377,7 +378,7 @@ class MapContent extends React.PureComponent {
             endYear +
             "/" +
             endmonthinInt +
-            "/fuelTypes/all";
+            "/fuelTypes/"+this.props.filterstr;
         } else if (this.props.form == "Projected") {
           var url =
             "https://ewed.org:31567/ewedService/getFutureData/getFacilityData/" +
@@ -453,7 +454,7 @@ class MapContent extends React.PureComponent {
             endYear +
             "/" +
             endmonthinInt +
-            "/fuelTypes/all";
+            "/fuelTypes/"+this.props.filterstr
         } else if (this.props.form == "Projected") {
           var url =
             "https://ewed.org:31567/ewedService/getFutureData/getFacilityData/" +
@@ -590,6 +591,7 @@ class MapContent extends React.PureComponent {
         this.state.viewByChoice == "Watersheds" &&
         this.state.isClicked
       ) {
+        localStorage.setItem("viewBy","Watersheds");
         localStorage.setItem("isClicked","true");
         var stateName = this.props.historicInputState.split(" (");
         stateName = stateName[0].split(" ");
@@ -890,7 +892,7 @@ class MapContent extends React.PureComponent {
             endYear +
             "/" +
             endmonthinInt +
-            "/fuelTypes/all";
+            "/fuelTypes/"+this.props.filterstr;
         } else if (this.props.form == "Projected") {
           var url =
             "https://ewed.org:31567/ewedService/getFutureData/getFacilityData/" +
@@ -968,7 +970,7 @@ class MapContent extends React.PureComponent {
             endYear +
             "/" +
             endmonthinInt +
-            "/fuelTypes/all";
+            "/fuelTypes/"+this.props.filterstr;
         } else if (this.props.form == "Projected") {
           var url =
             "https://ewed.org:31567/ewedService/getFutureData/getFacilityData/" +
@@ -1046,7 +1048,7 @@ class MapContent extends React.PureComponent {
             endYear +
             "/" +
             endmonthinInt +
-            "/fuelTypes/all";
+            "/fuelTypes/"+this.props.filterstr;
         } else if (this.props.form == "Projected") {
           var url =
             "https://ewed.org:28469/ewedService/getFacilityData/stateName/" +
@@ -1059,7 +1061,7 @@ class MapContent extends React.PureComponent {
             endYear +
             "/" +
             endmonthinInt +
-            "/fuelTypes/all";
+            "/fuelTypes/"+this.props.filterstr;
         }
         try {
           var response = await fetch(url);
@@ -1147,6 +1149,7 @@ class MapContent extends React.PureComponent {
     
     // If geojson data is loaded    
     else {
+      debugger
       return (
         <div>
           <div>
@@ -1328,9 +1331,10 @@ class MapContent extends React.PureComponent {
                 </div>
               </form>
             </div>
+            
             <div className="up-to-btn" style={{ marginLeft: "50px" }}>
               {this.state.prevState ? (
-
+                
                 // To check whether prevstate is exist or not to display back button
                 <Button
                   color="primary"
@@ -1341,6 +1345,7 @@ class MapContent extends React.PureComponent {
 
                     // If prev state is all us then will update the view by button
                     if (this.state.prevState.length > 0) {
+                      debugger
                       if (
                         this.state.prevState
                           .toLowerCase()
@@ -1391,10 +1396,6 @@ class MapContent extends React.PureComponent {
         </div>
       );
     }
-    
-
-    
   }
 }
-
 export default MapContent;

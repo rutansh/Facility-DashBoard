@@ -15,6 +15,7 @@ import StateContext from "../Context/inputStatecontext";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import dateFormat from '../GlobalState/dateFormat';
+import urlchange from '../GlobalUtil/urlutil';
 Modal.setAppElement("#root");
 
 
@@ -45,19 +46,25 @@ class HistoricForm extends Component {
     if(this.state.startDate<this.state.endDate)
     {
       // Setting values to local Storage
+      debugger
+      console.log("formcontrol historic");
       if(this.props.inputstate.name.toLowerCase().includes("all us"))
       {
         localStorage.setItem("viewBy","States");
       }
       else if(this.props.inputstate.name.toLowerCase().includes("state"))
       {
-        if(localStorage.getItem("viewBy")=="Watersheds")
+        if(localStorage.getItem("viewBy")=="Watersheds" || localStorage.getItem("viewBy")=="States")
         {
           localStorage.setItem("viewBy","Watersheds");
         }
-        else
+        else if(localStorage.getItem("viewBy")=="Counties")
         {
           localStorage.setItem("viewBy","Counties");
+        }
+        else
+        {
+          localStorage.setItem("viewBy","Facilities");
         }
       }
       else
@@ -74,6 +81,7 @@ class HistoricForm extends Component {
       if(this.state.startDate<this.state.endDate)
       {
         // Calling parent component formControl with all the updated values
+        debugger
         this.props.historicFormHandler(this.arrayForParent);
       } 
     }
@@ -85,50 +93,52 @@ class HistoricForm extends Component {
   resetControl (e){
 
     // If Display by is changed then display is set back to Water Consumption
-    // Settling value of reload 
-    if(localStorage.getItem("displayBy")!=="Water Consumption" && localStorage.getItem("name").toLowerCase().includes("all us"))
-    {
-      localStorage.setItem("reload","true");
-      localStorage.setItem("reloadformapcontent","true");
-    }
+    // Settling value of reload
+    urlchange("/Historic/all%20us/RCP45/AVG45/REF2019/1/2015/12/2015/Water%20Consumption/States/fuelTypes/all");
+    window.location.href="/Historic/all%20us/RCP45/AVG45/REF2019/1/2015/12/2015/Water%20Consumption/States/fuelTypes/all";
+    // if(localStorage.getItem("displayBy")!=="Water Consumption" && localStorage.getItem("name").toLowerCase().includes("all us"))
+    // {
+    //   localStorage.setItem("reload","true");
+    //   localStorage.setItem("reloadformapcontent","true");
+    // }
         
-    // Settling value of reload if it is true in the localstorage
-    else
-    {
-      localStorage.setItem("reload","false"); 
-    }
+    // // Settling value of reload if it is true in the localstorage
+    // else
+    // {
+    //   localStorage.setItem("reload","false"); 
+    // }
 
-    // Storing data in an array and updating all the values in localStorage to update url
+    // // Storing data in an array and updating all the values in localStorage to update url
 
-    this.arrayForParent[0] = "all us";
-    let date=new Date("2015/01");
-    this.arrayForParent[1] =date;
-    date= new Date("2015/12");
-    this.arrayForParent[2] = date;
-    this.arrayForParent[3] = "all";
+    // this.arrayForParent[0] = "all us";
+    // let date=new Date("2015/01");
+    // this.arrayForParent[1] =date;
+    // date= new Date("2015/12");
+    // this.arrayForParent[2] = date;
+    // this.arrayForParent[3] = "all";
 
-    // Calling global context to update the search region
-    this.props.setInputState("all us")
-    localStorage.setItem("name", this.props.inputstate.name);
-    localStorage.setItem("viewBy", "States");
-    localStorage.setItem("displayBy","Water Consumption");
-    localStorage.setItem("filterstr", "all");
-    localStorage.setItem("resetView", "true");
-    localStorage.setItem("resetViewforLastLayer", "true");
-    localStorage.setItem("reset", "true");
-    localStorage.setItem("historicStart","2015/01");
-    localStorage.setItem("historicEnd","2015/12");
-    for (let i = 0; i < this.filters.length; i++) {
-      this.filters[i].isChecked = true;
-    }
-    // Calling global context to update the filters 
-    this.props.setFilterStr("all");
-    this.props.setFilters(this.filters);
-    this.setState({
-      startDate:new Date("2015/01"),
-      endDate:new Date("2015/12"),
-    })
-    this.props.historicFormHandler(this.arrayForParent);
+    // // Calling global context to update the search region
+    // this.props.setInputState("all us")
+    // localStorage.setItem("name", this.props.inputstate.name);
+    // localStorage.setItem("viewBy", "States");
+    // localStorage.setItem("displayBy","Water Consumption");
+    // localStorage.setItem("filterstr", "all");
+    // localStorage.setItem("resetView", "true");
+    // localStorage.setItem("resetViewforLastLayer", "true");
+    // localStorage.setItem("reset", "true");
+    // localStorage.setItem("historicStart","2015/01");
+    // localStorage.setItem("historicEnd","2015/12");
+    // for (let i = 0; i < this.filters.length; i++) {
+    //   this.filters[i].isChecked = true;
+    // }
+    // // Calling global context to update the filters 
+    // this.props.setFilterStr("all");
+    // this.props.setFilters(this.filters);
+    // this.setState({
+    //   startDate:new Date("2015/01"),
+    //   endDate:new Date("2015/12"),
+    // })
+    // this.props.historicFormHandler(this.arrayForParent);
   }
 
 // This method is used for styling of labels in historic form
@@ -193,6 +203,7 @@ class HistoricForm extends Component {
       }
 
       // Update the context 
+      localStorage.setItem("filterstr", str);
       this.props.setFilterStr(str);
       this.props.setFilters(this.filters);
       this.setState({

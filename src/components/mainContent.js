@@ -20,7 +20,7 @@ class MainContent extends Component {
     {
       // Fetching all the parameters
       localStorage.setItem("fromurl","true")
-      
+      localStorage.setItem("from_url","true");
       
       let filterarr=this.props.filters;
       let str=this.props.arr[4];
@@ -128,16 +128,25 @@ class MainContent extends Component {
       {
         localStorage.setItem("historicStart",start);
         localStorage.setItem("historicEnd",end);
-        localStorage.setItem("projectedStart","2049/01");
-        localStorage.setItem("projectedEnd","2050/12");
+        if(!localStorage.getItem("projectedStart") || !localStorage.getItem("projectedStart"))
+        {
+          localStorage.setItem("projectedStart","2049/01");
+          localStorage.setItem("projectedEnd","2050/12");
+        }
+        
+        
 
       }
       else
       {
         localStorage.setItem("projectedStart",start);
         localStorage.setItem("projectedEnd",end);
-        localStorage.setItem("historicStart","2015/01");
-        localStorage.setItem("historicEnd","2015/12");
+        if(!localStorage.getItem("historicStart") || !localStorage.getItem("historicEnd"))
+        {
+          localStorage.setItem("historicStart","2015/01");
+          localStorage.setItem("historicEnd","2015/12");
+        }
+
       }
 
       localStorage.setItem("name",str);
@@ -165,7 +174,7 @@ class MainContent extends Component {
     // If "Root" url is given
     else
     {
-
+      localStorage.setItem("from_url","false");
       //this is not from url hence set the initial state with default values
       // Update the localstorage for URL 
       localStorage.setItem("displayBy","Water Consumption");
@@ -220,6 +229,7 @@ class MainContent extends Component {
   formHandler(array)
   {
     // If Historic form
+    console.log("formhandler");
     if(array[1]=="Historic")
     {
       this.props.setFilterStr(array[0][3]);
@@ -228,6 +238,7 @@ class MainContent extends Component {
       // If reset is pressed
       if(localStorage.getItem("reload")=="true")
       {
+        console.log("formahandler1");
         localStorage.setItem("reload","false");
         this.setState({
           historicInputState:array[0][0],
@@ -239,6 +250,7 @@ class MainContent extends Component {
       }   
       else
       {
+        console.log("formahandler2",array[0][1]);
         this.setState({
           historicInputState:array[0][0],
           historicStartDate:String(array[0][1]),
@@ -409,14 +421,13 @@ class MainContent extends Component {
   // This method will not rerender the component again if everything is same
   shouldComponentUpdate(nextProps,nextState)
   {
-    
+    console.log("should outside");
     if(this.state.historicInputState===nextState.historicInputState&&this.props.form===nextProps.form&&this.props.filterstr===nextProps.filterstr
       &&this.state.historicStartDate===nextState.historicStartDate&&this.state.historicEndDate===nextState.historicEndDate
       &&this.state.projectedStartDate===nextState.projectedStartDate&&this.state.projectedEndDate===nextState.projectedEndDate
       &&this.state.energyScenario==nextState.energyScenario&&this.state.climateModel==nextState.climateModel&&this.state.climateScenario==nextState.climateScenario&&!nextState.reload)
     {
-      const {startMonth,startYear,endMonth,endYear}=dateFormat(this.state.projectedStartDate,this.state.projectedEndDate);
-      urlchange("/"+this.props.form+"/"+this.state.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
+      console.log("should inside false");
       return false;
     } 
     return true;

@@ -14,7 +14,7 @@ import ProjectedContext from "../Context/projectedFormContext";
 import StateContext from "../Context/inputStatecontext";
 import FormControl from "@material-ui/core/FormControl";
 import dateFormat from '../GlobalState/dateFormat';
-
+import urlchange from '../GlobalUtil/urlutil';
 //This component handles Projected Form
 
 class ProjectedForm extends React.Component {
@@ -67,13 +67,17 @@ class ProjectedForm extends React.Component {
     }
     else if(this.props.inputstate.name.toLowerCase().includes("state"))
     {
-      if(localStorage.getItem("viewBy")=="Watersheds")
+      if(localStorage.getItem("viewBy")=="Watersheds" || localStorage.getItem("viewBy")=="States")
       {
         localStorage.setItem("viewBy","Watersheds");
       }
-      else
+      else if(localStorage.getItem("viewBy")=="Counties")
       {
         localStorage.setItem("viewBy","Counties");
+      }
+      else
+      {
+          localStorage.setItem("viewBy","Facilities");
       }
       
     }
@@ -106,80 +110,84 @@ class ProjectedForm extends React.Component {
   // When reset is called on projected form
 
   resetControl (e){
-    // If Display by is changed then display is set back to Water Consumption
-    // Settling value of reload 
-    if(localStorage.getItem("displayBy")!=="Water Consumption" && localStorage.getItem("name").toLowerCase().includes("all us"))
-    {
-      localStorage.setItem("reload","true");
-      localStorage.setItem("reloadformapcontent","true");
-    }
-    // If reload is already true
-    else
-    {
-      localStorage.setItem("reload","false"); 
-    }
+    urlchange("/Projected/ALL%20US/RCP45/AVG45/REF2019/1/2049/12/2050/Water%20Consumption/States/fuelTypes/all");
+    localStorage.setItem("projectedreset","true");
+    window.location.href="/Projected/ALL%20US/RCP45/AVG45/REF2019/1/2049/12/2050/Water%20Consumption/States/fuelTypes/all";
+    // localStorage.setItem("projectedreset","true");
+    // //If Display by is changed then display is set back to Water Consumption
+    // //Settling value of reload 
+    // if(localStorage.getItem("displayBy")!=="Water Consumption" && localStorage.getItem("name").toLowerCase().includes("all us"))
+    // {
+    //   localStorage.setItem("reload","true");
+    //   localStorage.setItem("reloadformapcontent","true");
+    // }
+    // // If reload is already true
+    // else
+    // {
+    //   localStorage.setItem("reload","false"); 
+    // }
 
-    // Storing values in localstorage for URL
-    localStorage.setItem("resetView", "true");
-    localStorage.setItem("p_resetViewforLastLayer", "true");
-    localStorage.setItem("reset", "true");
-    let date=new Date("2049/01");
-    let enddate=new Date("2050/12");
-    localStorage.setItem("projectedStart","2049/01");
-    localStorage.setItem("projectedEnd","2050/12");
+    // // Storing values in localstorage for URL
+    // localStorage.setItem("resetView", "true");
+    // localStorage.setItem("p_resetViewforLastLayer", "true");
+    // localStorage.setItem("reset", "true");
+    // let date=new Date("2049/01");
+    // let enddate=new Date("2050/12");
+    // localStorage.setItem("projectedStart","2049/01");
+    // localStorage.setItem("projectedEnd","2050/12");
 
-    // Storing values in array which will be pass to parent component to update an application
-    this.arrayForParent[0] = "all us";
-    this.arrayForParent[1] = date;
-    this.arrayForParent[2] = enddate;
-    this.arrayForParent[3] = "REF2019";
-    this.arrayForParent[4] = "all";
-    this.arrayForParent[5] = "RCP45";
-    this.arrayForParent[6] = "AVG45";
+    // // Storing values in array which will be pass to parent component to update an application
+    // this.arrayForParent[0] = "all us";
+    // this.arrayForParent[1] = date;
+    // this.arrayForParent[2] = enddate;
+    // this.arrayForParent[3] = "REF2019";
+    // this.arrayForParent[4] = "all";
+    // this.arrayForParent[5] = "RCP45";
+    // this.arrayForParent[6] = "AVG45";
 
-    // Calling form context to store the inputstate as a all us
-    this.props.setInputState("all us")
-    localStorage.setItem("selfreset", "true");
-    localStorage.setItem("filterstr", "all");
+    // // Calling form context to store the inputstate as a all us
+    // this.props.setInputState("all us")
+    // localStorage.setItem("selfreset", "true");
+    // localStorage.setItem("filterstr", "all");
 
-    // To check all the filters
-    for (let i = 0; i < this.filters.length; i++) {
-      this.filters[i].isChecked = true;
-    }
+    // // To check all the filters
+    // for (let i = 0; i < this.filters.length; i++) {
+    //   this.filters[i].isChecked = true;
+    // }
 
-    // Calling form context to store the filterstr
-    this.props.setFilterStr("all");
+    // // Calling form context to store the filterstr
+    // this.props.setFilterStr("all");
 
-    // Calling form context to store the checked filters
+    // // Calling form context to store the checked filters
 
-    this.props.setFilters(this.filters);
+    // this.props.setFilters(this.filters);
     
-    // Update all the values for the URL
-    localStorage.setItem("name", this.props.inputstate.name);
-    localStorage.setItem("viewBy", "States");
-    localStorage.setItem("displayBy","Water Consumption");
-    localStorage.setItem("filterstr", "all");
-    localStorage.setItem("projectedStart","2049/1");
-    localStorage.setItem("projectedEnd","2050/12");
-    localStorage.setItem("climateScenario","RCP45");
-    localStorage.setItem("climateModel","AVG45");
-    localStorage.setItem("energyScenario","REF2019");
-    localStorage.setItem("filterstr","all");
-    localStorage.setItem("form","Projected");
+    // // Update all the values for the URL
+    // localStorage.setItem("name", this.props.inputstate.name);
+    // localStorage.setItem("viewBy", "States");
+    // localStorage.setItem("displayBy","Water Consumption");
+    // localStorage.setItem("filterstr", "all");
+    // localStorage.setItem("projectedStart","2049/1");
+    // localStorage.setItem("projectedEnd","2050/12");
+    // localStorage.setItem("climateScenario","RCP45");
+    // localStorage.setItem("climateModel","AVG45");
+    // localStorage.setItem("energyScenario","REF2019");
+    // localStorage.setItem("filterstr","all");
+    // localStorage.setItem("form","Projected");
 
-    // Call projectedform context to set new value of different cases (i.e. Energy Scenario, Climate scenario and Climate model)
-    this.props.setenergyScenario("REF2019");
-    // Calling parent component formcontrol to update the state of an application
-    this.props.projectedFormHandler(this.arrayForParent);
+    // // Call projectedform context to set new value of different cases (i.e. Energy Scenario, Climate scenario and Climate model)
+    // this.props.setenergyScenario("REF2019");
+    // // Calling parent component formcontrol to update the state of an application
+    // this.props.projectedFormHandler(this.arrayForParent);
 
-    // Updating state of this component
-    this.setState({
-      startDate:new Date("2049/01"),
-      endDate:new Date("2050/12"),
-      inputState: "ALL US",
-      modalIsOpen: false,
-      filterstr: "all",
-    })
+    // // Updating state of this component
+    // this.setState({
+    //   startDate:new Date("2049/01"),
+    //   endDate:new Date("2050/12"),
+    //   inputState: "ALL US",
+    //   modalIsOpen: false,
+    //   filterstr: "all",
+    // })
   }
   
 
@@ -235,6 +243,7 @@ class ProjectedForm extends React.Component {
         }
       }
       // Updating global context with newly selected filters
+      localStorage.setItem("filterstr", str);
       this.props.setFilterStr(str);
       this.props.setFilters(this.filters);
 
@@ -267,6 +276,9 @@ class ProjectedForm extends React.Component {
 
   // Rendering projected form
   render() {
+    console.log("projected form");
+    console.log(this.props.climateModel);
+    console.log(localStorage.getItem("climateModel"));
     const {startMonth,startYear,endMonth,endYear}=dateFormat(String(this.state.startDate),String(this.state.endDate));
 
     var formatstart = startYear+"/"+startMonth;
@@ -361,6 +373,19 @@ class ProjectedForm extends React.Component {
                       if(e.target.value!=="undefined" && e.target.value&&e.target.value!==0)
                       {
                         this.props.setclimateScenario(e.target.value);
+                        console.log("this is projected form");
+                        if(e.target.value=="RCP45")
+                        {
+
+                          this.props.setclimateModel("AVG45");  
+                        }
+                        else if(e.target.value=="RCP85")
+                        {
+                          this.props.setclimateModel("AVG85");  
+                        }
+                        
+                        
+                        
                       }
                       
                     }}

@@ -37,7 +37,7 @@ class FormControl extends Component {
   // Conditional rendering for different forms based on it is selected from Parent component QueryForm
   render()
   {
-    
+    console.log("formcontrol");
     return(
       <div>
         {this.props.form==="Historic"?<HistoricForm historicFormHandler={(e)=>this.historicFormHandler(e)}/>:<ProjectedForm projectedFormHandler={(e)=>this.projectedFormHandler(e)}/>}

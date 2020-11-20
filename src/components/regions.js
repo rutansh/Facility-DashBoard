@@ -259,9 +259,10 @@ class Regions extends React.Component {
               }
               if(arr.length>0)
               {
+                
                 g.setSerie(arr);
                 g.setPrecision(2);
-                if(arr.length<10)
+                if(arr.length<=11)
                 {
                   g.getClassJenks2(arr.length-1);  
                 }
