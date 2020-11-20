@@ -4,7 +4,6 @@ export default function urlchange(newendpoint){
     var url = window.location.href;
    
     var path=window.location.pathname;
-    
     if (window.history.pushState) {
     
     if(newendpoint=="/")

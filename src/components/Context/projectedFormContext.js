@@ -14,15 +14,32 @@ class ProjectedProvider extends React.Component{
 
     // Global Method to set climatescenario
     setclimateScenario = (climateScenario) => {
+      console.log("climatescenario");
         if(climateScenario!==0)
         {
-            localStorage.setItem("climateScenario",climateScenario);
-            this.setState((prevState) => ({ climateScenario }))
+          localStorage.setItem("climateScenario",climateScenario);
+            if(climateScenario=="RCP45")
+            {
+              localStorage.setItem("climateModel","AVG45");
+              this.setState((prevState) => ({ climateScenario }));
+              
+              this.setclimateModel("AVG45");
+            }          
+            else
+            {
+              localStorage.setItem("climateModel","AVG85");
+              this.setState((prevState) => ({ climateScenario }));
+              this.setclimateModel("AVG85");
+            }
+            
+            
+            
         }
       }
 
     // Global Method to set climatemodel
     setclimateModel = (climateModel) => {
+      console.log("climateModel",climateModel);
         if(climateModel!==0)
         {
             localStorage.setItem("climateModel",climateModel);

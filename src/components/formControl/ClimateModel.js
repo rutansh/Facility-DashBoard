@@ -22,16 +22,20 @@ class ClimateModel extends React.Component{
     render()
     {
 
-        
+        const optionlist=this.props.climateScenario==="RCP45"?climateModels45:climateModels85;
+        console.log("climateModel is rendered", this.props.climateScenario);
+        console.log("climateModel is rendered props climateModel", this.props.climateModel);   
         return(
             <div>
             <InputLabel>Select Climate Model</InputLabel>
             {localStorage.getItem("climateModel")=="na" && this.props.climateScenario=="RCP45"?localStorage.setItem("climateModel","AVG45"):console.log()}
             {localStorage.getItem("climateModel")=="na" && this.props.climateScenario=="RCP85"?localStorage.setItem("climateModel","AVG85"):console.log()}
             
-            {this.props.climateScenario=="RCP45"?
+            
             <Select
-            defaultValue={localStorage.getItem("climateModel")}
+            native={false}
+            // defaultValue={localStorage.getItem("climateModel")}
+            value={localStorage.getItem("climateModel")}
             onClick={(e)=>{
 
                 // If it is different than the currently selected then update the state
@@ -39,7 +43,7 @@ class ClimateModel extends React.Component{
                 if(this.props.climateModel!==e.target.value)
                 {
                     if(e.target.value=="undefined" || e.target.value==0){
-                        this.props.setclimateModel("AVG45");   
+                        // this.props.setclimateModel(localStorage.getItem("climateModel"));   
                     }
                     
                     if(e.target.value!=="undefined" && e.target.value &&e.target.value!==0)
@@ -51,35 +55,18 @@ class ClimateModel extends React.Component{
                     
                 }
                 
-            }}>
-              
-              {climateModels45.map((data)=>{
-                  return(
-                  <MenuItem value={data.value}>{data.name}</MenuItem>
-                  );
-              })}
-              
-          </Select>:
-          <Select
-            defaultValue={localStorage.getItem("climateModel")}
-            onClick={(e)=>{
-                if(this.props.climateModel!==e.target.value)
-                {
-                    this.props.setclimateModel(e.target.value);
-                }
-                else 
-                {
-                    
-                }
             }}
-          >
-              {climateModels85.map((data)=>{
+            
+            >
+              
+              {optionlist.map((data)=>{
                   return(
                   <MenuItem value={data.value}>{data.name}</MenuItem>
                   );
               })}
-          </Select>}
-            </div>
+              
+          </Select>
+        </div>
         );
     }}
 

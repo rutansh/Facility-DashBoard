@@ -126,10 +126,14 @@ class CustomMarker extends Component {
                         this.objectForParent.data = jsondata;
                         this.objectForParent.index = this.props.arrIndex;
                         this.props.markerClick(this.objectForParent);
-                    })}    
+                    })}
+                    
+                      
                 >
                 {this.state.loading&&this.props.arrIndex===this.props.index&&
-                (<InfoWindow>
+                (<InfoWindow onCloseClick={()=>{this.objectForParent.data = "data";
+                  this.objectForParent.index = -1;
+                  this.props.markerClick(this.objectForParent)}}>
                   <div style={{display: 'flex', flexDirection: 'column',height:"200px",width:"200px",zIndex:10}}>
                     
                     <b>{this.props.data.Facility[0]["PRIMARY_NAME"]} - Trends</b>
