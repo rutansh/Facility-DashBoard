@@ -22,15 +22,15 @@ class ClimateModel extends React.Component{
     render()
     {
 
-        const optionlist=this.props.climateScenario==="RCP45"?climateModels45:climateModels85;
+        const optionlist=localStorage.getItem("climateScenario")==="RCP45"?climateModels45:climateModels85;
         console.log("climateModel is rendered", this.props.climateScenario);
         console.log("climateModel is rendered props climateModel", this.props.climateModel);   
         return(
             <div>
             <InputLabel>Select Climate Model</InputLabel>
-            {localStorage.getItem("climateModel")=="na" && this.props.climateScenario=="RCP45"?localStorage.setItem("climateModel","AVG45"):console.log()}
+            {/* {localStorage.getItem("climateModel")=="na" && this.props.climateScenario=="RCP45"?localStorage.setItem("climateModel","AVG45"):console.log()}
             {localStorage.getItem("climateModel")=="na" && this.props.climateScenario=="RCP85"?localStorage.setItem("climateModel","AVG85"):console.log()}
-            
+             */}
             
             <Select
             native={false}
@@ -39,7 +39,6 @@ class ClimateModel extends React.Component{
             onClick={(e)=>{
 
                 // If it is different than the currently selected then update the state
-
                 if(this.props.climateModel!==e.target.value)
                 {
                     if(e.target.value=="undefined" || e.target.value==0){
@@ -48,7 +47,7 @@ class ClimateModel extends React.Component{
                     
                     if(e.target.value!=="undefined" && e.target.value &&e.target.value!==0)
                     {
-  
+                        
                         this.props.setclimateModel(e.target.value);
                     }
                     

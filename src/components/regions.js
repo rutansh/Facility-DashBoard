@@ -5,6 +5,7 @@ import Modal from 'react-modal';
 import {geostats} from './geostats';
 import StateLayer from './stateLayer';
 import UserContext from './Context/updateContext';
+import MarkerContext from './Context/markerContext';
 import Button from '@material-ui/core/Button';
 import urlchange from './GlobalUtil/urlutil';
 import dateFormat from './GlobalState/dateFormat';
@@ -34,7 +35,7 @@ class Regions extends React.Component {
       ismodalOpen:false,
       
     }
-
+    
     // This will help to display different colors on map and divide value of table data using statistics and will create clusters
     var g=new geostats();
     
@@ -45,6 +46,14 @@ class Regions extends React.Component {
     this.formHandlerforFacility=this.formHandlerforFacility.bind(this);
     this.arrayForParent = []; 
   }
+  // shouldComponentUpdate(nextProps,nS)
+  // {
+  //   if(this.props.regions!==nextProps.regions || nextProps.markerId!==this.props.markerId || nextProps.markerData!==this.props.markerData)
+  //   {
+  //     return true
+  //   }
+    
+  // }
 
   //When clicks on particular region from all us 
   formHandler(e)
@@ -62,11 +71,13 @@ class Regions extends React.Component {
   // When marker is clicked from map layer
   markerClick(e)
   {
-        
-        this.setState({
-          index:e.index,
-          data:e.data,
-        })  
+        console.log(e.index);
+        this.props.setmarkerData(e.data);
+        this.props.setmarkerId(e.index);     
+        // this.setState({
+        //   index:e.index,
+        //   data:e.data,
+        // })  
   }
 
   // modal is clicked to display line chart
@@ -76,7 +87,7 @@ class Regions extends React.Component {
         ismodalOpen:true,
     })
   }
-
+  
   // Initially after component is rendered it will set state of the component with the data provided by parent 
   componentDidMount()
   {
@@ -87,26 +98,30 @@ class Regions extends React.Component {
       nameOfState: this.props.historicInputState,
     })
   }
-
   // If particular facility is selected
   componentDidUpdate(pP,pS,snap)
   { 
-    
-    let i=this.state.index;
+
+    if(localStorage.getItem("isFormChange"=="true"))
+    {
+        localStorage.setItem("isFormChange","false")
+    }
+    console.log("componentDidupdate");
+    let i=this.props.markerId;
     localStorage.setItem("id",i);
 
-    if(pS.index!==this.state.index)
+    if(pP.markerId!==this.props.markerId)
     {
-        this.setState({
-            index:i,
-        })
+        this.props.setmarkerId(i);     
     }
   }
   
   
   render() {
     {
-
+      
+        console.log("regions render");
+        console.log(this.props.regions);
         const scale=1;
         
         // To display the regions for facilities
@@ -165,18 +180,20 @@ class Regions extends React.Component {
 
             // Custom marker will render different facilities on map layer and props are passed 
             // FacilityChart will render the facility's line chart
+            console.log("this.props.regions:"+this.props.regions);
+            console.log(this.props);
             return this.props.regions["All Facilities"].map((facility, index) => {
               return  (
               <div>
                 {<CustomMarker 
                 form={this.props.form} energyScenario={this.props.energyScenario}
-                facility={facility} arrIndex={index} index={this.state.index} 
-                data={this.state.data} modalOpen={(e)=>{this.modalClick(e)}} 
+                facility={facility} arrIndex={index} index={this.props.markerId} 
+                data={this.props.markerData} modalOpen={(e)=>{this.modalClick(e)}} 
                 markerClick={(e)=>this.markerClick(e)} historicInputState={this.props.historicInputState} 
                 historicStartDate={this.props.historicStartDate} historicEndDate={this.props.historicEndDate}
                 objforstate={objforstate} g={g} displayChoice={this.props.displayChoice}
                 /> }
-                {this.state.ismodalOpen&&index===this.state.index&&<Modal isOpen={this.state.ismodalOpen} style={
+                {this.state.ismodalOpen&&index===this.props.markerId&&<Modal isOpen={this.state.ismodalOpen} style={
                     {
                        overlay: {
                         position: 'fixed',
@@ -207,12 +224,15 @@ class Regions extends React.Component {
                     }
                   }>
                   
-                <FacilityChart className="facility-chart-container" facilityData={this.state.data} startDate={this.props.historicStartDate} endDate={this.props.historicEndDate}/>
+                <FacilityChart className="facility-chart-container" facilityData={this.props.markerData} startDate={this.props.historicStartDate} endDate={this.props.historicEndDate}/>
                 <Button variant="contained" color="primary"onClick={()=>{this.setState({ismodalOpen:false})}}>Close</Button>
                 </Modal>} 
               </div>
           )}
-        );  
+          
+        );
+        
+        
         }  
         else
         {
@@ -222,10 +242,14 @@ class Regions extends React.Component {
             </div>
           );
         }
+        
       }
+      
 
       // To display all us layer and state layers
-      else if(this.props.regions&&this.props.regions.length>0 && this.props.tabledata.Summary&&this.props.tabledata.Summary.length!==1){
+      else if((this.props.regions&&this.props.regions.length>0 && this.props.tabledata.Summary&&this.props.tabledata.Summary.length!==1)
+      || (this.props.regions&&this.props.regions.length>0 && this.props.historicInputState.toLowerCase().includes("alaska")&&this.props.tabledata.Summary&&this.props.tabledata.Summary.length!==0)
+      ){
       {
         
         //Getting table data (data with emission, water generation, water withdrawal and water generation) to display different colors
@@ -331,9 +355,19 @@ class Regions extends React.Component {
 // Global context is imported to provide synchronization between table and map layer to display borders
 export default (props)=>{
   return(
+
     <UserContext.Consumer>
     {(context)=>{
-      return <Regions {...props}{...context}/>
+      return (
+      <MarkerContext.Consumer>
+        {
+          (context1)=>{
+            return <Regions {...props}{...context} {...context1}/>
+          }
+        }
+        
+      </MarkerContext.Consumer>
+      )
     }} 
   </UserContext.Consumer>
   )

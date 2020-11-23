@@ -14,7 +14,7 @@ class MainContent extends Component {
   {
     super(props);
     this.props=props;
-
+    localStorage.setItem("activeTab","1");
     // If url is provided
     if(this.props.isurl)
     {
@@ -60,6 +60,7 @@ class MainContent extends Component {
       localStorage.setItem("climateScenario",climatescenario);
       localStorage.setItem("climateModel",climatemodel);
       localStorage.setItem("energyScenario",energyscenario);
+      
 
       // Sanitizing input string
       if(this.props.arr[4].includes("%20"))
@@ -128,12 +129,20 @@ class MainContent extends Component {
       {
         localStorage.setItem("historicStart",start);
         localStorage.setItem("historicEnd",end);
-        if(!localStorage.getItem("projectedStart") || !localStorage.getItem("projectedStart"))
+        if(localStorage.getItem("fromReset")=="true")
+        {
+          localStorage.setItem("fromReset","false");
+        }
+        else if(!localStorage.getItem("projectedStart") || !localStorage.getItem("projectedStart"))
         {
           localStorage.setItem("projectedStart","2049/01");
           localStorage.setItem("projectedEnd","2050/12");
         }
-        
+        else
+        {
+          localStorage.setItem("projectedStart","2049/01");
+          localStorage.setItem("projectedEnd","2050/12");
+        }
         
 
       }
@@ -141,7 +150,16 @@ class MainContent extends Component {
       {
         localStorage.setItem("projectedStart",start);
         localStorage.setItem("projectedEnd",end);
-        if(!localStorage.getItem("historicStart") || !localStorage.getItem("historicEnd"))
+        if(localStorage.getItem("fromReset")=="true")
+        {
+          localStorage.setItem("fromReset","false");
+        }
+        else if(!localStorage.getItem("historicStart") || !localStorage.getItem("historicEnd"))
+        {
+          localStorage.setItem("historicStart","2015/01");
+          localStorage.setItem("historicEnd","2015/12");
+        }
+        else
         {
           localStorage.setItem("historicStart","2015/01");
           localStorage.setItem("historicEnd","2015/12");
@@ -169,6 +187,7 @@ class MainContent extends Component {
         filterstr:this.props.filterstr,
         loading:false,
         reload:false,
+        initialloader:false,
       }
     }
     // If "Root" url is given
@@ -207,6 +226,7 @@ class MainContent extends Component {
         filterstr:this.props.filterstr,
         loading:false,
         reload:false,
+        initialloader:true,
       }
     }
 
@@ -229,6 +249,8 @@ class MainContent extends Component {
   formHandler(array)
   {
     // If Historic form
+    debugger
+    
     console.log("formhandler");
     if(array[1]=="Historic")
     {
@@ -262,7 +284,9 @@ class MainContent extends Component {
     }
     else if(array[1]=="Projected")
     {
+      
         // Set localstorage for URL
+        console.log(array);
         if(localStorage.getItem("energyScenario")=="na")
         {
           localStorage.setItem("energyScenario","REF2019")
@@ -348,11 +372,21 @@ class MainContent extends Component {
       })
     }   
   }
-
+  componentDidMount()
+  {
+    if(localStorage.getItem("from_url")=="true")
+    {
+      localStorage.setItem("from_url","false");
+      localStorage.setItem("from_url2","true");
+      this.setState({
+        initialloader:true,
+      })
+    }
+  }
   // Everytime will be called after render method
   componentDidUpdate(pP,pS)
   {
-    
+    debugger
     // If loading data
     if(this.state.loading)
     {
@@ -364,7 +398,7 @@ class MainContent extends Component {
     else
     {
       // Set localstorage to update the URL
-      if(localStorage.getItem("energyScenario")=="na")
+      if(localStorage.getItem("energyScenario")=="na" || localStorage.getItem("energyScenario")==null)
       {
           localStorage.setItem("energyScenario","REF2019")
       }
@@ -422,10 +456,16 @@ class MainContent extends Component {
   shouldComponentUpdate(nextProps,nextState)
   {
     console.log("should outside");
-    if(this.state.historicInputState===nextState.historicInputState&&this.props.form===nextProps.form&&this.props.filterstr===nextProps.filterstr
+    if(localStorage.getItem("from_url2")=="true")
+    {
+      localStorage.setItem("from_url2","false");
+      return true;
+    }
+    else if((this.state.historicInputState===nextState.historicInputState&&this.props.form===nextProps.form&&this.props.filterstr===nextProps.filterstr
       &&this.state.historicStartDate===nextState.historicStartDate&&this.state.historicEndDate===nextState.historicEndDate
       &&this.state.projectedStartDate===nextState.projectedStartDate&&this.state.projectedEndDate===nextState.projectedEndDate
-      &&this.state.energyScenario==nextState.energyScenario&&this.state.climateModel==nextState.climateModel&&this.state.climateScenario==nextState.climateScenario&&!nextState.reload)
+      &&this.state.energyScenario==nextState.energyScenario&&this.state.climateModel==nextState.climateModel&&
+      this.state.climateScenario==nextState.climateScenario&&!nextState.reload))
     {
       console.log("should inside false");
       return false;
@@ -436,7 +476,15 @@ class MainContent extends Component {
   // Rendering Main component and all the children components by passing local state as a prop
   render()
   {
-    
+    if(localStorage.getItem("from_url")=="true")
+    {
+      return(
+        <div>
+          Loading....
+          </div>
+      )
+    }
+    else{
       return (
         <div>
         <QueryForm/>
@@ -452,6 +500,8 @@ class MainContent extends Component {
       />}
         </div>
       );    
+    }
+      
   }
 }
 

@@ -16,19 +16,34 @@ class NavBar extends Component {
 
       // Initially activation id is "1" which is associated with the table
       this.state = {
-        activeItem: "1",
+        activeItem: localStorage.getItem("activeTab"),
         items:this.props.tabledata,
       };
       this.formHandler=this.formHandler.bind(this);
+      this.forDisplayBy=this.forDisplayBy.bind(this);
+    }
+    shouldComponentUpdate(nextProps,nextState)
+    {
+      //
+      if(this.props.tabledata===nextProps.tabledata&&this.props.historicInputState===nextProps.historicInputState&&this.props.form===nextProps.form&&this.props.filterstr===nextProps.filterstr
+        &&this.props.historicStartDate===nextProps.historicStartDate&&this.props.historicEndDate===nextProps.historicEndDate && this.state.activeItem===nextState.activeItem
+        &&this.props.energyScenario==nextProps.energyScenario&&this.props.climateModel==nextProps.climateModel&&this.props.climateScenario==nextProps.climateScenario)
+      {
+        return false;
+      }
+      return true;
     }
 
+    forDisplayBy()
+    { 
+      console.log("");
+
+    }
     // When user clicks on table entry this method gets called and it will call formhandler method of mapcontrol component
     formHandler(e)
     {
       this.props.formHandler(e);
     }
-
-
     // This method gets called when user clicks on different navigation bars
     toggle = tab => e => {
       
@@ -39,7 +54,7 @@ class NavBar extends Component {
       +"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"
       +startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);           
       if (this.state.activeItem !== tab) {
-        
+        localStorage.setItem("activeTab",tab);
         this.setState({
           activeItem: tab
         });
@@ -86,6 +101,7 @@ class NavBar extends Component {
         {
           if(this.props.historicInputState.toLowerCase().includes("all us") && this.state.activeItem=="4")
           {
+            localStorage.setItem("activeTab","1");
             this.setState({
               items:this.props.tabledata,
               activeItem:"1"
@@ -120,10 +136,28 @@ class NavBar extends Component {
             {
               this.toggle("1")
             }
-            onClick={this.toggle("1")} role="tab" link={window.location.pathname}
-            to={window.location.pathname}
+            onClick={this.toggle("1")} role="tab" 
+            
+            link={
+              ()=>{
+              const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+              return "/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")
+              +"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"
+              +startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr;              
+            }
+          }
+            to={
+              ()=>{
+              const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+              return "/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")
+              +"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"
+              +startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr;
+              }
+              // window.location.pathname
+            
+            }
             >
-              Table
+              <b>Table</b>
             </MDBNavLink>
             </div>
           </MDBNavItem>
@@ -134,35 +168,87 @@ class NavBar extends Component {
               this.toggle("2")
             }
             active={this.state.activeItem === "2"} 
-            to={window.location.pathname}
-            link={window.location.pathname} onClick={this.toggle("2")} role="tab" >
-              Pie Chart
+            
+            to={
+              ()=>{
+                const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+                return "/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")
+                +"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"
+                +startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr;              
+              }
+              // window.location.pathname
+            }
+            link={
+              ()=>{
+                const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+                return "/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")
+                +"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"
+                +startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr;              
+              }
+              // window.location.pathname
+            } 
+            
+            onClick={this.toggle("2")} role="tab" >
+              <b>Pie Chart</b>
             </MDBNavLink>
           </MDBNavItem>
           <MDBNavItem>
             <MDBNavLink 
-            to={window.location.pathname}
+            to={
+              ()=>{
+                const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+                return "/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")
+                +"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"
+                +startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr;              
+              }
+              // window.location.pathname
+            }
             onDoubleClick=
             {
               this.toggle("3")
             }
             active={this.state.activeItem === "3"} 
-            link={window.location.pathname} 
+            link={
+              ()=>{
+                const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+                return "/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")
+                +"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"
+                +startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr;              
+              }
+              // window.location.pathname
+            } 
             onClick={this.toggle("3")} role="tab" >
-              Bar Chart
+              <b>Bar Chart</b>
             </MDBNavLink>
           </MDBNavItem>
           {!this.props.historicInputState.toLowerCase().includes("all us")?
           <MDBNavItem>
             <MDBNavLink  
-            to={window.location.pathname}
+            to={
+              ()=>{
+                const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+                return "/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")
+                +"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"
+                +startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr;              
+              }
+              // window.location.pathname
+            }
             onDoubleClick=
             {
               this.toggle("4")
             }
-            active={this.state.activeItem === "4"} link={window.location.pathname} 
+            active={this.state.activeItem === "4"} 
+            link={
+              ()=>{
+                const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+                return "/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")
+                +"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"
+                +startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr;              
+              }
+              // window.location.pathname
+            } 
             onClick={this.toggle("4")} role="tab" >
-              Line Chart
+              <b>Line Chart</b>
             </MDBNavLink>
           </MDBNavItem>
           :<></>}

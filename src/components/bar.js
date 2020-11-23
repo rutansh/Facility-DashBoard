@@ -253,12 +253,14 @@ class BarChart extends Component{
         var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
         var url="https://ewed.org:41513/ewedService/getSummaryWithin/stateName/"+stateName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
       }
-      else if(this.props.historicInputState.toLowerCase().includes("county"))
+      else if(this.props.historicInputState.toLowerCase().includes("county") 
+      || (this.props.historicInputState.toLowerCase().search(",") < 0 &&
+      this.props.historicInputState.split("(")[1].split(")")[0].length > 2))
       {
         var countyName=this.props.historicInputState.toLowerCase();
         var url="https://ewed.org:41513/ewedService/getSummaryWithin/CountyState1/"+countyName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
       }
-      else if(this.props.historicInputState.toLowerCase().includes("watershed"))
+      else if(this.props.historicInputState.toLowerCase().includes("watershed") || (this.props.historicInputState.split("(")[1].split(")")[0].length == 2))
       {
         var url="https://ewed.org:41513/ewedService/getSummaryWithin/HUC8Name/"+this.props.historicInputState.toLowerCase()+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr 
       }
@@ -288,12 +290,13 @@ class BarChart extends Component{
           var stateName=this.props.historicInputState.toLowerCase().split("(")[0].trim(" ");  
           var url="https://ewed.org:41513/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/stateName/"+stateName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         }
-        else if(this.props.historicInputState.toLowerCase().includes("county"))
+        else if(this.props.historicInputState.toLowerCase().includes("county") || (this.props.historicInputState.toLowerCase().search(",") < 0 &&
+        this.props.historicInputState.split("(")[1].split(")")[0].length > 2))
         {
           var countyName=this.props.historicInputState.toLowerCase();
           var url="https://ewed.org:41513/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/CountyState1/"+countyName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         }
-        else if(this.props.historicInputState.toLowerCase().includes("watershed"))
+        else if(this.props.historicInputState.toLowerCase().includes("watershed") || (this.props.historicInputState.split("(")[1].split(")")[0].length == 2))
         {
           var url="https://ewed.org:41513/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/HUC8Name/"+this.props.historicInputState.toLowerCase()+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         }
@@ -311,114 +314,126 @@ class BarChart extends Component{
         }
     }
   }
-  async componentDidUpdate(pP,pS,snap)
-  {
-    //Changing api endpoints If historic form is selected
-    if(this.props.form=="Historic")
-    {
-        if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&this.props.filterstr==pP.filterstr)
-        {
-          const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-          urlchange("/"+this.props.form+"/"+localStorage.getItem("name")+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);
-        }
-        else
-        {
-          var startDate=this.props.historicStartDate;
-          var endDate=this.props.historicEndDate;
-          var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};
-          var startYear=parseInt(startDate.split(" ")[3])
-          var endYear=parseInt(endDate.split(" ")[3])
-          var startmonthinInt=parseInt(mapping[startDate.split(" ")[1]]);
-          var endmonthinInt=parseInt(mapping[endDate.split(" ")[1]]);
-          if(this.props.historicInputState.toLowerCase().includes("all us"))
-          {
-            var url="https://ewed.org:41513/ewedService/defaultViewData/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
-          }
-          else if(this.props.historicInputState.toLowerCase().includes("state"))
-          {
-            var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
-            var url="https://ewed.org:41513/ewedService/getSummaryWithin/stateName/"+stateName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
-          }
-          else if(this.props.historicInputState.toLowerCase().includes("county"))
-          {
-            var countyName=this.props.historicInputState.toLowerCase();
-            var url="https://ewed.org:41513/ewedService/getSummaryWithin/CountyState1/"+countyName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
-          }
-          else if(this.props.historicInputState.toLowerCase().includes("watershed"))
-          {
-            var url="https://ewed.org:41513/ewedService/getSummaryWithin/HUC8Name/"+this.props.historicInputState.toLowerCase()+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr 
-          }
+  // shouldComponentUpdate(nextProps,nextState)
+  // {
+  //   if(this.props.form==nextProps.form && this.props.enegyScenario==nextProps.enegyScenario && this.props.climateModel==nextProps.climateModel
+  //     && this.props.climateScenario==nextProps.climateScenario && this.props.filterstr==nextProps.filterstr && 
+  //     this.props.historicInputState==nextProps.historicInputState  && this.props.historicStartDate ==nextProps.historicStartDate
+  //     &&this.props.historicEndDate == nextProps.historicEndDate
+  //     )
+  //     {
+  //       return false;
+  //     }
+  //     return true;
+  // }
+  // async componentDidUpdate(pP,pS,snap)
+  // {
+  //   //Changing api endpoints If historic form is selected
+  //   if(this.props.form=="Historic")
+  //   {
+  //       if(pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&this.props.filterstr==pP.filterstr)
+  //       {
+  //         const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+  //         urlchange("/"+this.props.form+"/"+localStorage.getItem("name")+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);
+  //       }
+  //       else
+  //       {
+  //         var startDate=this.props.historicStartDate;
+  //         var endDate=this.props.historicEndDate;
+  //         var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};
+  //         var startYear=parseInt(startDate.split(" ")[3])
+  //         var endYear=parseInt(endDate.split(" ")[3])
+  //         var startmonthinInt=parseInt(mapping[startDate.split(" ")[1]]);
+  //         var endmonthinInt=parseInt(mapping[endDate.split(" ")[1]]);
+  //         if(this.props.historicInputState.toLowerCase().includes("all us"))
+  //         {
+  //           var url="https://ewed.org:41513/ewedService/defaultViewData/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+  //         }
+  //         else if(this.props.historicInputState.toLowerCase().includes("state"))
+  //         {
+  //           var stateName=this.props.historicInputState.toLowerCase().split("(")[0]
+  //           var url="https://ewed.org:41513/ewedService/getSummaryWithin/stateName/"+stateName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+  //         }
+  //         else if(this.props.historicInputState.toLowerCase().includes("county"))
+  //         {
+  //           var countyName=this.props.historicInputState.toLowerCase();
+  //           var url="https://ewed.org:41513/ewedService/getSummaryWithin/CountyState1/"+countyName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+  //         }
+  //         else if(this.props.historicInputState.toLowerCase().includes("watershed"))
+  //         {
+  //           var url="https://ewed.org:41513/ewedService/getSummaryWithin/HUC8Name/"+this.props.historicInputState.toLowerCase()+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr 
+  //         }
 
-          //Making request
-          try{
-            var response=await fetch(url)
-            var json=await response.json()
-            //this.updateState(json,pP);
-            setTimeout(() => {this.setState({
-              items:json["Summary"],
-              },() => { });}, 0);
-          }
-          catch(e){
-            console.log(e);
-          }
-        }
-    }
-    //Changing api endpoints If projected form is selected
-    else if(this.props.form=="Projected")
-    {
-      if(this.props.energyScenario===pP.energyScenario&&this.state.projectedDidmount&&pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&this.props.filterstr===pP.filterstr)
-      {
-        const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-        urlchange("/"+this.props.form+"/"+localStorage.getItem("name")+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);
-      }
-      else
-      {
-        var startDate=this.props.historicStartDate;
-        var endDate=this.props.historicEndDate;
-        var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};
-        var startYear=parseInt(startDate.split(" ")[3])
-        var endYear=parseInt(endDate.split(" ")[3])
-        var startmonthinInt=parseInt(mapping[startDate.split(" ")[1]]);
-        var endmonthinInt=parseInt(mapping[endDate.split(" ")[1]]);
-        if(this.props.historicInputState.toLowerCase().includes("all us"))
-        {
-          var url="https://ewed.org:41513/ewedService/getFutureData/defaultViewData/"+this.props.energyScenario+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
+  //         //Making request
+  //         try{
+  //           var response=await fetch(url)
+  //           var json=await response.json()
+  //           //this.updateState(json,pP);
+  //           setTimeout(() => {this.setState({
+  //             items:json["Summary"],
+  //             },() => { });}, 0);
+  //         }
+  //         catch(e){
+  //           console.log(e);
+  //         }
+  //       }
+  //   }
+  //   //Changing api endpoints If projected form is selected
+  //   else if(this.props.form=="Projected")
+  //   {
+  //     if(this.props.energyScenario===pP.energyScenario&&this.state.projectedDidmount&&pP.historicInputState===this.props.historicInputState&&pP.historicStartDate===this.props.historicStartDate&&pP.historicEndDate===this.props.historicEndDate&&this.props.filterstr===pP.filterstr)
+  //     {
+  //       const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+  //       urlchange("/"+this.props.form+"/"+localStorage.getItem("name")+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);
+  //     }
+  //     else
+  //     {
+  //       var startDate=this.props.historicStartDate;
+  //       var endDate=this.props.historicEndDate;
+  //       var mapping={"Jan":"1","Feb":"2","Mar":"3","Apr":"4","May":"5","Jun":"6","Jul":"7","Aug":"8","Sep":"9","Oct":"10","Nov":"11","Dec":"12"};
+  //       var startYear=parseInt(startDate.split(" ")[3])
+  //       var endYear=parseInt(endDate.split(" ")[3])
+  //       var startmonthinInt=parseInt(mapping[startDate.split(" ")[1]]);
+  //       var endmonthinInt=parseInt(mapping[endDate.split(" ")[1]]);
+  //       if(this.props.historicInputState.toLowerCase().includes("all us"))
+  //       {
+  //         var url="https://ewed.org:41513/ewedService/getFutureData/defaultViewData/"+this.props.energyScenario+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
           
-        }
-        else if(this.props.historicInputState.toLowerCase().includes("state"))
-        {
-          var stateName=this.props.historicInputState.toLowerCase().split("(")[0].trim(" ");
-          var url="https://ewed.org:41513/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/stateName/"+stateName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
-        }
-        else if(this.props.historicInputState.toLowerCase().includes("county"))
-        {
-          var countyName=this.props.historicInputState.toLowerCase();
-          var url="https://ewed.org:41513/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/CountyState1/"+countyName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
-        }
-        else if(this.props.historicInputState.toLowerCase().includes("watershed"))
-        {
+  //       }
+  //       else if(this.props.historicInputState.toLowerCase().includes("state"))
+  //       {
+  //         var stateName=this.props.historicInputState.toLowerCase().split("(")[0].trim(" ");
+  //         var url="https://ewed.org:41513/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/stateName/"+stateName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+  //       }
+  //       else if(this.props.historicInputState.toLowerCase().includes("county"))
+  //       {
+  //         var countyName=this.props.historicInputState.toLowerCase();
+  //         var url="https://ewed.org:41513/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/CountyState1/"+countyName+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+  //       }
+  //       else if(this.props.historicInputState.toLowerCase().includes("watershed"))
+  //       {
           
-          var url="https://ewed.org:41513/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/HUC8Name/"+this.props.historicInputState.toLowerCase()+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
+  //         var url="https://ewed.org:41513/ewedService/getFutureData/getSummaryWithin/"+this.props.energyScenario+"/HUC8Name/"+this.props.historicInputState.toLowerCase()+"/fuelType/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
           
-        }
+  //       }
 
-        //Making request
-        try{
-          var response=await fetch(url)
-          var json=await response.json()
-          this.setState({
-            items:json["Summary"],
-            projectedDidmount:true,   
-          });
-            }
+  //       //Making request
+  //       try{
+  //         var response=await fetch(url)
+  //         var json=await response.json()
+  //         this.setState({
+  //           items:json["Summary"],
+  //           projectedDidmount:true,   
+  //         });
+  //           }
         
-        catch(e)
-        {
-          console.log(e);
-        }
-      }
-    }
-  }
+  //       catch(e)
+  //       {
+  //         console.log(e);
+  //       }
+  //     }
+  //   }
+  // }
 
   //This will render bar chart based on the data present in the local state of "items" 
   render() {

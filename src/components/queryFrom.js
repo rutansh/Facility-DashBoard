@@ -3,12 +3,13 @@ import React, { Component } from "react";
 import FormContext from "./Context/queryFormContext";
 import { Radio, InputLabel } from "@material-ui/core";
 import urlchange from './GlobalUtil/urlutil';
-
+import MarkerContext from './Context/markerContext';
 //This component is a parent compoennt of both historic and projected form components
 class QueryForm extends Component {
   constructor(props) {
     super(props);
-
+    localStorage.setItem("isFormChange","false");
+    
     // when initially rendered it is taking value present in the global context
     this.state = {
       selectedChoice: this.props.form.name,
@@ -19,7 +20,9 @@ class QueryForm extends Component {
   //This method gets called whenenver user clicks on particular radio button
   selectedItem(event) {
     
+    console.log("selectedItem");
     localStorage.setItem("formchange","true");
+    
     localStorage.setItem("form",event.target.value);
     
 
@@ -42,6 +45,8 @@ class QueryForm extends Component {
       
     //changing global context of the form
     this.props.setForm(event.target.value);
+    this.props.setmarkerData(null);
+    this.props.setmarkerId(-1);
     // this.props.optionHandler(event.target.value)
   }
 
@@ -99,8 +104,19 @@ export default (props) => {
   return (
     <FormContext.Consumer>
       {(context) => {
-        return <QueryForm {...props} {...context} />;
+        return(
+          <MarkerContext.Consumer>
+        {
+          (context1)=>{
+            return <QueryForm {...props} {...context}{...context1} />
+          }
+        }
+        
+        </MarkerContext.Consumer>
+        )
+        
       }}
     </FormContext.Consumer>
   );
 };
+

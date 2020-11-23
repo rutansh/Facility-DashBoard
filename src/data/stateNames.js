@@ -2,10 +2,7 @@
 // Watershed and Counties with key value
 
 export const statename=[
-    {
-      "key": "A??asco Municipio (Puerto Rico)",
-      "value": "A??asco Municipio (Puerto Rico)"
-    },
+    
     {
       "key": "Abbeville County (South Carolina)",
       "value": "Abbeville County (South Carolina)"

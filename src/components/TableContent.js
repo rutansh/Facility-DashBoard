@@ -4,6 +4,7 @@ import ReactToExcel from "react-html-table-to-excel";
 import UserContext from "./Context/updateContext";
 import urlchange from './GlobalUtil/urlutil';
 import dateFormat from './GlobalState/dateFormat';
+import MarkerContext from "./Context/markerContext";
 
 //This component is used to render table data in the application
 class TableContent extends Component {
@@ -19,6 +20,7 @@ class TableContent extends Component {
       nameOfState: this.props.historicInputState,
       counter: 1,
     };
+    this.objectForParent = {}
 
     //Event binding for whenever user clicks on particular region or hover over particular entry in the table
     this.updateState = this.updateState.bind(this);
@@ -413,6 +415,10 @@ class TableContent extends Component {
         typeof this.props.tabledata["All Facilities"] !== "undefined" &&
         this.state.nameOfState.toLowerCase().includes("county")
       ) {
+
+        console.log(this.props.markerData);
+        console.log("table data");
+        console.log(this.props.tabledata);
         return (
           <div>
             <div className="table-top-bar-container">
@@ -473,22 +479,52 @@ class TableContent extends Component {
                       </b>
                     </td>
                   </tr>
-                  {this.props.tabledata["All Facilities"].map((item, index) => (
+                  {
+
+                  }
+                  {this.props.tabledata["All Facilities"].map((facility, index) => (
                     <tr
                       key={index}
+                      onClick={()=>{
+                        
+                        (async ()=>{
+                          
+                          let startDate = this.props.historicStartDate;
+                          let endDate = this.props.historicEndDate;
+                          let mapping = { "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sep": "9", "Oct": "10", "Nov": "11", "Dec": "12" };
+                          let startYear = parseInt(startDate.split(" ")[3])
+                          let endYear = parseInt(endDate.split(" ")[3])
+                          let startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
+                          let endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
+                          let fetchFacility=""
+                          if(this.props.form=="Historic")
+                          {
+                            fetchFacility="https://ewed.org:31567/ewedService/getFacility/pgmSysId/"+facility.PGM_SYS_ID+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt;
+                          }
+                          else if(this.props.form=="Projected")
+                          {
+                            fetchFacility="https://ewed.org:31567/ewedService/getFutureData/getFacility/"+this.props.energyScenario+"/pgmSysId/"+facility.PGM_SYS_ID+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt;
+                          }
+                          var res = await fetch(fetchFacility);
+                          var jsondata = await res.json();
+                          this.objectForParent.data = jsondata;
+                          this.props.setmarkerData(this.objectForParent.data);
+                          this.props.setmarkerId(index);
+                          
+                      })()
+                      }}
                       onMouseOver={() => {
-                        this.props.setRegion(item.PRIMARY_NAME);
                       }}
                       onMouseOut={() => {
-                        this.props.setRegion("");
+                        
                       }}
                       
                     >
-                      <td>{item.PRIMARY_NAME}</td>
-                      <td>{Number(item.GenerationSummary).toLocaleString()}</td>
-                      <td>{Number(item.EmissionSummary).toLocaleString()}</td>
-                      <td>{Number(item.WaterConsumptionSummary).toLocaleString()}</td>
-                      <td>{Number(item.WaterWithdrawalSummary).toLocaleString()}</td>
+                      <td>{facility.PRIMARY_NAME}</td>
+                      <td>{Number(facility.GenerationSummary).toLocaleString()}</td>
+                      <td>{Number(facility.EmissionSummary).toLocaleString()}</td>
+                      <td>{Number(facility.WaterConsumptionSummary).toLocaleString()}</td>
+                      <td>{Number(facility.WaterWithdrawalSummary).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -502,6 +538,8 @@ class TableContent extends Component {
         typeof this.props.tabledata["All Facilities"] !== "undefined" &&
         (this.state.nameOfState.toLowerCase().includes("watershed") || true)
       ) {
+        console.log("table data");
+        console.log(this.props.tabledata);
         nameOfState = this.props.historicInputState;
         return (
           <div>
@@ -557,13 +595,46 @@ class TableContent extends Component {
                     </td>
                   </tr>
                   {this.state.items["All Facilities"] ? (
-                    this.state.items["All Facilities"].map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.PRIMARY_NAME}</td>
-                        <td>{Number(item.GenerationSummary).toLocaleString()}</td>
-                        <td>{Number(item.EmissionSummary).toLocaleString()}</td>
-                        <td>{Number(item.WaterConsumptionSummary).toLocaleString()}</td>
-                        <td>{Number(item.WaterWithdrawalSummary).toLocaleString()}</td>
+                    this.state.items["All Facilities"].map((facility, index) => (
+                      <tr key={index} onClick={()=>{
+                        
+                        (async ()=>{
+                          
+                          let startDate = this.props.historicStartDate;
+                          let endDate = this.props.historicEndDate;
+                          let mapping = { "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sep": "9", "Oct": "10", "Nov": "11", "Dec": "12" };
+                          let startYear = parseInt(startDate.split(" ")[3])
+                          let endYear = parseInt(endDate.split(" ")[3])
+                          let startmonthinInt = parseInt(mapping[startDate.split(" ")[1]]);
+                          let endmonthinInt = parseInt(mapping[endDate.split(" ")[1]]);
+                          let fetchFacility=""
+                          if(this.props.form=="Historic")
+                          {
+                            fetchFacility="https://ewed.org:31567/ewedService/getFacility/pgmSysId/"+facility.PGM_SYS_ID+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt;
+                          }
+                          else if(this.props.form=="Projected")
+                          {
+                            fetchFacility="https://ewed.org:31567/ewedService/getFutureData/getFacility/"+this.props.energyScenario+"/pgmSysId/"+facility.PGM_SYS_ID+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt;
+                          }
+                          var res = await fetch(fetchFacility);
+                          var jsondata = await res.json();
+                          this.objectForParent.data = jsondata;
+                          this.props.setmarkerData(this.objectForParent.data);
+                          this.props.setmarkerId(index);
+                          
+                      })()
+                      }}
+                      onMouseOver={() => {
+                        // this.props.setmarkerData();
+                        
+                      }}
+                      onMouseLeave={() => {
+                      }}>
+                        <td>{facility.PRIMARY_NAME}</td>
+                        <td>{Number(facility.GenerationSummary).toLocaleString()}</td>
+                        <td>{Number(facility.EmissionSummary).toLocaleString()}</td>
+                        <td>{Number(facility.WaterConsumptionSummary).toLocaleString()}</td>
+                        <td>{Number(facility.WaterWithdrawalSummary).toLocaleString()}</td>
                       </tr>
                     ))
                   ) : (
@@ -590,7 +661,15 @@ export default (props) => {
   return (
     <UserContext.Consumer>
       {(context) => {
-        return <TableContent {...props} {...context} />;
+        return (
+          <MarkerContext.Consumer>
+          {
+            (context1)=>{
+              return <TableContent {...props} {...context}{...context1} />;
+            }
+          }
+          </MarkerContext.Consumer>
+        )
       }}
     </UserContext.Consumer>
   );
