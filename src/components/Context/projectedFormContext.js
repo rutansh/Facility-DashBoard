@@ -7,14 +7,15 @@ class ProjectedProvider extends React.Component{
     
     // Initialize the states with default values 
     state={
-        climateScenario:"RCP45",
-        climateModel:"AVG45",
-        energyScenario:"REF2019"
+        climateScenario:localStorage.getItem("climateScenario"),
+        climateModel:localStorage.getItem("climateModel"),
+        energyScenario:localStorage.getItem("energyScenario")?localStorage.getItem("energyScenario"):"REF2019"
     }
 
     // Global Method to set climatescenario
     setclimateScenario = (climateScenario) => {
-      console.log("climatescenario");
+      debugger
+      console.log("climatescenario",climateScenario);
         if(climateScenario!==0)
         {
           localStorage.setItem("climateScenario",climateScenario);
@@ -39,6 +40,7 @@ class ProjectedProvider extends React.Component{
 
     // Global Method to set climatemodel
     setclimateModel = (climateModel) => {
+      debugger
       console.log("climateModel",climateModel);
         if(climateModel!==0)
         {
@@ -49,11 +51,14 @@ class ProjectedProvider extends React.Component{
 
     // Global Method to set energyscenario
     setenergyScenario=(energyScenario)=>{
-        if(energyScenario!==0)
+        console.log("energyScenario is called");
+        debugger
+        if(energyScenario!==0 || energyScenario!==null || energyScenario)
         {
           localStorage.setItem("energyScenario",energyScenario);
+          this.setState((prevState) => ({ energyScenario }))
         }
-        this.setState((prevState) => ({ energyScenario }))
+        
     }
 
     // Rendering context to children components

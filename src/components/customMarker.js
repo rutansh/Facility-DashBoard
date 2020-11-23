@@ -83,10 +83,11 @@ class CustomMarker extends Component {
     // Returning facilities as markers using <Marker> component
 
     else {
+        console.log("this.state",this.state.facility.PRIMARY_NAME);
           return(
             <div>
             <Marker key={this.props.arrIndex}
-            title={this.state.facility.LOCATION_ADDRESS}
+            title={this.state.facility.PRIMARY_NAME}
             position={
               {
                 lat: parseFloat(this.state.facility.LATITUDE83),
@@ -102,6 +103,7 @@ class CustomMarker extends Component {
                   strokeWeight: 0,
                   scale: this.setRadius(this.props.g,this.props.facility,this.props.objforstate)
                 }}
+              // onMouseOver={()=><InfoWindow>{this.state.facility.PRIMARY_NAME}</InfoWindow>}
                 onClick={
                     (async ()=>{
                         
@@ -131,27 +133,29 @@ class CustomMarker extends Component {
                       
                 >
                 {this.state.loading&&this.props.arrIndex===this.props.index&&
-                (<InfoWindow onCloseClick={()=>{this.objectForParent.data = "data";
+                (<InfoWindow onCloseClick={()=>{this.objectForParent.data = null;
                   this.objectForParent.index = -1;
                   this.props.markerClick(this.objectForParent)}}>
+                  {this.props.data?
                   <div style={{display: 'flex', flexDirection: 'column',height:"200px",width:"200px",zIndex:10}}>
-                    
-                    <b>{this.props.data.Facility[0]["PRIMARY_NAME"]} - Trends</b>
-                    <br></br>
-                    <div><b>Plant Code: </b>{this.state.facility.PGM_SYS_ID}</div>
-                    <div style={{display: 'flex', flexDirection: 'row',marginBottom:"-15px"}}><b>Fuel Type: </b>{this.props.data["FacilityDataSummary"][0].fuelType?<p>{this.props.data.FacilityDataSummary[0].fuelType}</p>:"N/A"}</div>
-                    <div style={{display: 'flex', flexDirection: 'row',marginBottom:"-15px"}}><b>Plant Type: </b>{this.props.data.FacilityDataSummary[0].plantType?<p>{this.props.data.FacilityDataSummary[0].plantType}</p>:"N/A"}</div>
-                    <div style={{display: 'flex', flexDirection: 'row'}}><b>Cooling System Type: </b>{this.props.data.FacilityDataSummary[0].coolingSystemType?<p>{this.props.data.FacilityDataSummary[0].coolingSystemType}</p>:"N/A"}</div>
-                    <div style={{display: 'flex', flexDirection: 'row',marginBottom:"-15px"}}><b>Water Type: </b>{this.props.data.FacilityDataSummary[0].waterType?<p>{this.props.data.FacilityDataSummary[0].waterType}</p>:"N/A"}</div>
-                    <div style={{display: 'flex', flexDirection: 'row'}}><b>Generation: </b>{this.props.data.FacilityDataSummary[0].generationSummary}</div>
-                    <div style={{display: 'flex', flexDirection: 'row'}}><b>Emissions: </b>{this.props.data.FacilityDataSummary[0].emissionSummary}</div>
-                    <div style={{display: 'flex', flexDirection: 'row'}}><b>Water Withdrawal: </b>{this.props.data.FacilityDataSummary[0].waterWithdrawalSummary}</div>
-                    <div style={{display: 'flex', flexDirection: 'row'}}><b>Water Consumption: </b>{this.props.data.FacilityDataSummary[0].waterConsumptionSummary}</div>
-                    <br></br>
-                    <Button variant="contained" color="primary" onClick={(e)=>{
-                      this.props.modalOpen(e)
-                    }}>Show Details</Button>
-                  </div>
+                  <b>{this.props.data.Facility[0]["PRIMARY_NAME"]} - Trends</b>
+                  <br></br>
+                  <div><b>Plant Code: </b>{this.state.facility.PGM_SYS_ID}</div>
+                  <div style={{display: 'flex', flexDirection: 'row',marginBottom:"-15px"}}><b>Fuel Type: </b>{this.props.data["FacilityDataSummary"][0].fuelType?<p>{this.props.data.FacilityDataSummary[0].fuelType}</p>:"N/A"}</div>
+                  <div style={{display: 'flex', flexDirection: 'row',marginBottom:"-15px"}}><b>Plant Type: </b>{this.props.data.FacilityDataSummary[0].plantType?<p>{this.props.data.FacilityDataSummary[0].plantType}</p>:"N/A"}</div>
+                  <div style={{display: 'flex', flexDirection: 'row'}}><b>Cooling System Type: </b>{this.props.data.FacilityDataSummary[0].coolingSystemType?<p>{this.props.data.FacilityDataSummary[0].coolingSystemType}</p>:"N/A"}</div>
+                  <div style={{display: 'flex', flexDirection: 'row',marginBottom:"-15px"}}><b>Water Type: </b>{this.props.data.FacilityDataSummary[0].waterType?<p>{this.props.data.FacilityDataSummary[0].waterType}</p>:"N/A"}</div>
+                  <div style={{display: 'flex', flexDirection: 'row'}}><b>Generation: </b>{this.props.data.FacilityDataSummary[0].generationSummary}</div>
+                  <div style={{display: 'flex', flexDirection: 'row'}}><b>Emissions: </b>{this.props.data.FacilityDataSummary[0].emissionSummary}</div>
+                  <div style={{display: 'flex', flexDirection: 'row'}}><b>Water Withdrawal: </b>{this.props.data.FacilityDataSummary[0].waterWithdrawalSummary}</div>
+                  <div style={{display: 'flex', flexDirection: 'row'}}><b>Water Consumption: </b>{this.props.data.FacilityDataSummary[0].waterConsumptionSummary}</div>
+                  <br></br>
+                  <Button variant="contained" color="primary" onClick={(e)=>{
+                    this.props.modalOpen(e)
+                  }}>Show Details</Button>
+                </div>:<div></div>  
+                }
+                  
                 </InfoWindow>)}  
             </Marker>
           </div>

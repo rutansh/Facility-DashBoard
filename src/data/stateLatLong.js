@@ -255,5 +255,11 @@ export const stateLatLngs = {
       state: "Wyoming",
       latitude: 42.7475,
       longitude: -107.2085
+    },
+    "Puerto Rico":
+    {
+      state:"Puerto Rico",
+      latitude:18.2001,
+      longitude: -66.6645,
     }
   };

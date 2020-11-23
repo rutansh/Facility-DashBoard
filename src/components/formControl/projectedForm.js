@@ -15,6 +15,8 @@ import StateContext from "../Context/inputStatecontext";
 import FormControl from "@material-ui/core/FormControl";
 import dateFormat from '../GlobalState/dateFormat';
 import urlchange from '../GlobalUtil/urlutil';
+import MarkerContext from '../Context/markerContext';
+import keys from '../../data/allNames';
 //This component handles Projected Form
 
 class ProjectedForm extends React.Component {
@@ -48,6 +50,12 @@ class ProjectedForm extends React.Component {
 
     // Date validation before submit
 
+    let isPresent=false;
+    
+    if(keys.has(this.props.inputstate.name.toLowerCase()))
+    {
+      isPresent=true
+    }
     if(this.state.startDate<this.state.endDate)
     {
     
@@ -64,6 +72,7 @@ class ProjectedForm extends React.Component {
     if(this.props.inputstate.name.toLowerCase().includes("all us"))
     {
       localStorage.setItem("viewBy","States");
+      localStorage.setItem("activeTab","1");
     }
     else if(this.props.inputstate.name.toLowerCase().includes("state"))
     {
@@ -100,6 +109,8 @@ class ProjectedForm extends React.Component {
     this.arrayForParent[5] = this.props.climateScenario;
     this.arrayForParent[6] = this.props.climateModel;
 
+    this.props.setmarkerId(-1);
+    this.props.setmarkerData(null);
     // Calling parent component formControl to take all the inputs given by user and update the state of an application
     this.props.projectedFormHandler(this.arrayForParent);
 
@@ -111,7 +122,10 @@ class ProjectedForm extends React.Component {
 
   resetControl (e){
     urlchange("/Projected/ALL%20US/RCP45/AVG45/REF2019/1/2049/12/2050/Water%20Consumption/States/fuelTypes/all");
+    this.props.setmarkerId(-1);
+    this.props.setmarkerData(null);
     localStorage.setItem("projectedreset","true");
+    localStorage.setItem("fromReset","true");
     window.location.href="/Projected/ALL%20US/RCP45/AVG45/REF2019/1/2049/12/2050/Water%20Consumption/States/fuelTypes/all";
     // localStorage.setItem("projectedreset","true");
     // //If Display by is changed then display is set back to Water Consumption
@@ -205,6 +219,8 @@ class ProjectedForm extends React.Component {
 
   saveOrcloseModal(e) {
     // If user has selected close
+    this.props.setmarkerId(-1);
+    this.props.setmarkerData(null);
     if(e=="Close")
     {
       this.setState({
@@ -364,7 +380,8 @@ class ProjectedForm extends React.Component {
                   <InputLabel>Select Climate Scenario</InputLabel>
                   {localStorage.getItem("climateScenario")=="na"?localStorage.setItem("climateScenario","RCP45"):console.log("")}
                   <Select
-                    defaultValue={localStorage.getItem("climateScenario")=="na"?"RCP45":localStorage.getItem("climateScenario")}
+                    
+                    defaultValue={localStorage.getItem("climateScenario")?localStorage.getItem("climateScenario"):"RCP45"}
                     labelId="demo-controlled-open-select-label"
                     id="demo-controlled-open-select"
                     onClick={(e) => {
@@ -484,7 +501,16 @@ export default (props) => {
         return (
           <StateContext.Consumer>
             {(context) => {
-              return <ProjectedForm {...props} {...context} {...context1} />;
+              return(
+                <MarkerContext.Consumer>
+                  {
+                (context2)=>{
+                return <ProjectedForm {...props} {...context} {...context1} {...context2}/>;
+                 }
+                  }
+                </MarkerContext.Consumer>
+              )
+              // return <ProjectedForm {...props} {...context} {...context1} />;
             }}
           </StateContext.Consumer>
         );

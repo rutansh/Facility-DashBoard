@@ -16,11 +16,13 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import dateFormat from '../GlobalState/dateFormat';
 import urlchange from '../GlobalUtil/urlutil';
+import MarkerContext from '../Context/markerContext';
+import keys from '../../data/allNames';
+
 Modal.setAppElement("#root");
 
 
 // This component is used to render historic form 
-
 class HistoricForm extends Component {
   constructor(props) {
     super(props);
@@ -42,6 +44,13 @@ class HistoricForm extends Component {
   }
   formControl(e) {
 
+    let isPresent=false;
+    
+    if(keys.has(this.props.inputstate.name.toLowerCase()))
+    {
+      isPresent=true
+    }
+    console.log(keys);   
     // Performing validation when user clicks on seach button
     if(this.state.startDate<this.state.endDate)
     {
@@ -51,6 +60,7 @@ class HistoricForm extends Component {
       if(this.props.inputstate.name.toLowerCase().includes("all us"))
       {
         localStorage.setItem("viewBy","States");
+        localStorage.setItem("activeTab","1");
       }
       else if(this.props.inputstate.name.toLowerCase().includes("state"))
       {
@@ -82,6 +92,9 @@ class HistoricForm extends Component {
       {
         // Calling parent component formControl with all the updated values
         debugger
+
+        this.props.setmarkerId(-1);
+        this.props.setmarkerData(null);
         this.props.historicFormHandler(this.arrayForParent);
       } 
     }
@@ -94,7 +107,10 @@ class HistoricForm extends Component {
 
     // If Display by is changed then display is set back to Water Consumption
     // Settling value of reload
+    this.props.setmarkerId(-1);
+    this.props.setmarkerData(null);
     urlchange("/Historic/all%20us/RCP45/AVG45/REF2019/1/2015/12/2015/Water%20Consumption/States/fuelTypes/all");
+    localStorage.setItem("fromReset","true");
     window.location.href="/Historic/all%20us/RCP45/AVG45/REF2019/1/2015/12/2015/Water%20Consumption/States/fuelTypes/all";
     // if(localStorage.getItem("displayBy")!=="Water Consumption" && localStorage.getItem("name").toLowerCase().includes("all us"))
     // {
@@ -164,6 +180,8 @@ class HistoricForm extends Component {
   // This will be called when user clicks on save or close modal button
   saveOrcloseModal(e) {
     // If user has selected close
+    this.props.setmarkerId(-1);
+    this.props.setmarkerData(null);
     if(e=="Close")
     {
       this.setState({
@@ -308,7 +326,17 @@ export default (props) => {
   return (
     <StateContext.Consumer>
       {(context) => {
-        return <HistoricForm {...props} {...context} />;
+        return(
+          <MarkerContext.Consumer>
+          {
+            (context1)=>{
+              return <HistoricForm {...props} {...context} {...context1} />
+            }
+          }
+          
+        </MarkerContext.Consumer>
+        )
+        // return <HistoricForm {...props} {...context} />;
       }}
     </StateContext.Consumer>
   );

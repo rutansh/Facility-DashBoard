@@ -3,6 +3,7 @@ import '../styles/mainContent.css';
 import NavBar from './navBar';
 import MapContent from './mapContent';
 import Loader from 'react-loader-spinner';
+import MarkerContext from './Context/markerContext';
 
 
 // This component is fetching data for table layer and map layer, as table layer is also a part of nav bar component, 
@@ -78,6 +79,7 @@ class MapControl extends Component {
   }
   formHandler3(changeEvent)
   {
+    
     localStorage.setItem("backbutton","true");
     this.props.mapHandler(changeEvent[0]);
   }
@@ -105,7 +107,9 @@ class MapControl extends Component {
   // All api calls will be handled during initial rendering 
   async componentDidMount()
   {
+    
     // Formating start and end dates
+    
     var startDate=this.props.historicStartDate;
     var endDate=this.props.historicEndDate;
     var startYear=parseInt(startDate.split(" ")[3])
@@ -288,9 +292,9 @@ class MapControl extends Component {
       // If all Us is requested from the input search field
       if(this.props.historicInputState.toLowerCase().includes("all us"))
       { 
-        if(startYear<2048)
+        if(startYear>=2020)
         {
-          var url="https://ewed.org:31567/ewedService/getFutureData/defaultViewData/"+localStorage.getItem("energyScenario")+"/stateName/"+2049+"/"+1+"/"+2050+"/"+12+"/fuelTypes/"+localStorage.getItem("filterstr");
+          var url="https://ewed.org:31567/ewedService/getFutureData/defaultViewData/"+localStorage.getItem("energyScenario")+"/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+localStorage.getItem("filterstr");
           try{
           var response=await fetch(url)
           var json=await response.json()
@@ -326,7 +330,7 @@ class MapControl extends Component {
         {
           if(startYear<2048)
           {
-            var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+localStorage.getItem("energyScenario") +"/stateName/"+stateName+"/HUC8Name/"+2049+"/"+1+"/"+2050+"/"+12+"/fuelTypes/"+localStorage.getItem("filterstr"); 
+            var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+localStorage.getItem("energyScenario") +"/stateName/"+stateName+"/HUC8Name/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+localStorage.getItem("filterstr"); 
           }
           else
           {
@@ -338,7 +342,7 @@ class MapControl extends Component {
         {
           if(startYear<2048)
           {
-            var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+localStorage.getItem("energyScenario")+"/stateName/"+stateName+"/CountyState1/"+2049+"/"+1+"/"+2050+"/"+12+"/fuelTypes/"+localStorage.getItem("filterstr");
+            var url="https://ewed.org:31567/ewedService/getFutureData/getSummaryWithin/"+localStorage.getItem("energyScenario")+"/stateName/"+stateName+"/CountyState1/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+localStorage.getItem("filterstr");
           }
           else
           {
@@ -353,7 +357,7 @@ class MapControl extends Component {
             var name=this.props.historicInputState;
             name=name.split(" (")[0];
             name=name.trim(" ");  
-            var url="https://ewed.org:31567/ewedService/getFutureData/getFacilityData/"+localStorage.getItem("energyScenario")+"/stateName/"+name+"/"+2049+"/"+1+"/"+2050+"/"+12+"/fuelTypes/"+localStorage.getItem("filterstr")
+            var url="https://ewed.org:31567/ewedService/getFutureData/getFacilityData/"+localStorage.getItem("energyScenario")+"/stateName/"+name+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+localStorage.getItem("filterstr")
           }
           else
           {
@@ -383,7 +387,8 @@ class MapControl extends Component {
       }
 
       // If county is requested from the input search field
-      else if(this.props.historicInputState.toLowerCase().includes("county")|| (this.props.historicInputState.toLowerCase().search(",") < 0 && this.props.historicInputState.split("(")[1].split(")")[0].length > 2))
+      else if(this.props.historicInputState.toLowerCase().includes("county")|| 
+      (this.props.historicInputState.toLowerCase().search(",") < 0 && this.props.historicInputState.split("(")[1].split(")")[0].length > 2))
       {
         var countyName=this.props.historicInputState.toLowerCase()
         var url = "https://ewed.org:31567/ewedService/getFutureData/getFacilityData/"+localStorage.getItem("energyScenario")+"/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+localStorage.getItem("filterstr")
@@ -433,7 +438,7 @@ class MapControl extends Component {
   async componentDidUpdate(pP,state,snap)
   {
     // To get start and end month,year for URL call
-    debugger
+    
     var startDate=this.props.historicStartDate;
     var endDate=this.props.historicEndDate;
     var startYear=parseInt(startDate.split(" ")[3])
@@ -472,33 +477,7 @@ class MapControl extends Component {
       console.log("projected inside");
 
       // If a user has selected reset button
-        console.log("this is projected form");
-        
-      // If user has selected facilities from viewby form in map layer and then update the component's state
-      // if(localStorage.getItem("p_resetViewforLastLayer")=="true")
-      // {
-      //   localStorage.setItem("p_resetViewforLastLayer","false");
-      //   var url="https://ewed.org:31567/ewedService/getFutureData/defaultViewData/"+this.props.energyScenario+"/stateName/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
-      //     // Update state
-      //     try{
-      //       localStorage.setItem("loadingfordata","true");
-      //       localStorage.setItem("viewBy","States");
-            
-      //       var response= await fetch(url)
-      //       var json= await response.json()
-      //       //this.updateState(json,pP);
-      //       this.setState({
-      //         regions:json,
-      //         loader:true,
-      //         viewByChoice:"States",
-      //       });
-      //     }
-      //     catch(e)
-      //     {
-      //       console.log(e);
-      //     }
-
-      // }
+      console.log("this is projected form");
       if(this.state.mapViewByCalled && localStorage.getItem("viewBy")=="Facilities")
       {
           var name=this.props.historicInputState;
@@ -742,7 +721,7 @@ class MapControl extends Component {
             
            
           
-          // If all us data is to call the API to fetch the data
+          
           
         
         
@@ -777,6 +756,7 @@ class MapControl extends Component {
         if(localStorage.getItem("from_url")=="true")
         {
           localStorage.setItem("from_url","false");
+          
         }
         else
         {
@@ -802,6 +782,10 @@ class MapControl extends Component {
       // If county is selcted
       else if(this.props.historicInputState.toLowerCase().includes("county")|| (this.props.historicInputState.toLowerCase().search(",") < 0 && this.props.historicInputState.split("(")[1].split(")")[0].length > 2))
       {
+        if(localStorage.getItem("from_url")=="true")
+        {
+          localStorage.setItem("from_url","false")
+        }
         var countyName=this.props.historicInputState.toLowerCase()
         var url = "https://ewed.org:31567/ewedService/getFutureData/getFacilityData/"+this.props.energyScenario+"/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         
@@ -823,6 +807,10 @@ class MapControl extends Component {
       }
       else if(this.props.historicInputState.toLowerCase().includes("county"))
       {
+        if(localStorage.getItem("from_url")=="true")
+        {
+          localStorage.setItem("from_url","false")
+        }
        
         var countyName=this.props.historicInputState.toLowerCase()
         var url="https://ewed.org:31567/ewedService/getFacilityData/"+this.props.energyScenario+"/CountyState1/"+countyName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
@@ -844,7 +832,10 @@ class MapControl extends Component {
       // To fetch the data for watersheds
       else if(this.props.historicInputState.toLowerCase().includes("watershed"))
       {
-        
+        if(localStorage.getItem("from_url")=="true")
+        {
+          localStorage.setItem("from_url","false")
+        }
         var hucName=this.props.historicInputState.toLowerCase()
         var url="https://ewed.org:31567/ewedService/getFutureData/getFacilityData/"+this.props.energyScenario+"/HUC8Name/"+hucName+"/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr
         try{
@@ -1154,7 +1145,7 @@ class MapControl extends Component {
           var url="https://ewed.org:31567/ewedService/getSummaryWithin/stateName/"+stateName.trim()+"/CountyState1/"+startYear+"/"+startmonthinInt+"/"+endYear+"/"+endmonthinInt+"/fuelTypes/"+this.props.filterstr;
           
           try{
-            const s=fetch(url);
+            // const s=fetch(url);
             
             var response=await fetch(url)
             var json=await response.json()
@@ -1298,4 +1289,5 @@ class MapControl extends Component {
     }
   }
 }
+
 export default MapControl;

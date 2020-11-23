@@ -1,0 +1,53 @@
+  <div className="up-to-btn" style={{ marginLeft: "50px" }}>
+              {this.state.prevState ? (
+                
+                // To check whether prevstate is exist or not to display back button
+                <Button
+                  color="primary"
+                  variant="contained"
+                  style={{ width: "200px", height: "40px" }}
+                  onClick={() => {
+
+
+                    // If prev state is all us then will update the view by button
+                    if (this.state.prevState.length > 0) {
+                      debugger
+                      if (
+                        this.state.prevState
+                          .toLowerCase()
+                          .includes("all us")
+                      ) {
+                        localStorage.setItem("viewBy","States");
+                        const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+                        urlchange("/"+this.props.form+"/"+this.state.prevState.toLowerCase()+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
+                        this.setState({
+                          loading: false,
+                          viewByChoice: "States",
+                          isClicked: true,
+                        });
+                        this.arrayForParent[0] = this.state.prevState.toLowerCase();
+                        this.props.formHandler(this.arrayForParent);
+                      } 
+                      
+                      // If prev state is some state region then will update the view by button
+                      else {
+                        localStorage.setItem("viewBy","Watersheds");
+                        const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+                        urlchange("/"+this.props.form+"/"+this.state.prevState.toLowerCase()+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
+                        this.setState({
+                          loading: false,
+                          viewByChoice: "Watershed",
+                          isClicked: true,
+                        });
+                        this.arrayForParent[0] = this.state.prevState.toLowerCase();
+                        this.props.formHandler3(this.arrayForParent);
+                      }
+                    }
+                  }}
+                >
+                  ← Up to {this.state.prevState} View
+                </Button>
+              ) : (
+                  console.log("")
+                )}
+            </div>

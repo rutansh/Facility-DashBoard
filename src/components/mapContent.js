@@ -8,6 +8,9 @@ import { Radio, InputLabel } from "@material-ui/core";
 import Loader from 'react-loader-spinner';
 import urlchange from './GlobalUtil/urlutil';
 import dateFormat from './GlobalState/dateFormat';
+import MarkerContext from './Context/markerContext';
+import BackComponent from './BackComponent';
+
 
 // This component is used to render google map and all the different regions 
 // This component will call different API endpoints to fetch the geojson data of requested region
@@ -16,6 +19,7 @@ class MapContent extends React.PureComponent {
 
   // Initializing the default state with default latitude and logitude for all us
   constructor(props) {
+    
     super(props);
     this.props = props;
     this.state = {
@@ -26,7 +30,7 @@ class MapContent extends React.PureComponent {
       nameOfState: this.props.historicInputState,
       longitude: -98.583333,
       latitude: 39.833333,
-      zoom: 4.30,
+      zoom: 4,
       isClicked: false,
       displayChoice: localStorage.getItem("displayBy"),
       viewByChoice: "States",
@@ -49,9 +53,40 @@ class MapContent extends React.PureComponent {
     this.formHandler = this.formHandler.bind(this);
     this.modalOpen = this.modalOpen.bind(this);
     this.formHandlerforFacility = this.formHandlerforFacility.bind(this);
+    this.backformHandler=this.backformHandler.bind(this);
+    this.backformHandler3=this.backformHandler3.bind(this);
   }
 
   // If all us is selected from Regions component
+  backformHandler(changeEvent)
+  {
+    localStorage.setItem("viewBy","States");
+    const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+    urlchange("/"+this.props.form+"/"+this.state.prevState.toLowerCase()+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
+    this.setState({
+      loading: false,
+      viewByChoice: "States",
+      isClicked: true,
+    });
+    this.arrayForParent[0] = this.state.prevState.toLowerCase();
+    this.props.formHandler(this.arrayForParent);
+  }
+  backformHandler3(changeEvent)
+  {
+
+    localStorage.setItem("viewBy","Watersheds");
+    const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+    urlchange("/"+this.props.form+"/"+this.state.prevState.toLowerCase()+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
+    this.setState
+    ({
+        loading: false,
+        viewByChoice: "Watershed",
+        isClicked: true,
+    });
+    this.arrayForParent[0] = this.state.prevState.toLowerCase();
+    this.props.formHandler3(this.arrayForParent);
+  }
+
   formHandler(changeEvent) {
     if (changeEvent[0] == "all us") {
       this.props.formHandler(changeEvent);
@@ -64,7 +99,6 @@ class MapContent extends React.PureComponent {
   formHandlerforFacility(changeEvent) {
     this.props.formHandlerforFacility(changeEvent);
   }
-
   //When particular facility is clicked on 3rd layer of the map
   onClickFacility(facilityObject) {
     if (!this.state.isFacilitySelected) {
@@ -112,13 +146,17 @@ class MapContent extends React.PureComponent {
 
   // If user changes view by filter
   viewByItem(event) {
-     
+    //setmarkerId
+    //setmarkerData
+
     // If view by is states then update the URL
     if (event.target.value == "States")
     {
+      localStorage.setItem("activeTab","1");
       localStorage.setItem("viewBy","States");
       const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-      urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
+      urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+
+      localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
     }
 
     // Update component's local state
@@ -136,12 +174,15 @@ class MapContent extends React.PureComponent {
 
     // If clicked on Counties of view form
     else if (event.target.value == "Counties") {
+
       localStorage.setItem("viewBy","Counties");
       const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
       urlchange("/"+this.props.form+"/"+this.props.historicInputState+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
+      
       this.setState({
         isClicked: true,
       });
+    
 
     } 
 
@@ -153,6 +194,7 @@ class MapContent extends React.PureComponent {
       this.setState({
         isClicked: true,
       });
+    
     } 
 
     // If clicked on watersheds of view form
@@ -163,6 +205,7 @@ class MapContent extends React.PureComponent {
       this.setState({
         isClicked: true,
       });
+    
     }
   }
 
@@ -333,7 +376,7 @@ class MapContent extends React.PureComponent {
           var json = await response.json();
           await this.setState({
             regions: json,
-            zoom: 5.5,
+            zoom: 5,
             isClicked: false,
             loading: true,
             longitude: long,
@@ -361,9 +404,8 @@ class MapContent extends React.PureComponent {
         } else {
           stateNamefromWatershed = stateNamefromWatershed.toUpperCase();
         }
-
-        var lat = stateLatLngs[stateAbr[stateNamefromWatershed]].latitude;
-        var long = stateLatLngs[stateAbr[stateNamefromWatershed]].longitude;
+        
+        
 
         // Updating URL based on the form selected
         if (this.props.form == "Historic") {
@@ -399,13 +441,15 @@ class MapContent extends React.PureComponent {
         try {
           var response = await fetch(url);
           var json = await response.json();
+          console.log("json data");
+          console.log(json);
           await this.setState({
             regions: json,
             loading: true,
             viewByChoice: "Facilities",
-            zoom: 7.0,
-            latitude: lat,
-            longitude: long,
+            zoom: 9,
+            latitude: json["All Facilities"].length>0?parseFloat(json["All Facilities"][0].LATITUDE83):stateLatLngs[stateAbr[stateNamefromWatershed]].latitude,
+            longitude: json["All Facilities"].length>0?parseFloat(json["All Facilities"][0].LONGITUDE83):stateLatLngs[stateAbr[stateNamefromWatershed]].longitude,
             prevState: stateAbr[stateNamefromWatershed] + " (state)",
             items: this.props.tabledata,
             startDateProps: this.props.historicStartDate,
@@ -422,6 +466,7 @@ class MapContent extends React.PureComponent {
       (this.props.historicInputState.toLowerCase().search(",") < 0 &&
       this.props.historicInputState.split("(")[1].split(")")[0].length > 2))
       {
+        localStorage.setItem("viewBy","Facilities");
         var countyName = this.props.historicInputState;
         var stateNamefromCounty = countyName.split(" (");
         stateNamefromCounty = stateNamefromCounty[1].substr(
@@ -437,10 +482,13 @@ class MapContent extends React.PureComponent {
             " ";
         }
         stateNamefromCounty = stateNamefromCounty.trim();
-
-        let lat = stateLatLngs[stateNamefromCounty].latitude;
-        let long = stateLatLngs[stateNamefromCounty].longitude;
+        console.log(stateLatLngs[stateNamefromCounty]);
         
+        if(this.props.historicInputState.toLowerCase().search(",") < 0 &&
+        this.props.historicInputState.split("(")[1].split(")")[0].length > 2)
+        {
+          countyName=countyName.toLowerCase();
+        }
         // Updating URL based on the form selected
         if (this.props.form == "Historic") {
           var url =
@@ -476,14 +524,85 @@ class MapContent extends React.PureComponent {
         try {
           var response = await fetch(url);
           var json = await response.json();
+          console.log("json data");
+          console.log(json);
           await this.setState({
             regions: json,
             loading: true,
             viewByChoice: "Facilities",
-            zoom: 8.0,
-            latitude: lat,
-            longitude: long,
+            zoom: 9,
+            latitude: json["All Facilities"].length>0?parseFloat(json["All Facilities"][0].LATITUDE83):stateLatLngs[stateNamefromCounty].latitude,
+            longitude: json["All Facilities"].length>0?parseFloat(json["All Facilities"][0].LONGITUDE83):stateLatLngs[stateNamefromCounty].longitude,
             prevState: stateNamefromCounty + " (state)",
+            items: this.props.tabledata,
+            startDateProps: this.props.historicStartDate,
+            endDateProps: this.props.historicEndDate,
+            nameOfState: this.props.historicInputState,
+          });
+        } catch (e) {
+          console.log("error"+e);
+        }
+        
+      }
+      else if(this.props.historicInputState.split("(")[1]>3)
+      {
+        var hucName = this.props.historicInputState.toLowerCase();
+        var stateNamefromWatershed = hucName.split(" (");
+        stateNamefromWatershed = stateNamefromWatershed[1].substr(0,stateNamefromWatershed[1].length - 1);
+        if (stateNamefromWatershed.includes(",")) {
+          stateNamefromWatershed = stateNamefromWatershed
+            .split(",")[0]
+            .toUpperCase();
+        } else {
+          stateNamefromWatershed = stateNamefromWatershed.toUpperCase();
+        }
+        
+        console.log("asdasdas");
+
+        // Updating URL based on the form selected
+        if (this.props.form == "Historic") {
+          var url =
+            "https://ewed.org:41513/ewedService/getFacilityData/HUC8Name/" +
+            hucName +
+            "/" +
+            startYear +
+            "/" +
+            startmonthinInt +
+            "/" +
+            endYear +
+            "/" +
+            endmonthinInt +
+            "/fuelTypes/"+this.props.filterstr;
+        } else if (this.props.form == "Projected") {
+          var url =
+            "https://ewed.org:31567/ewedService/getFutureData/getFacilityData/" +
+            this.props.energyScenario +
+            "/HUC8Name/" +
+            hucName +
+            "/" +
+            startYear +
+            "/" +
+            startmonthinInt +
+            "/" +
+            endYear +
+            "/" +
+            endmonthinInt +
+            "/fuelTypes/" +
+            this.props.filterstr;
+        }
+        try {
+          var response = await fetch(url);
+          var json = await response.json();
+          console.log("json data");
+          console.log(json);
+          await this.setState({
+            regions: json,
+            loading: true,
+            viewByChoice: "Facilities",
+            zoom: 9,
+            latitude: json["All Facilities"].length>0?parseFloat(json["All Facilities"][0].LATITUDE83):stateLatLngs[stateAbr[stateNamefromWatershed]].latitude,
+            longitude: json["All Facilities"].length>0?parseFloat(json["All Facilities"][0].LONGITUDE83):stateLatLngs[stateAbr[stateNamefromWatershed]].longitude,
+            prevState: stateAbr[stateNamefromWatershed] + " (state)",
             items: this.props.tabledata,
             startDateProps: this.props.historicStartDate,
             endDateProps: this.props.historicEndDate,
@@ -492,9 +611,7 @@ class MapContent extends React.PureComponent {
         } catch (e) {
           console.log(e);
         }
-        
       }
-
     
   }
 
@@ -694,7 +811,7 @@ class MapContent extends React.PureComponent {
           var json = await response.json();
           await this.setState({
             regions: json,
-            zoom: 5.5,
+            zoom: 5,
             isClicked: false,
             loading: true,
             viewByChoice: "Facilities",
@@ -722,7 +839,7 @@ class MapContent extends React.PureComponent {
             loading: true,
             lattitude: 39.833333,
             longitude: -98.583333,
-            zoom: 4.46,
+            zoom: 5,
             isClicked: false,
             prevState: "",
           });
@@ -733,7 +850,7 @@ class MapContent extends React.PureComponent {
       }
     } 
     
-    // If something has changed from parent components or in state
+    // If something has changed from the parent components or in the state
     else {
       
       // calling api for all us geo json data
@@ -751,7 +868,7 @@ class MapContent extends React.PureComponent {
               loading: true,
               lattitude: 39.833333,
               longitude: -98.583333,
-              zoom: 4.46,
+              zoom: 4,
               prevState: "",
               items: this.props.tabledata,
               startDateProps: this.props.historicStartDate,
@@ -861,6 +978,7 @@ class MapContent extends React.PureComponent {
         (this.props.historicInputState.toLowerCase().search(",") < 0 &&
           this.props.historicInputState.split("(")[1].split(")")[0].length > 2)
         ) {
+          localStorage.setItem("viewBy","Facilities");
         var countyName = this.props.historicInputState;
         var stateNamefromCounty = countyName.split(" (");
         stateNamefromCounty = stateNamefromCounty[1].substr(
@@ -915,13 +1033,14 @@ class MapContent extends React.PureComponent {
         try {
           var response = await fetch(url);
           var json = await response.json();
-
+          console.log("json data");
+          console.log(json);
           //this.updateState(json,pP);
           await this.setState({
             regions: json,
             loading: true,
             viewByChoice: "Facilities",
-            zoom: 8.0,
+            zoom: 9,
             latitude: lat,
             longitude: long,
             prevState: stateNamefromCounty + " (state)",
@@ -937,7 +1056,7 @@ class MapContent extends React.PureComponent {
       
       // To fetch geo json of particular watershed
       else if (
-        this.props.historicInputState.toLowerCase().includes("watershed")
+        this.props.historicInputState.toLowerCase().includes("watershed") || this.props.historicInputState.toLowerCase().includes("alaska") 
       ) 
       {
         var hucName = this.props.historicInputState.toLowerCase();
@@ -991,11 +1110,13 @@ class MapContent extends React.PureComponent {
         try {
           var response = await fetch(url);
           var json = await response.json();
+          console.log("json data");
+          console.log(json);
           await this.setState({
             regions: json,
             loading: true,
             viewByChoice: "Facilities",
-            zoom: 7.0,
+            zoom: 9.0,
             latitude: lat,
             longitude: long,
             prevState: stateAbr[stateNamefromWatershed] + " (state)",
@@ -1068,7 +1189,7 @@ class MapContent extends React.PureComponent {
           var json = await response.json();
           await this.setState({
             regions: json,
-            zoom: 5.5,
+            zoom: 6,
             isClicked: false,
             loading: true,
             prevState: pP.historicInputState,
@@ -1090,6 +1211,8 @@ class MapContent extends React.PureComponent {
 
     // To fetch google map using 3rd party component
       // Pass all the necessary props required by the component
+      console.log("map render");
+      console.log(this.state.regions)
       let GoogleMapExample = withGoogleMap((props) => (
 
       // This is a higher order component that is why it is taking other customized components as a children
@@ -1149,7 +1272,7 @@ class MapContent extends React.PureComponent {
     
     // If geojson data is loaded    
     else {
-      debugger
+      
       return (
         <div>
           <div>
@@ -1315,7 +1438,10 @@ class MapContent extends React.PureComponent {
                             .toLowerCase()
                             .includes("county")||this.props.historicInputState
                             .toLowerCase()
-                            .includes("state"))
+                            .includes("state")||
+                            (this.props.historicInputState.toLowerCase().search(",") < 0 &&
+                        this.props.historicInputState.split("(")[1].split(")")[0].length > 2)
+                            )
                         }
                         unchecked={this.state.viewByChoice==="Facilities"&&this.props.historicInputState.toLowerCase().includes("all us")}
                         disabled={this.props.historicInputState
@@ -1334,53 +1460,64 @@ class MapContent extends React.PureComponent {
             
             <div className="up-to-btn" style={{ marginLeft: "50px" }}>
               {this.state.prevState ? (
-                
+                <BackComponent 
+                prevState={this.state.prevState}
+                climateScenario={this.props.climateScenario}
+                climateModel={this.props.climateModel} energyScenario={this.props.energyScenario}
+                form={this.props.form} tabledata={this.props.tabledata}
+                backformHandler={(e)=>this.backformHandler(e)}
+                backformHandler3={(e)=>this.backformHandler3(e)}
+                historicInputState={this.props.historicInputState} 
+                historicStartDate={this.props.historicStartDate} 
+                historicEndDate={this.props.historicEndDate}
+                filterstr={this.props.filterstr}
+                />
                 // To check whether prevstate is exist or not to display back button
-                <Button
-                  color="primary"
-                  variant="contained"
-                  style={{ width: "200px", height: "40px" }}
-                  onClick={() => {
+                // <Button
+                //   color="primary"
+                //   variant="contained"
+                //   style={{ width: "200px", height: "40px" }}
+                //   onClick={() => {
 
 
-                    // If prev state is all us then will update the view by button
-                    if (this.state.prevState.length > 0) {
-                      debugger
-                      if (
-                        this.state.prevState
-                          .toLowerCase()
-                          .includes("all us")
-                      ) {
-                        localStorage.setItem("viewBy","States");
-                        const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-                        urlchange("/"+this.props.form+"/"+this.state.prevState.toLowerCase()+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
-                        this.setState({
-                          loading: false,
-                          viewByChoice: "States",
-                          isClicked: true,
-                        });
-                        this.arrayForParent[0] = this.state.prevState.toLowerCase();
-                        this.props.formHandler(this.arrayForParent);
-                      } 
+                //     // If prev state is all us then will update the view by button
+                //     if (this.state.prevState.length > 0) {
+                //       debugger
+                //       if (
+                //         this.state.prevState
+                //           .toLowerCase()
+                //           .includes("all us")
+                //       ) {
+                //         localStorage.setItem("viewBy","States");
+                //         const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+                //         urlchange("/"+this.props.form+"/"+this.state.prevState.toLowerCase()+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
+                //         this.setState({
+                //           loading: false,
+                //           viewByChoice: "States",
+                //           isClicked: true,
+                //         });
+                //         this.arrayForParent[0] = this.state.prevState.toLowerCase();
+                //         this.props.formHandler(this.arrayForParent);
+                //       } 
                       
-                      // If prev state is some state region then will update the view by button
-                      else {
-                        localStorage.setItem("viewBy","Watersheds");
-                        const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
-                        urlchange("/"+this.props.form+"/"+this.state.prevState.toLowerCase()+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
-                        this.setState({
-                          loading: false,
-                          viewByChoice: "Watershed",
-                          isClicked: true,
-                        });
-                        this.arrayForParent[0] = this.state.prevState.toLowerCase();
-                        this.props.formHandler3(this.arrayForParent);
-                      }
-                    }
-                  }}
-                >
-                  ← Up to {this.state.prevState} View
-                </Button>
+                //       // If prev state is some state region then will update the view by button
+                //       else {
+                //         localStorage.setItem("viewBy","Watersheds");
+                //         const {startMonth,startYear,endMonth,endYear}=dateFormat(this.props.historicStartDate,this.props.historicEndDate);
+                //         urlchange("/"+this.props.form+"/"+this.state.prevState.toLowerCase()+"/"+localStorage.getItem("climateScenario")+"/"+localStorage.getItem("climateModel")+"/"+localStorage.getItem("energyScenario")+"/"+startMonth+"/"+startYear+"/"+endMonth+"/"+endYear+"/"+localStorage.getItem("displayBy")+"/"+localStorage.getItem("viewBy")+"/fuelTypes/"+this.props.filterstr);        
+                //         this.setState({
+                //           loading: false,
+                //           viewByChoice: "Watershed",
+                //           isClicked: true,
+                //         });
+                //         this.arrayForParent[0] = this.state.prevState.toLowerCase();
+                //         this.props.formHandler3(this.arrayForParent);
+                //       }
+                //     }
+                //   }}
+                //>
+                  // ← Up to {this.state.prevState} View
+                // </Button>
               ) : (
                   console.log("")
                 )}
@@ -1399,3 +1536,5 @@ class MapContent extends React.PureComponent {
   }
 }
 export default MapContent;
+      
+
