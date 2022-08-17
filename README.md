@@ -68,3 +68,6 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 ### Project Description
 In this section I will walk you through the project description, In this project I have created a dashboard on ReactJS which provides powerplant performance based on the input given by user. On the other hand, user can search for a particular power plant from the search input box or they can go through google maps, for example, in the map view initially they will have a deafult all us map dashboard, now if they decide to see all the powerplants present in california state then they can search for the california from the search box or directly click on the california region on the map. After getting all the information regarding the state, they can click on any couties present in the state same either with the search box or bby clicking on map, then they will be able to see information about all the powerplants present in that particular region. 
+
+### License
+MIT
